@@ -211,7 +211,7 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-10-13 12:05 JST</div>
+      <div class="timestamp">Updated: 2026-10-14 10:17 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
     </div>
   </header>
@@ -241,32 +241,32 @@ section > h2.section-title {
             
         <div class="us-idx-item">
           <div class="us-idx-name">ナスダック</div>
-          <div class="us-idx-pct" style="color: var(--short);">-0.44%</div>
+          <div class="us-idx-pct" style="color: var(--muted);">-0.15%</div>
         </div>
         
         <div class="us-idx-item">
           <div class="us-idx-name">ダウ</div>
-          <div class="us-idx-pct" style="color: var(--long);">+0.38%</div>
+          <div class="us-idx-pct" style="color: var(--short);">-0.35%</div>
         </div>
         
         <div class="us-idx-item">
           <div class="us-idx-name">SOX</div>
-          <div class="us-idx-pct" style="color: var(--short);">-2.67%</div>
+          <div class="us-idx-pct" style="color: var(--muted);">-0.23%</div>
         </div>
         
           </div>
         </div>
         <div class="direction-meta-item">
           <div class="direction-meta-label">日経先物 現対</div>
-          <div class="futures-value" style="color: var(--muted);">+108円</div>
+          <div class="futures-value" style="color: var(--muted);">+133円</div>
           <div class="sub" style="font-size: 12px;">
-            先物: ¥67,400 / 現物終値: ¥67,292
+            先物: ¥68,185 / 現物終値: ¥68,052
           </div>
         </div>
       </div>
 
       <div class="reasons-list">
-        <ul><li>米指数が揃って下げ（ナスダック, SOX）</li><li>先物の方向性が不明確（現対+108円）</li><li>→ 米日非連動のため、方向性読みづらく様子見</li></ul>
+        <ul><li>米指数に個体差あり（ナスダック=-0.15% / ダウ- / SOX=-0.23%）</li><li>先物の方向性が不明確（現対+133円）</li><li>→ 米指数の個体差が大きく、レンジ・優柔不断相場想定</li></ul>
       </div>
 
       <div class="time-nodes-note">
@@ -287,8 +287,8 @@ section > h2.section-title {
             <span class="fx-symbol">USD/JPY</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">158.25</span>
-            <span class="fx-change" style="color: var(--muted);">━ +0.12%</span>
+            <span class="fx-price">158.50</span>
+            <span class="fx-change" style="color: var(--muted);">━ -0.01%</span>
           </div>
           <div class="fx-interpretation">変動なし</div>
         </div>
@@ -299,10 +299,10 @@ section > h2.section-title {
             <span class="fx-symbol">XAU/USD</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$4,198.9</span>
-            <span class="fx-change" style="color: var(--short);">▼ -0.41%</span>
+            <span class="fx-price">$4,181.9</span>
+            <span class="fx-change" style="color: var(--muted);">━ -0.21%</span>
           </div>
-          <div class="fx-interpretation">ゴールド小幅下落</div>
+          <div class="fx-interpretation">変動なし</div>
         </div>
         
         <div class="fx-item">
@@ -311,10 +311,10 @@ section > h2.section-title {
             <span class="fx-symbol">CL</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$92.48</span>
-            <span class="fx-change" style="color: var(--long);">▲ +0.69%</span>
+            <span class="fx-price">$95.28</span>
+            <span class="fx-change" style="color: var(--long);">▲ +1.64%</span>
           </div>
-          <div class="fx-interpretation">原油小幅上昇</div>
+          <div class="fx-interpretation">原油上昇 → エネルギー株に追い風</div>
         </div>
         
       </div>
@@ -620,6 +620,16 @@ section > h2.section-title {
         </thead>
         <tbody>
         <tr>
+          <td>10/14(水)</td>
+          <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
+          <td class="num"><span style="color: var(--muted);">低</span></td>
+          <td class="num">-0.15%</td>
+          <td class="num">-0.35%</td>
+          <td class="num">-0.23%</td>
+          <td class="num">+133</td>
+        </tr>
+        
+        <tr>
           <td>10/13(火)</td>
           <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
           <td class="num"><span style="color: var(--muted);">低</span></td>
@@ -657,16 +667,6 @@ section > h2.section-title {
           <td class="num">-0.66%</td>
           <td class="num">-1.15%</td>
           <td class="num">+131</td>
-        </tr>
-        
-        <tr>
-          <td>10/7(水)</td>
-          <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
-          <td class="num"><span style="color: var(--muted);">低</span></td>
-          <td class="num">+0.45%</td>
-          <td class="num">+0.49%</td>
-          <td class="num">+0.34%</td>
-          <td class="num">+170</td>
         </tr>
         </tbody>
       </table>
