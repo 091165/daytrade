@@ -1,30 +1,30 @@
 {
   "market": {
-    "timestamp": "2026-10-15T09:38:53.546690+09:00",
+    "timestamp": "2026-10-16T09:30:57.581126+09:00",
     "nikkei": {
-      "prev_close": 65550.421875,
-      "change_pct": -3.238453333647018,
+      "prev_close": 65057.30859375,
+      "change_pct": -3.9663571733272285,
       "week_is_positive": false,
       "month_is_positive": true
     },
     "nikkei_futures": {
-      "price": 65630.0
+      "price": 65305.0
     },
     "etf_1570": {
-      "prev_close": 68270.0
+      "prev_close": 67120.0
     },
     "us_markets": {
-      "nasdaq_change_pct": -1.8802549537668578,
-      "dow_change_pct": -0.09409908686009993,
-      "sox_change_pct": -4.295325129555339
+      "nasdaq_change_pct": 0.07551174020976603,
+      "dow_change_pct": 1.0774796314428015,
+      "sox_change_pct": -0.8829312303877956
     },
     "fx_commodities": {
-      "usdjpy_price": 157.88800048828125,
-      "usdjpy_change_pct": -0.1249041392496375,
-      "gold_price": 4160.2001953125,
-      "gold_change_pct": -0.4093459932134169,
-      "oil_price": 94.66000366210938,
-      "oil_change_pct": 0.5523733544002152
+      "usdjpy_price": 158.16299438476562,
+      "usdjpy_change_pct": 0.1266148048613358,
+      "gold_price": 4175.89990234375,
+      "gold_change_pct": 1.6553470536417647,
+      "oil_price": 96.12000274658203,
+      "oil_change_pct": 1.0831911329888033
     },
     "us_sector_changes": {
       "ADBE": 1.8621948193737303,
@@ -47,12 +47,12 @@
       "MCD": 1.060175576049871,
       "MSFT": -1.7959351451641625,
       "NOC": 2.9727029401807714,
-      "NOW": -1.2186478225561292,
+      "NOW": 0.9883811493794914,
       "NVDA": -3.159461353805515,
       "ORCL": -8.833794808708383,
       "PG": 2.2804532450801496,
       "RTX": 1.8850381749014655,
-      "SNDK": -0.33617288347119745,
+      "SNDK": -5.328772444470575,
       "STX": -4.5048224879259084,
       "T": 0.8752685000084748,
       "TMUS": 2.6409924357178927,
@@ -62,35 +62,43 @@
       "XOM": 1.683129966085839
     }
   },
-  "warnings": [],
+  "warnings": [
+    {
+      "type": "friday_closing",
+      "severity": "medium",
+      "label": "📅 金曜 × 週足陰線 = ショートカバー買い警戒",
+      "message": "今週の日経は陰線。金曜のショートカバーで後場上げの可能性。",
+      "action": "安易な売りポジ持ち越しに注意。後場の買い戻しに巻き込まれる懸念。"
+    }
+  ],
   "market_context": {
     "items": [
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 157.88800048828125,
-        "change_pct": -0.1249041392496375,
+        "current": 158.16299438476562,
+        "change_pct": 0.1266148048613358,
         "direction": "flat",
         "interpretation": "変動なし"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4160.2001953125,
-        "change_pct": -0.4093459932134169,
-        "direction": "down",
-        "interpretation": "ゴールド小幅下落"
+        "current": 4175.89990234375,
+        "change_pct": 1.6553470536417647,
+        "direction": "up",
+        "interpretation": "ゴールド上昇 → インフレ懸念 or リスクオフ。住友金属鉱山等の金鉱株に追い風"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 94.66000366210938,
-        "change_pct": 0.5523733544002152,
+        "current": 96.12000274658203,
+        "change_pct": 1.0831911329888033,
         "direction": "up",
-        "interpretation": "原油小幅上昇"
+        "interpretation": "原油上昇 → エネルギー株に追い風"
       }
     ],
-    "combined_note": null
+    "combined_note": "⚠️ ゴールド & 原油の同時上昇 → ハイパーインフレ/重度リスクオフの兆候。株全体に警戒。"
   },
   "direction": {
     "verdict": "hands_off",
@@ -99,52 +107,52 @@
     "us_indices": [
       {
         "name": "ナスダック",
-        "change_pct": -1.8802549537668578,
-        "direction": "bearish"
-      },
-      {
-        "name": "ダウ",
-        "change_pct": -0.09409908686009993,
+        "change_pct": 0.07551174020976603,
         "direction": "neutral"
       },
       {
+        "name": "ダウ",
+        "change_pct": 1.0774796314428015,
+        "direction": "bullish"
+      },
+      {
         "name": "SOX",
-        "change_pct": -4.295325129555339,
+        "change_pct": -0.8829312303877956,
         "direction": "bearish"
       }
     ],
-    "us_consensus_direction": "bearish",
-    "futures_diff": 79.578125,
+    "us_consensus_direction": "neutral",
+    "futures_diff": 247.69140625,
     "futures_aligned": false,
     "reasons": [
-      "米指数が揃って下げ（ナスダック, SOX）",
-      "先物の方向性が不明確（現対+80円）",
-      "→ 米日非連動のため、方向性読みづらく様子見"
+      "米指数に個体差あり（ナスダック=+0.08% / ダウ+ / SOX-）",
+      "先物の方向性が不明確（現対+248円）",
+      "→ 米指数の個体差が大きく、レンジ・優柔不断相場想定"
     ]
   },
   "kiriban": {
     "kiriban_bands": {
-      "prev_close": 65550.421875,
+      "prev_close": 65057.30859375,
       "bands": {
-        "-1500": 64050.421875,
-        "-1000": 64550.421875,
-        "-500": 65050.421875,
-        "+500": 66050.421875,
-        "+1000": 66550.421875,
-        "+1500": 67050.421875
+        "-1500": 63557.30859375,
+        "-1000": 64057.30859375,
+        "-500": 64557.30859375,
+        "+500": 65557.30859375,
+        "+1000": 66057.30859375,
+        "+1500": 66557.30859375
       }
     },
     "sayatori_signal": {
-      "futures_price": 65630.0,
-      "spot_price": 65550.421875,
-      "diff": 79.578125,
-      "abs_diff": 79.578125,
+      "futures_price": 65305.0,
+      "spot_price": 65057.30859375,
+      "diff": 247.69140625,
+      "abs_diff": 247.69140625,
       "direction": "neutral",
       "threshold": 1000,
-      "rationale": "現対+80円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+      "rationale": "現対+248円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
-      "current_price": 65550.421875,
+      "current_price": 65057.30859375,
       "resistance": 66000.0,
       "support": 65000.0,
       "step": 1000
@@ -153,6 +161,22 @@
     "kiriban_effective": false
   },
   "sectors": [
+    {
+      "sector_name": "ストレージ半導体",
+      "us_label": "サンディスク等ストレージ",
+      "us_avg_change_pct": -4.7321640261174585,
+      "direction": "bearish",
+      "signal_strength": "strong",
+      "jp_stocks": [
+        "キオクシア"
+      ],
+      "correlation_strength": "high",
+      "note": "キオクシアはサンディスクの動きに強く連動。半導体カルテットとは別扱いが鉄則",
+      "rationale": "米サンディスク等ストレージが平均-4.73%。キオクシア等は売り目線で想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.41223653273245464,
+      "validation_label": "✅ 強連動を確認"
+    },
     {
       "sector_name": "半導体",
       "us_label": "SOX指数（半導体）",
@@ -170,22 +194,6 @@
       "rationale": "米SOX指数（半導体）が平均-4.04%。東京エレクトロン・アドバンテスト・ディスコ等は売り目線で想定。",
       "validation_verdict": "confirmed",
       "validation_pearson_r": 0.5158038937115634,
-      "validation_label": "✅ 強連動を確認"
-    },
-    {
-      "sector_name": "ストレージ半導体",
-      "us_label": "サンディスク等ストレージ",
-      "us_avg_change_pct": -3.067964172450999,
-      "direction": "bearish",
-      "signal_strength": "strong",
-      "jp_stocks": [
-        "キオクシア"
-      ],
-      "correlation_strength": "high",
-      "note": "キオクシアはサンディスクの動きに強く連動。半導体カルテットとは別扱いが鉄則",
-      "rationale": "米サンディスク等ストレージが平均-3.07%。キオクシア等は売り目線で想定。",
-      "validation_verdict": "confirmed",
-      "validation_pearson_r": 0.41223653273245464,
       "validation_label": "✅ 強連動を確認"
     },
     {
@@ -301,7 +309,7 @@
     {
       "sector_name": "SaaS・ソフトウェア",
       "us_label": "セールスフォース・MSFT等",
-      "us_avg_change_pct": -1.3115737862676908,
+      "us_avg_change_pct": -0.9437356242784207,
       "direction": "bearish",
       "signal_strength": "weak",
       "jp_stocks": [
@@ -313,7 +321,7 @@
       ],
       "correlation_strength": "medium",
       "note": "「アメリカ下げ戦犯・ソフトウェアSaaS系」として頻出。下げ時の連動が特に強い",
-      "rationale": "米セールスフォース・MSFT等が平均-1.31%。富士通・NEC・NRI等はやや売り寄りで想定。",
+      "rationale": "米セールスフォース・MSFT等が平均-0.94%。富士通・NEC・NRI等はやや売り寄りで想定。",
       "validation_verdict": "confirmed",
       "validation_pearson_r": 0.4714693923556395,
       "validation_label": "✅ 中程度の連動を確認"
@@ -338,6 +346,19 @@
     }
   ],
   "recent_history": [
+    {
+      "date": "2026-10-16",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": 247.69140625,
+      "nasdaq_pct": 0.07551174020976603,
+      "dow_pct": 1.0774796314428015,
+      "sox_pct": -0.8829312303877956,
+      "warnings": [
+        "📅 金曜 × 週足陰線 = ショートカバー買い警戒"
+      ]
+    },
     {
       "date": "2026-10-15",
       "verdict": "hands_off",
@@ -381,25 +402,22 @@
       "dow_pct": 0.8262639817617545,
       "sox_pct": -0.4062992513390373,
       "warnings": []
-    },
-    {
-      "date": "2026-10-09",
-      "verdict": "hands_off",
-      "verdict_label": "初心者手出し無用",
-      "confidence": "low",
-      "futures_diff": 126.6484375,
-      "nasdaq_pct": -1.2540524485118887,
-      "dow_pct": 0.10115213294532577,
-      "sox_pct": -3.386120116851321,
-      "warnings": [
-        "📅 金曜 × 週足陰線 = ショートカバー買い警戒"
-      ]
     }
   ],
   "stock_picks": {
     "available": true,
     "reason": "5セクターで強い連動シグナル",
     "picks": [
+      {
+        "sector_name": "ストレージ半導体",
+        "direction": "bearish",
+        "direction_label": "売り（空売り）候補",
+        "rationale": "米サンディスク等ストレージが平均-4.73%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
+        "stocks": [
+          "キオクシア"
+        ],
+        "tickers": []
+      },
       {
         "sector_name": "半導体",
         "direction": "bearish",
@@ -410,16 +428,6 @@
           "アドバンテスト",
           "ディスコ",
           "レーザーテック"
-        ],
-        "tickers": []
-      },
-      {
-        "sector_name": "ストレージ半導体",
-        "direction": "bearish",
-        "direction_label": "売り（空売り）候補",
-        "rationale": "米サンディスク等ストレージが平均-3.07%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
-        "stocks": [
-          "キオクシア"
         ],
         "tickers": []
       },
