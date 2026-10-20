@@ -1,30 +1,30 @@
 {
   "market": {
-    "timestamp": "2026-10-19T09:17:27.547429+09:00",
+    "timestamp": "2026-10-20T10:07:32.736877+09:00",
     "nikkei": {
-      "prev_close": 64643.37109375,
-      "change_pct": -1.042365678252577,
+      "prev_close": 64124.55859375,
+      "change_pct": -1.8365763883050334,
       "week_is_positive": false,
       "month_is_positive": true
     },
     "nikkei_futures": {
-      "price": 64375.0
+      "price": 64235.0
     },
     "etf_1570": {
-      "prev_close": 67680.0
+      "prev_close": 65080.0
     },
     "us_markets": {
-      "nasdaq_change_pct": -2.1450206699957897,
-      "dow_change_pct": -0.33593140147822886,
-      "sox_change_pct": -3.83310486013384
+      "nasdaq_change_pct": 1.1126897317967899,
+      "dow_change_pct": -0.06995619268548303,
+      "sox_change_pct": 1.6076867330113265
     },
     "fx_commodities": {
-      "usdjpy_price": 157.75399780273438,
-      "usdjpy_change_pct": 0.11775650196534926,
-      "gold_price": 4203.7001953125,
-      "gold_change_pct": 0.5405299353851589,
-      "oil_price": 97.5199966430664,
-      "oil_change_pct": -3.835920400914472
+      "usdjpy_price": 158.57000732421875,
+      "usdjpy_change_pct": -0.21310181531175587,
+      "gold_price": 4151.39990234375,
+      "gold_change_pct": -0.710344039099875,
+      "oil_price": 98.4800033569336,
+      "oil_change_pct": -2.8892616106575897
     },
     "us_sector_changes": {
       "ADBE": -2.5708273802107495,
@@ -68,24 +68,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 157.75399780273438,
-        "change_pct": 0.11775650196534926,
+        "current": 158.57000732421875,
+        "change_pct": -0.21310181531175587,
         "direction": "flat",
         "interpretation": "変動なし"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4203.7001953125,
-        "change_pct": 0.5405299353851589,
-        "direction": "up",
-        "interpretation": "ゴールド小幅上昇"
+        "current": 4151.39990234375,
+        "change_pct": -0.710344039099875,
+        "direction": "down",
+        "interpretation": "ゴールド小幅下落"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 97.5199966430664,
-        "change_pct": -3.835920400914472,
+        "current": 98.4800033569336,
+        "change_pct": -2.8892616106575897,
         "direction": "down",
         "interpretation": "原油急落 → リスクオン転換の可能性、エネルギー株は逆風"
       }
@@ -93,58 +93,58 @@
     "combined_note": null
   },
   "direction": {
-    "verdict": "sell_bias",
-    "verdict_label": "売りポジ主体",
-    "confidence": "high",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
     "us_indices": [
       {
         "name": "ナスダック",
-        "change_pct": -2.1450206699957897,
-        "direction": "bearish"
+        "change_pct": 1.1126897317967899,
+        "direction": "bullish"
       },
       {
         "name": "ダウ",
-        "change_pct": -0.33593140147822886,
-        "direction": "bearish"
+        "change_pct": -0.06995619268548303,
+        "direction": "neutral"
       },
       {
         "name": "SOX",
-        "change_pct": -3.83310486013384,
-        "direction": "bearish"
+        "change_pct": 1.6076867330113265,
+        "direction": "bullish"
       }
     ],
-    "us_consensus_direction": "bearish",
-    "futures_diff": -268.37109375,
-    "futures_aligned": true,
+    "us_consensus_direction": "bullish",
+    "futures_diff": 110.44140625,
+    "futures_aligned": false,
     "reasons": [
-      "米指数が揃って下げ（ナスダック, ダウ, SOX）",
-      "日経先物が米に追随（現対-268円）",
-      "→ 米日連動の下落相場として売り目線"
+      "米指数が揃って上げ（ナスダック, SOX）",
+      "先物の方向性が不明確（現対+110円）",
+      "→ 米日非連動のため、方向性読みづらく様子見"
     ]
   },
   "kiriban": {
     "kiriban_bands": {
-      "prev_close": 64643.37109375,
+      "prev_close": 64124.55859375,
       "bands": {
-        "-1500": 63143.37109375,
-        "-1000": 63643.37109375,
-        "-500": 64143.37109375,
-        "+500": 65143.37109375,
-        "+1000": 65643.37109375,
-        "+1500": 66143.37109375
+        "-1500": 62624.55859375,
+        "-1000": 63124.55859375,
+        "-500": 63624.55859375,
+        "+500": 64624.55859375,
+        "+1000": 65124.55859375,
+        "+1500": 65624.55859375
       }
     },
     "sayatori_signal": {
-      "futures_price": 64375.0,
-      "spot_price": 64643.37109375,
-      "diff": -268.37109375,
-      "abs_diff": 268.37109375,
+      "futures_price": 64235.0,
+      "spot_price": 64124.55859375,
+      "diff": 110.44140625,
+      "abs_diff": 110.44140625,
       "direction": "neutral",
       "threshold": 1000,
-      "rationale": "現対-268円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+      "rationale": "現対+110円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
-      "current_price": 64643.37109375,
+      "current_price": 64124.55859375,
       "resistance": 65000.0,
       "support": 64000.0,
       "step": 1000
@@ -339,6 +339,17 @@
   ],
   "recent_history": [
     {
+      "date": "2026-10-20",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": 110.44140625,
+      "nasdaq_pct": 1.1126897317967899,
+      "dow_pct": -0.06995619268548303,
+      "sox_pct": 1.6076867330113265,
+      "warnings": []
+    },
+    {
       "date": "2026-10-19",
       "verdict": "sell_bias",
       "verdict_label": "売りポジ主体",
@@ -383,22 +394,48 @@
       "dow_pct": -0.34801794008184617,
       "sox_pct": -0.22877827516966098,
       "warnings": []
-    },
-    {
-      "date": "2026-10-13",
-      "verdict": "hands_off",
-      "verdict_label": "初心者手出し無用",
-      "confidence": "low",
-      "futures_diff": 107.609375,
-      "nasdaq_pct": -0.4394753758686032,
-      "dow_pct": 0.3786695475619606,
-      "sox_pct": -2.669588178116189,
-      "warnings": []
     }
   ],
   "stock_picks": {
-    "available": false,
-    "reason": "指数判定が出ているため、本機能は表示しません",
-    "picks": []
+    "available": true,
+    "reason": "3セクターで強い連動シグナル",
+    "picks": [
+      {
+        "sector_name": "ストレージ半導体",
+        "direction": "bearish",
+        "direction_label": "売り（空売り）候補",
+        "rationale": "米サンディスク等ストレージが平均-7.07%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
+        "stocks": [
+          "キオクシア"
+        ],
+        "tickers": []
+      },
+      {
+        "sector_name": "半導体",
+        "direction": "bearish",
+        "direction_label": "売り（空売り）候補",
+        "rationale": "米SOX指数（半導体）が平均-4.41%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
+        "stocks": [
+          "東京エレクトロン",
+          "アドバンテスト",
+          "ディスコ",
+          "レーザーテック"
+        ],
+        "tickers": []
+      },
+      {
+        "sector_name": "SaaS・ソフトウェア",
+        "direction": "bearish",
+        "direction_label": "売り（空売り）候補",
+        "rationale": "米セールスフォース・MSFT等が平均-2.92%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
+        "stocks": [
+          "富士通",
+          "NEC",
+          "NRI",
+          "オービック"
+        ],
+        "tickers": []
+      }
+    ]
   }
 }
