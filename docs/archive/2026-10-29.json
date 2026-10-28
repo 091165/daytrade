@@ -2,7 +2,7 @@
   "date": "2026-10-29",
   "reconstructed": false,
   "market": {
-    "timestamp": "2026-10-29T00:51:24.167895+09:00",
+    "timestamp": "2026-10-29T01:00:20.945214+09:00",
     "nikkei": {
       "prev_close": 63268.37109375,
       "change_pct": 1.734569471532077,
@@ -10,65 +10,65 @@
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 64675.0
+      "price": 64615.0
     },
     "etf_1570": {
       "prev_close": 64590.0
     },
     "us_markets": {
-      "nasdaq_change_pct": -0.07213439850393133,
-      "dow_change_pct": 0.3053624009203615,
-      "sox_change_pct": 0.808388784563463
+      "nasdaq_change_pct": -0.021435991620044614,
+      "dow_change_pct": 0.3057054628434752,
+      "sox_change_pct": 0.9102506531678545
     },
     "fx_commodities": {
-      "usdjpy_price": 158.24000549316406,
-      "usdjpy_change_pct": 0.45198670445008027,
-      "gold_price": 4059.10009765625,
-      "gold_change_pct": -0.38040542945345646,
-      "oil_price": 102.7300033569336,
-      "oil_change_pct": 2.832834622451519
+      "usdjpy_price": 158.21099853515625,
+      "usdjpy_change_pct": 0.4342121640817709,
+      "gold_price": 4054.300048828125,
+      "gold_change_pct": -0.4982095995089586,
+      "oil_price": 103.4000015258789,
+      "oil_change_pct": 3.5035034499907747
     },
     "us_sector_changes": {
-      "ADBE": -0.28184769951760114,
-      "AMAT": 4.50079752831738,
-      "AMD": 1.0727179632433748,
-      "ARM": 2.797880038447298,
-      "BA": -0.6541192199780776,
-      "CAT": 0.09252262645835785,
-      "CL": -0.14104074644732956,
-      "COHR": 0.4834808185710582,
-      "COP": 1.6186732258693493,
-      "CRM": 0.014530973555593185,
-      "CVX": 1.41305094154478,
-      "DE": 0.38306578404045943,
-      "FDX": -1.7942069866868415,
-      "GLW": 3.159137084691843,
-      "HON": -0.27420632120152,
-      "INTU": 0.28021909102311504,
-      "KLAC": 3.1107631559139204,
-      "KO": 1.0912510893307692,
-      "LITE": 3.817914013698198,
-      "LMT": 0.9695242551533978,
-      "LRCX": 5.476432156264188,
-      "MCD": 1.0662619349394609,
-      "MSFT": -0.7622358351126124,
-      "NOC": 0.43920334408402706,
-      "NOW": -2.2903464251864847,
-      "NVDA": -0.31430556617429994,
-      "ORCL": -0.2719648593112245,
-      "PG": 0.03140303529454158,
-      "QQQ": 0.1053739709705459,
-      "RTX": 1.2795427319002517,
-      "SNDK": 5.803775363451624,
-      "SOXX": 1.0131243620276065,
-      "STX": 1.0848237451579035,
-      "T": 0.30228833554324375,
-      "TMUS": -0.15324259395878004,
-      "UPS": -1.0934075527916143,
-      "VRT": 12.857212675154894,
-      "VZ": -0.19348755720960398,
-      "WDC": 3.216236043624554,
-      "XOM": 1.9287427880998687
+      "ADBE": -0.31808394435149934,
+      "AMAT": 4.346733587002882,
+      "AMD": 1.2654777597420175,
+      "ARM": 2.7736046928653613,
+      "BA": -0.8523528367848421,
+      "CAT": 0.414969926509845,
+      "CL": -0.2766597140976046,
+      "COHR": 0.30324085713511195,
+      "COP": 1.4497086485133481,
+      "CRM": -0.1369927485121103,
+      "CVX": 1.3429446167388281,
+      "DE": 0.41276361717699217,
+      "FDX": -1.8528174302570033,
+      "GLW": 3.4204211884772073,
+      "HON": 0.03884955660877765,
+      "INTU": 0.20398321974606226,
+      "KLAC": 3.1693316420168705,
+      "KO": 0.92125064167492,
+      "LITE": 3.4888859121446902,
+      "LMT": 0.8451202637231425,
+      "LRCX": 5.4016998867105315,
+      "MCD": 0.9540244803650566,
+      "MSFT": -0.6944840913782446,
+      "NOC": 0.26940595383726507,
+      "NOW": -2.2677313183345427,
+      "NVDA": -0.2844797238883201,
+      "ORCL": 0.2451599840737284,
+      "PG": 0.006286356775464519,
+      "QQQ": 0.14419106098353396,
+      "RTX": 1.120242860949161,
+      "SNDK": 5.705302589545824,
+      "SOXX": 1.0957569781805176,
+      "STX": 1.3947198578987186,
+      "T": 0.06685739545266856,
+      "TMUS": -0.30647479577093906,
+      "UPS": -1.2253704093106665,
+      "VRT": 13.315115361304652,
+      "VZ": -0.47826560400472395,
+      "WDC": 3.2004836917487456,
+      "XOM": 1.834472632479045
     }
   },
   "warnings": [],
@@ -77,24 +77,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 158.24000549316406,
-        "change_pct": 0.45198670445008027,
+        "current": 158.21099853515625,
+        "change_pct": 0.4342121640817709,
         "direction": "up",
         "interpretation": "円安傾向 → 輸出株にやや追い風"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4059.10009765625,
-        "change_pct": -0.38040542945345646,
+        "current": 4054.300048828125,
+        "change_pct": -0.4982095995089586,
         "direction": "down",
         "interpretation": "ゴールド小幅下落"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 102.7300033569336,
-        "change_pct": 2.832834622451519,
+        "current": 103.4000015258789,
+        "change_pct": 3.5035034499907747,
         "direction": "up",
         "interpretation": "原油急騰 → リスクオフ懸念。エネルギー株（INPEX・ENEOS等）に追い風、他はリスクオフ警戒"
       }
@@ -108,26 +108,26 @@
     "us_indices": [
       {
         "name": "ナスダック",
-        "change_pct": -0.07213439850393133,
+        "change_pct": -0.021435991620044614,
         "direction": "neutral"
       },
       {
         "name": "ダウ",
-        "change_pct": 0.3053624009203615,
+        "change_pct": 0.3057054628434752,
         "direction": "bullish"
       },
       {
         "name": "SOX",
-        "change_pct": 0.808388784563463,
+        "change_pct": 0.9102506531678545,
         "direction": "bullish"
       }
     ],
     "us_consensus_direction": "bullish",
-    "futures_diff": 1406.62890625,
+    "futures_diff": 1346.62890625,
     "futures_aligned": true,
     "reasons": [
       "米指数が揃って上げ（ダウ, SOX）",
-      "日経先物が米に追随（現対+1407円）",
+      "日経先物が米に追随（現対+1347円）",
       "→ 米日連動の上昇相場として買い目線"
     ]
   },
@@ -144,13 +144,13 @@
       }
     },
     "sayatori_signal": {
-      "futures_price": 64675.0,
+      "futures_price": 64615.0,
       "spot_price": 63268.37109375,
-      "diff": 1406.62890625,
-      "abs_diff": 1406.62890625,
+      "diff": 1346.62890625,
+      "abs_diff": 1346.62890625,
       "direction": "short",
       "threshold": 1000,
-      "rationale": "現対+1,407円。先物が現物より1,407円高い。鞘が閉じる方向（先物売り）を朝一で狙う。"
+      "rationale": "現対+1,347円。先物が現物より1,347円高い。鞘が閉じる方向（先物売り）を朝一で狙う。"
     },
     "round_number_levels": {
       "current_price": 63268.37109375,
@@ -165,7 +165,7 @@
     {
       "sector_name": "ストレージ半導体",
       "us_label": "サンディスク等ストレージ",
-      "us_avg_change_pct": 3.3682783840780277,
+      "us_avg_change_pct": 3.433502046397763,
       "direction": "bullish",
       "signal_strength": "strong",
       "jp_stocks": [
@@ -173,15 +173,15 @@
       ],
       "correlation_strength": "high",
       "note": "キオクシアはサンディスクの動きに強く連動。半導体カルテットとは別扱いが鉄則",
-      "rationale": "米サンディスク等ストレージが平均+3.37%。キオクシア等は買い目線で想定。",
+      "rationale": "米サンディスク等ストレージが平均+3.43%。キオクシア等は買い目線で想定。",
       "validation_verdict": "confirmed",
-      "validation_pearson_r": 0.41464337926357164,
+      "validation_pearson_r": 0.40679014047350986,
       "validation_label": "✅ 強連動を確認"
     },
     {
       "sector_name": "半導体",
       "us_label": "SOX指数（半導体）",
-      "us_avg_change_pct": 2.7692810475129126,
+      "us_avg_change_pct": 2.7797526303167963,
       "direction": "bullish",
       "signal_strength": "strong",
       "jp_stocks": [
@@ -192,15 +192,15 @@
       ],
       "correlation_strength": "high",
       "note": "SOX指数との連動が最も強いグループ（半導体カルテット）",
-      "rationale": "米SOX指数（半導体）が平均+2.77%。東京エレクトロン・アドバンテスト・ディスコ等は買い目線で想定。",
+      "rationale": "米SOX指数（半導体）が平均+2.78%。東京エレクトロン・アドバンテスト・ディスコ等は買い目線で想定。",
       "validation_verdict": "confirmed",
-      "validation_pearson_r": 0.5133564605844549,
+      "validation_pearson_r": 0.5101813127869049,
       "validation_label": "✅ 強連動を確認"
     },
     {
       "sector_name": "エネルギー（原油）",
       "us_label": "エクソン・シェブロン等",
-      "us_avg_change_pct": 1.6534889851713326,
+      "us_avg_change_pct": 1.5423752992437405,
       "direction": "bullish",
       "signal_strength": "strong",
       "jp_stocks": [
@@ -211,17 +211,17 @@
       ],
       "correlation_strength": "high",
       "note": "原油先物・XOM・CVXが上げればINPEX等は高確率で連動",
-      "rationale": "米エクソン・シェブロン等が平均+1.65%。INPEX・ENEOS・出光興産等は買い目線で想定。",
+      "rationale": "米エクソン・シェブロン等が平均+1.54%。INPEX・ENEOS・出光興産等は買い目線で想定。",
       "validation_verdict": "weak",
-      "validation_pearson_r": 0.3435792457201898,
+      "validation_pearson_r": 0.33395488079612295,
       "validation_label": "△ 期待より弱い連動"
     },
     {
       "sector_name": "海運・物流",
       "us_label": "UPS・FedEx",
-      "us_avg_change_pct": -1.443807269739228,
+      "us_avg_change_pct": -1.539093919783835,
       "direction": "bearish",
-      "signal_strength": "weak",
+      "signal_strength": "strong",
       "jp_stocks": [
         "日本郵船",
         "商船三井",
@@ -229,17 +229,17 @@
       ],
       "correlation_strength": "low",
       "note": "連動は弱め。海運は日本独自の材料（海峡・BDI）の影響が大きい",
-      "rationale": "米UPS・FedExが平均-1.44%。日本郵船・商船三井・川崎汽船等はやや売り寄りで想定。",
+      "rationale": "米UPS・FedExが平均-1.54%。日本郵船・商船三井・川崎汽船等は売り目線で想定。",
       "validation_verdict": "contradicted",
-      "validation_pearson_r": -0.18106070915503597,
+      "validation_pearson_r": -0.16621037376975015,
       "validation_label": "⚠️ 期待と逆方向の相関"
     },
     {
       "sector_name": "SaaS・ソフトウェア",
       "us_label": "セールスフォース・MSFT等",
-      "us_avg_change_pct": -0.551940792424869,
-      "direction": "bearish",
-      "signal_strength": "weak",
+      "us_avg_change_pct": -0.49469148312610106,
+      "direction": "neutral",
+      "signal_strength": "neutral",
       "jp_stocks": [
         "富士通",
         "NEC",
@@ -249,52 +249,15 @@
       ],
       "correlation_strength": "medium",
       "note": "「アメリカ下げ戦犯・ソフトウェアSaaS系」として頻出。下げ時の連動が特に強い",
-      "rationale": "米セールスフォース・MSFT等が平均-0.55%。富士通・NEC・NRI等はやや売り寄りで想定。",
+      "rationale": "米セールスフォース・MSFT等が平均-0.49%。方向感なし、様子見。",
       "validation_verdict": "confirmed",
-      "validation_pearson_r": 0.5355629854274983,
+      "validation_pearson_r": 0.5351696110918817,
       "validation_label": "✅ 中程度の連動を確認"
-    },
-    {
-      "sector_name": "生活防衛（配当王）",
-      "us_label": "コカコーラ・P&G等",
-      "us_avg_change_pct": 0.5119688282793605,
-      "direction": "bullish",
-      "signal_strength": "weak",
-      "jp_stocks": [
-        "花王",
-        "味の素",
-        "明治HD",
-        "キッコーマン"
-      ],
-      "correlation_strength": "low",
-      "note": "連動は弱い。配当ディフェンシブ資金フロー時のみ同方向",
-      "rationale": "米コカコーラ・P&G等が平均+0.51%。花王・味の素・明治HD等はやや買い寄りで想定。",
-      "validation_verdict": "confirmed",
-      "validation_pearson_r": 0.2797771479412425,
-      "validation_label": "✅ 想定より強い連動"
-    },
-    {
-      "sector_name": "軍需・防衛",
-      "us_label": "ロッキード・RTX等",
-      "us_avg_change_pct": 0.3519889579916158,
-      "direction": "neutral",
-      "signal_strength": "neutral",
-      "jp_stocks": [
-        "三菱重工業",
-        "IHI",
-        "川崎重工業"
-      ],
-      "correlation_strength": "high",
-      "note": "地政学リスク連動。戦争懸念時の強い順張りセクター",
-      "rationale": "米ロッキード・RTX等が平均+0.35%。方向感なし、様子見。",
-      "validation_verdict": "weak",
-      "validation_pearson_r": 0.2733263482488852,
-      "validation_label": "△ 期待より弱い連動"
     },
     {
       "sector_name": "建機",
       "us_label": "キャタピラー・ディアー",
-      "us_avg_change_pct": 0.23779420524940864,
+      "us_avg_change_pct": 0.4138667718434186,
       "direction": "neutral",
       "signal_strength": "neutral",
       "jp_stocks": [
@@ -304,15 +267,15 @@
       ],
       "correlation_strength": "high",
       "note": "CAT・DEの動きから翌朝のコマツ方向が読みやすい",
-      "rationale": "米キャタピラー・ディアーが平均+0.24%。方向感なし、様子見。",
+      "rationale": "米キャタピラー・ディアーが平均+0.41%。方向感なし、様子見。",
       "validation_verdict": "weak",
-      "validation_pearson_r": 0.3681736725267452,
+      "validation_pearson_r": 0.37064645213567843,
       "validation_label": "△ 期待より弱い連動"
     },
     {
       "sector_name": "電線（CAT連動系）",
       "us_label": "キャタピラー・ディアー",
-      "us_avg_change_pct": 0.23779420524940864,
+      "us_avg_change_pct": 0.4138667718434186,
       "direction": "neutral",
       "signal_strength": "neutral",
       "jp_stocks": [
@@ -322,15 +285,52 @@
       ],
       "correlation_strength": "medium",
       "note": "インフラ投資テーマでCAT・DEと一緒に動く傾向。PDFでは「電線3種」としてコマツとセットで語られる",
-      "rationale": "米キャタピラー・ディアーが平均+0.24%。方向感なし、様子見。",
+      "rationale": "米キャタピラー・ディアーが平均+0.41%。方向感なし、様子見。",
       "validation_verdict": "confirmed",
-      "validation_pearson_r": 0.25440953620160667,
+      "validation_pearson_r": 0.2526717273665363,
       "validation_label": "✅ 中程度の連動を確認"
+    },
+    {
+      "sector_name": "生活防衛（配当王）",
+      "us_label": "コカコーラ・P&G等",
+      "us_avg_change_pct": 0.40122544117945913,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "花王",
+        "味の素",
+        "明治HD",
+        "キッコーマン"
+      ],
+      "correlation_strength": "low",
+      "note": "連動は弱い。配当ディフェンシブ資金フロー時のみ同方向",
+      "rationale": "米コカコーラ・P&G等が平均+0.40%。方向感なし、様子見。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.26864286157230605,
+      "validation_label": "✅ 想定より強い連動"
+    },
+    {
+      "sector_name": "軍需・防衛",
+      "us_label": "ロッキード・RTX等",
+      "us_avg_change_pct": 0.28425315966670084,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "三菱重工業",
+        "IHI",
+        "川崎重工業"
+      ],
+      "correlation_strength": "high",
+      "note": "地政学リスク連動。戦争懸念時の強い順張りセクター",
+      "rationale": "米ロッキード・RTX等が平均+0.28%。方向感なし、様子見。",
+      "validation_verdict": "weak",
+      "validation_pearson_r": 0.2825664265580473,
+      "validation_label": "△ 期待より弱い連動"
     },
     {
       "sector_name": "通信（配当ディフェンシブ）",
       "us_label": "ベライゾン・AT&T",
-      "us_avg_change_pct": -0.014813938541713423,
+      "us_avg_change_pct": -0.23929433477433149,
       "direction": "neutral",
       "signal_strength": "neutral",
       "jp_stocks": [
@@ -340,9 +340,9 @@
       ],
       "correlation_strength": "medium",
       "note": "ディフェンシブ資金フロー時に連動。日本特有の材料（粉飾等）には非連動",
-      "rationale": "米ベライゾン・AT&Tが平均-0.01%。方向感なし、様子見。",
+      "rationale": "米ベライゾン・AT&Tが平均-0.24%。方向感なし、様子見。",
       "validation_verdict": "confirmed",
-      "validation_pearson_r": 0.24575904498156306,
+      "validation_pearson_r": 0.2593490520343319,
       "validation_label": "✅ 中程度の連動を確認"
     }
   ],
@@ -352,10 +352,10 @@
       "verdict": "buy_bias",
       "verdict_label": "買いポジ主体",
       "confidence": "medium",
-      "futures_diff": 1406.62890625,
-      "nasdaq_pct": -0.07213439850393133,
-      "dow_pct": 0.3053624009203615,
-      "sox_pct": 0.808388784563463,
+      "futures_diff": 1346.62890625,
+      "nasdaq_pct": -0.021435991620044614,
+      "dow_pct": 0.3057054628434752,
+      "sox_pct": 0.9102506531678545,
       "warnings": []
     },
     {
@@ -461,12 +461,12 @@
       "code": "5803",
       "name": "フジクラ",
       "us_label": "光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ）",
-      "us_avg_change_pct": 5.079436148028998,
+      "us_avg_change_pct": 5.131915829765416,
       "us_changes": {
-        "GLW": 3.159137084691843,
-        "COHR": 0.4834808185710582,
-        "LITE": 3.817914013698198,
-        "VRT": 12.857212675154894
+        "GLW": 3.4204211884772073,
+        "COHR": 0.30324085713511195,
+        "LITE": 3.4888859121446902,
+        "VRT": 13.315115361304652
       },
       "direction": "bullish",
       "strength": "strong",
@@ -484,47 +484,47 @@
           "LITE",
           "VRT"
         ],
-        "n": 232,
-        "gap_r": 0.6393528891849112,
-        "gap_p": 4.613291477967151e-28,
-        "intraday_r": 0.10302343630504178,
-        "intraday_p": 0.11760700708706852,
+        "n": 231,
+        "gap_r": 0.638647816954992,
+        "gap_p": 7.165816425643947e-28,
+        "intraday_r": 0.10488512502815506,
+        "intraday_p": 0.11186719516888217,
         "gap_link": "confirmed",
         "intraday_link": "weak",
         "us_up": {
-          "n": 106,
-          "mean_gap": 2.2192254483592606,
-          "mean_intraday": 0.3399485493283279,
-          "gap_hit": 0.7547169811320755,
-          "intraday_hit": 0.5094339622641509
+          "n": 105,
+          "mean_gap": 2.215225107658785,
+          "mean_intraday": 0.3633675604557175,
+          "gap_hit": 0.7714285714285715,
+          "intraday_hit": 0.5142857142857142
         },
         "us_down": {
           "n": 77,
-          "mean_gap": -2.4580439347027796,
-          "mean_intraday": -0.4828800056401187,
+          "mean_gap": -2.4580436591002943,
+          "mean_intraday": -0.48288000564011885,
           "gap_hit": 0.8181818181818182,
           "intraday_hit": 0.5454545454545454
         },
         "per_proxy": {
           "GLW": {
-            "gap_r": 0.6476108695277233,
-            "intraday_r": 0.1543506098288309,
-            "n": 232
+            "gap_r": 0.6490625305506056,
+            "intraday_r": 0.1538129046762956,
+            "n": 231
           },
           "COHR": {
-            "gap_r": 0.5605934593210385,
-            "intraday_r": 0.04828064183298842,
-            "n": 232
+            "gap_r": 0.5595881698880162,
+            "intraday_r": 0.05080236381330112,
+            "n": 231
           },
           "LITE": {
-            "gap_r": 0.527763202191423,
-            "intraday_r": 0.10983467852777015,
-            "n": 232
+            "gap_r": 0.526782786474461,
+            "intraday_r": 0.11183460334432449,
+            "n": 231
           },
           "VRT": {
-            "gap_r": 0.5154311328667989,
-            "intraday_r": 0.04592434988393204,
-            "n": 232
+            "gap_r": 0.5143038716310223,
+            "intraday_r": 0.04823225926681828,
+            "n": 231
           }
         },
         "gap_label": "✅ 連動を確認",
@@ -541,7 +541,7 @@
         "pred_yen": 201.5156181353613,
         "lot_yen": 20151.56181353613,
         "shares": 100,
-        "rough_yen": 246.66286815048227,
+        "rough_yen": 247.032026919479,
         "level": "normal",
         "level_text": "最近の値幅は普段どおり",
         "stop_yen": 5000,
@@ -549,18 +549,24 @@
         "stop_frac": 0.2481197262160305,
         "validation": {
           "window": 10,
-          "n": 232,
-          "r": 0.36559898290540427,
-          "p": 9.554773949710892e-09,
-          "within_rate": 0.5862068965517241,
-          "median_ratio": 0.9311624064922919,
-          "rough_ratio": 1.2240384662631698
+          "n": 231,
+          "r": 0.36489449869716845,
+          "p": 1.1030470456292448e-08,
+          "within_rate": 0.5844155844155844,
+          "median_ratio": 0.9342689416475795,
+          "rough_ratio": 1.225870377717044
         },
         "morning": {
-          "available": false,
+          "available": true,
+          "n": 58,
+          "morning_yen": 122.4884306098436,
+          "morning_lot_yen": 12248.84306098436,
+          "rough_lot_yen": 15879.417450059827,
+          "first5_lot_yen": 9068.20281609126,
+          "first5_morning_lot_yen": 15982.205744245675,
           "earnings_today": false,
-          "earnings_ratio": null,
-          "earnings_n": 0,
+          "earnings_ratio": 2.6165311182886724,
+          "earnings_n": 7,
           "next_earnings": "2026-11-10"
         }
       }
@@ -569,11 +575,11 @@
       "code": "9984",
       "name": "ソフトバンクG",
       "us_label": "Arm・NVIDIA・ナスダック100",
-      "us_avg_change_pct": 0.8629828144145146,
+      "us_avg_change_pct": 0.8777720099868583,
       "us_changes": {
-        "ARM": 2.797880038447298,
-        "NVDA": -0.31430556617429994,
-        "QQQ": 0.1053739709705459
+        "ARM": 2.7736046928653613,
+        "NVDA": -0.2844797238883201,
+        "QQQ": 0.14419106098353396
       },
       "direction": "neutral",
       "strength": "neutral",
@@ -590,19 +596,19 @@
           "NVDA",
           "QQQ"
         ],
-        "n": 232,
-        "gap_r": 0.7130324725646169,
-        "gap_p": 2.5090741532644626e-37,
-        "intraday_r": -0.08601611466963359,
-        "intraday_p": 0.1917217290444068,
+        "n": 231,
+        "gap_r": 0.7127512363566283,
+        "gap_p": 3.938804356283333e-37,
+        "intraday_r": -0.08707865448014697,
+        "intraday_p": 0.1872333561279932,
         "gap_link": "confirmed",
         "intraday_link": "none",
         "us_up": {
-          "n": 68,
-          "mean_gap": 3.501413755793239,
-          "mean_intraday": -0.2924965989593517,
-          "gap_hit": 0.9264705882352942,
-          "intraday_hit": 0.4117647058823529
+          "n": 67,
+          "mean_gap": 3.5116397552441923,
+          "mean_intraday": -0.32346831977444895,
+          "gap_hit": 0.9253731343283582,
+          "intraday_hit": 0.40298507462686567
         },
         "us_down": {
           "n": 69,
@@ -613,19 +619,19 @@
         },
         "per_proxy": {
           "ARM": {
-            "gap_r": 0.6636613722266977,
-            "intraday_r": -0.00879565275795801,
-            "n": 232
+            "gap_r": 0.6636852215965336,
+            "intraday_r": -0.009355928622015775,
+            "n": 231
           },
           "NVDA": {
-            "gap_r": 0.5020145085225609,
-            "intraday_r": -0.18601897017509056,
-            "n": 232
+            "gap_r": 0.5016585134456357,
+            "intraday_r": -0.18690875110517288,
+            "n": 231
           },
           "QQQ": {
-            "gap_r": 0.6113280117394849,
-            "intraday_r": -0.11711646261910678,
-            "n": 232
+            "gap_r": 0.6103204291500186,
+            "intraday_r": -0.11956345540570805,
+            "n": 231
           }
         },
         "gap_label": "✅ 連動を確認",
@@ -642,7 +648,7 @@
         "pred_yen": 226.26409109616114,
         "lot_yen": 22626.409109616114,
         "shares": 100,
-        "rough_yen": 298.3180086088176,
+        "rough_yen": 298.66867100543635,
         "level": "normal",
         "level_text": "最近の値幅は普段どおり",
         "stop_yen": 5000,
@@ -650,18 +656,24 @@
         "stop_frac": 0.22098071221893642,
         "validation": {
           "window": 10,
-          "n": 232,
-          "r": 0.23715396611745268,
-          "p": 0.0002675530648529579,
-          "within_rate": 0.5603448275862069,
-          "median_ratio": 0.9150937368638874,
-          "rough_ratio": 1.3184505202022263
+          "n": 231,
+          "r": 0.23698970379819065,
+          "p": 0.0002787339885206414,
+          "within_rate": 0.5627705627705628,
+          "median_ratio": 0.9136116095670058,
+          "rough_ratio": 1.3200003127252906
         },
         "morning": {
-          "available": false,
+          "available": true,
+          "n": 53,
+          "morning_yen": 141.86896314390862,
+          "morning_lot_yen": 14186.896314390862,
+          "rough_lot_yen": 19385.915149661825,
+          "first5_lot_yen": 10181.884099327252,
+          "first5_morning_lot_yen": 17945.007388978327,
           "earnings_today": false,
-          "earnings_ratio": null,
-          "earnings_n": 0,
+          "earnings_ratio": 1.7131703337538076,
+          "earnings_n": 8,
           "next_earnings": "2026-11-10"
         }
       }
@@ -670,11 +682,11 @@
       "code": "6981",
       "name": "村田製作所",
       "us_label": "半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品）",
-      "us_avg_change_pct": 0.26806425560795083,
+      "us_avg_change_pct": 0.31848943842524385,
       "us_changes": {
-        "SOXX": 1.0131243620276065,
-        "QQQ": 0.1053739709705459,
-        "NVDA": -0.31430556617429994
+        "SOXX": 1.0957569781805176,
+        "QQQ": 0.14419106098353396,
+        "NVDA": -0.2844797238883201
       },
       "direction": "neutral",
       "strength": "neutral",
@@ -691,19 +703,19 @@
           "QQQ",
           "SOXX"
         ],
-        "n": 232,
-        "gap_r": 0.6150089770748047,
-        "gap_p": 1.569043956871606e-25,
-        "intraday_r": -0.11828455693763933,
-        "intraday_p": 0.07213844590836421,
+        "n": 231,
+        "gap_r": 0.6130638458700015,
+        "gap_p": 3.102976230133816e-25,
+        "intraday_r": -0.118882109282191,
+        "intraday_p": 0.07131746617052673,
         "gap_link": "confirmed",
         "intraday_link": "none",
         "us_up": {
-          "n": 79,
-          "mean_gap": 1.6576555303952545,
-          "mean_intraday": -0.14587933564122424,
-          "gap_hit": 0.7215189873417721,
-          "intraday_hit": 0.4936708860759494
+          "n": 78,
+          "mean_gap": 1.6209161989104481,
+          "mean_intraday": -0.15661124528828413,
+          "gap_hit": 0.717948717948718,
+          "intraday_hit": 0.48717948717948717
         },
         "us_down": {
           "n": 56,
@@ -714,19 +726,19 @@
         },
         "per_proxy": {
           "SOXX": {
-            "gap_r": 0.6122372163672236,
-            "intraday_r": -0.06842498150989525,
-            "n": 232
+            "gap_r": 0.6094196002389571,
+            "intraday_r": -0.06912464936472934,
+            "n": 231
           },
           "QQQ": {
-            "gap_r": 0.5689856580581151,
-            "intraday_r": -0.07708456737324075,
-            "n": 232
+            "gap_r": 0.5667268698624336,
+            "intraday_r": -0.07760834455434314,
+            "n": 231
           },
           "NVDA": {
-            "gap_r": 0.47265510817403594,
-            "intraday_r": -0.1690342991501963,
-            "n": 232
+            "gap_r": 0.47270614054154,
+            "intraday_r": -0.16920414473142895,
+            "n": 231
           }
         },
         "gap_label": "✅ 連動を確認",
@@ -743,7 +755,7 @@
         "pred_yen": 326.9781033588517,
         "lot_yen": 32697.81033588517,
         "shares": 100,
-        "rough_yen": 426.2021269705862,
+        "rough_yen": 427.0062710789083,
         "level": "normal",
         "level_text": "最近の値幅は普段どおり",
         "stop_yen": 5000,
@@ -751,18 +763,24 @@
         "stop_frac": 0.15291543833174062,
         "validation": {
           "window": 10,
-          "n": 232,
-          "r": 0.6477082842998964,
-          "p": 5.516817333929159e-29,
-          "within_rate": 0.5991379310344828,
-          "median_ratio": 0.9477814322442457,
-          "rough_ratio": 1.3034577012725475
+          "n": 231,
+          "r": 0.6479609865981921,
+          "p": 6.799985285905239e-29,
+          "within_rate": 0.5974025974025974,
+          "median_ratio": 0.9505304216180727,
+          "rough_ratio": 1.3059170222486665
         },
         "morning": {
-          "available": false,
+          "available": true,
+          "n": 57,
+          "morning_yen": 208.62254119572378,
+          "morning_lot_yen": 20862.25411957238,
+          "rough_lot_yen": 26355.78640950464,
+          "first5_lot_yen": 14714.014651148327,
+          "first5_morning_lot_yen": 25932.636736047523,
           "earnings_today": false,
-          "earnings_ratio": null,
-          "earnings_n": 0,
+          "earnings_ratio": 3.4464222691175044,
+          "earnings_n": 7,
           "next_earnings": "2026-10-30"
         }
       }
