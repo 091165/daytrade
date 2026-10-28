@@ -1,5 +1,5 @@
 """
-承認銘柄（フジクラ・SBG）の個別方向予測
+承認銘柄（フジクラ・SBG）と試用銘柄（村田製作所）の個別方向予測
 
 前日の米国関連株の動きから、翌朝の各銘柄の方向を出す。
 
@@ -37,6 +37,7 @@ class FocusStock:
     us_proxies: tuple[str, ...]    # 連動を見る米国ティッカー
     us_label: str
     note: str
+    trial: bool = False            # 試用銘柄（条件つきで試し、回数がたまったら承認を決め直す）
 
 
 FOCUS_STOCKS: list[FocusStock] = [
@@ -56,6 +57,15 @@ FOCUS_STOCKS: list[FocusStock] = [
         us_label="Arm・NVIDIA・ナスダック100",
         note="保有株Arm（約9割保有）とAI関連の値動きに敏感",
     ),
+    FocusStock(
+        code="6981",
+        ticker="6981.T",
+        name="村田製作所",
+        us_proxies=("SOXX", "QQQ", "NVDA"),
+        us_label="半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品）",
+        note="試用銘柄。100株だけ・10時前だけ・-5,000円で即損切り。値動きは承認銘柄の約2倍",
+        trial=True,
+    ),
 ]
 
 
@@ -74,6 +84,7 @@ class FocusSignal:
     conflict_text: str
     validation: dict | None                # バックテスト結果（なければNone）
     note: str
+    trial: bool = False
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -180,6 +191,7 @@ def build_focus_signal(
         conflict_text=conflict_text,
         validation=validation,
         note=stock.note,
+        trial=stock.trial,
     )
 
 

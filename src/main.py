@@ -297,7 +297,7 @@ def _build_stub_focus_ohlc() -> dict[str, list[dict]]:
 
     out = {}
     idx = pd.bdate_range(end="2026-04-23", periods=90)
-    for k, (code, base) in enumerate((("5803", 4200.0), ("9984", 6500.0))):
+    for k, (code, base) in enumerate((("5803", 4200.0), ("9984", 6500.0), ("6981", 6600.0))):
         rng = np.random.default_rng(10 + k)
         close = base * np.exp(rng.normal(0, 0.02, len(idx)).cumsum())
         open_ = close * np.exp(rng.normal(0, 0.01, len(idx)))
@@ -345,7 +345,7 @@ def _build_stub_data() -> dict:
             "UPS": -0.2, "FDX": 0.1,
             "KO": 0.3, "PG": 0.1, "CL": -0.1, "MCD": 0.4,
             "GLW": -1.8, "COHR": -3.2, "LITE": -2.6, "VRT": -2.0,
-            "ARM": 1.4, "QQQ": -1.1,
+            "ARM": 1.4, "QQQ": -1.1, "SOXX": -2.4,
         },
     }
 

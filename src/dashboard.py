@@ -129,6 +129,8 @@ _RULES_FOCUS_CSS = """
 .focus-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .focus-name { font-size: 17px; font-weight: 700; }
 .focus-code { color: var(--muted); font-size: 12px; margin-left: 4px; font-weight: 400; }
+.focus-trial { font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid currentColor; border-radius: 6px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; }
+.focus-trial-note { font-size: 12px; color: var(--accent); margin-bottom: 6px; }
 .focus-dir { font-size: 15px; font-weight: 700; white-space: nowrap; }
 .focus-dir.bullish { color: var(--long); }
 .focus-dir.bearish { color: var(--short); }
@@ -184,7 +186,7 @@ def render_trading_rules_banner(rules: dict | None) -> str:
     """
 
 
-# ----- 承認銘柄（フジクラ・SBG）の個別予測 -----
+# ----- 承認銘柄（フジクラ・SBG）・試用銘柄の個別予測 -----
 
 def _fmt_r(x: float | None) -> str:
     return "—" if x is None else f"{x:+.2f}"
@@ -263,12 +265,15 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
         is_conflict = bool(f.get("conflict_with_market"))
         conflict = f'<div class="focus-conflict">⚠️ {f["conflict_text"]}</div>' if is_conflict else ""
         card_class = "focus-card conflict" if is_conflict else "focus-card"
+        trial_badge = '<span class="focus-trial">試用</span>' if f.get("trial") else ""
+        trial_note = f'<div class="focus-trial-note">🧪 {f["note"]}</div>' if f.get("trial") else ""
         cards += f"""
         <div class="{card_class}">
           <div class="focus-head">
-            <div class="focus-name">{f["name"]}<span class="focus-code">{f["code"]}</span></div>
+            <div class="focus-name">{f["name"]}<span class="focus-code">{f["code"]}</span>{trial_badge}</div>
             <div class="focus-dir {d}">{dir_html}</div>
           </div>
+          {trial_note}
           <div class="focus-us">米関連株の平均 {f["us_avg_change_pct"]:+.2f}%（{f["us_label"]}）</div>
           <div class="focus-chips">{chips}</div>
           <div class="focus-line"><span class="lbl">寄り（窓）</span>{f["gap_text"]}</div>
@@ -280,7 +285,7 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
         """
     return f"""
     <section>
-      <h2 class="section-title">🎯 承認銘柄の寄り前予測（フジクラ・SBG）</h2>
+      <h2 class="section-title">🎯 承認銘柄の寄り前予測（{"・".join(f["name"] for f in focus_signals if not f.get("trial"))}{"　試用：" + "・".join(f["name"] for f in focus_signals if f.get("trial")) if any(f.get("trial") for f in focus_signals) else ""}）</h2>
       <div class="focus-grid">
         {cards}
       </div>
