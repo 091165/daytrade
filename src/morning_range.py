@@ -26,7 +26,7 @@ from focus_backtest import _norm
 
 MORNING_FROM, MORNING_TO = "09:00", "09:55"     # 5分足の始まりの時刻（9:55の足で10:00まで）
 FIRST_END = "09:10"                             # 最初の10分 = これより前に始まった足
-OPEN_BY = "09:05"                               # この時刻までに始まる足がない日は除く（寄りが遅れた日・データ欠け）
+OPEN_BY = "09:05"                               # この時刻までに始まる足がない日は除く（Yahooの5分足は9:00の足が欠ける日が多い）
 FIRST5_LEVELS = (0.15, 0.30, 0.45)              # 最初の10分の動き ÷ 1日の目安 の区切り
 MIN_DAYS = 20
 ANNOUNCE_AFTER = time(15, 0)                    # これ以降の発表は翌営業日に反応する
@@ -200,8 +200,8 @@ def run_morning_validation(period: str = "2y") -> dict:
     focus = {s.ticker: s for s in FOCUS_STOCKS}
     tickers = sorted({t for _, t, _ in SCREEN_JP} | set(focus))
     print(f"Fetching {len(tickers)} tickers (5m 60d + 1d {period}) for morning range...")
-    from yahoo_chart import fetch_intraday
-    m5 = {t: fetch_intraday(t, "5m", days=59, chunk_days=59) for t in tickers}   # yfinance だと 9:00 の足が欠ける
+    m5 = yf.download(" ".join(tickers), period="60d", interval="5m", progress=False,
+                     group_by="ticker", auto_adjust=True, threads=True)
     d1 = yf.download(" ".join(tickers), period=period, interval="1d", progress=False,
                      group_by="ticker", auto_adjust=True, threads=True)
     pooled, per_code = [], {}

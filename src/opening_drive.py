@@ -23,7 +23,7 @@ from correlation_scan import Q_THRESHOLD, bh_qvalues
 from focus_backtest import _corr
 
 WINDOWS = ("09:10", "09:20")     # 最初の動きを測る区切り
-OPEN_BY = "09:05"                # この時刻までに始まる足がない日は除く（寄りが遅れた日・データ欠け）
+OPEN_BY = "09:05"                # この時刻までに始まる足がない日は除く（Yahooの5分足は9:00の足が欠ける日が多い）
 END = "10:00"
 MIN_SAVED_DAYS = 40
 MIN_DAYS = 20
@@ -122,12 +122,17 @@ def run_opening_drive() -> dict:
             idx = pd.to_datetime(g["date"].dt.strftime("%Y-%m-%d") + " " + g["time"]).dt.tz_localize("Asia/Tokyo")
             bars_by_code[code] = pd.DataFrame({"Open": g["open"].values, "Close": g["close"].values}, index=idx.values)
     else:
-        from yahoo_chart import fetch_intraday
+        import yfinance as yf
         source, bar_minutes = f"Yahoo 5分足・直近60日（1分足は{n_saved}日分たまったところ）", 5
-        for code, t, _ in SCREEN_JP:
-            x = fetch_intraday(t, "5m", days=59, chunk_days=59)
-            if not x.empty:
-                bars_by_code[code] = x.tz_convert("Asia/Tokyo")
+        tickers = {t: c for c, t, _ in SCREEN_JP}
+        m5 = yf.download(" ".join(tickers), period="60d", interval="5m", progress=False,
+                         group_by="ticker", auto_adjust=True, threads=True)
+        for t, code in tickers.items():
+            try:
+                x = m5[t].dropna(subset=["Open", "Close"])
+            except KeyError:
+                continue
+            bars_by_code[code] = x.tz_convert("Asia/Tokyo") if getattr(x.index, "tz", None) is not None else x
 
     per_stock = {}
     for code, bars in bars_by_code.items():
