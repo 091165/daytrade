@@ -473,9 +473,9 @@
   },
   {
     "date": "2026-10-28",
-    "verdict": "buy_bias",
-    "verdict_label": "買いポジ主体",
-    "confidence": "high",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
     "reconstructed": false,
     "generated_after_open": true
   }
