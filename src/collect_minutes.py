@@ -87,7 +87,9 @@ def collect(now: datetime | None = None) -> int:
     saved = days_to_save(set(by_day), existing, now)
     for d in saved:
         write_day(MINUTES_DIR / f"{d.isoformat()}.csv", by_day[d])
-        print(f"✅ data/minutes/{d.isoformat()}.csv  {len({r[0] for r in by_day[d]})}銘柄 {len(by_day[d])}行")
+        codes = {r[0] for r in by_day[d]}
+        opened = {r[0] for r in by_day[d] if r[1] == "09:00"}
+        print(f"✅ data/minutes/{d.isoformat()}.csv  {len(codes)}銘柄 {len(by_day[d])}行（9:00の足あり {len(opened)}銘柄）")
     print(f"保存 {len(saved)}日 ／ これまでの合計 {len(existing) + len(saved)}日")
     return len(saved)
 
