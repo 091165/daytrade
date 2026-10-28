@@ -2,9 +2,13 @@ name: Daily Kiriban Signal
 
 on:
   schedule:
-    # 平日毎朝 7:30 JST (= 22:30 UTC 前日)
-    # GitHub Actionsのcronは数十分遅延することがあるため、寄付き(9:00)に余裕を持って設定
-    - cron: "30 22 * * 0-4"
+    # 平日の寄り前に3回（JST 6:37 / 7:07 / 7:37 = UTC 前日 21:37 / 22:07 / 22:37）
+    # 定期実行は混雑で大きく遅れる（2026/9〜10月の実績: 7:30指定で遅れの中央値 約2時間15分、寄り前0回）。
+    # 混雑しやすい 00分・30分ちょうどを避け、米国市場の引け（冬時間 6:00 JST）後に複数回入れる。
+    # 9:00以降に遅れて動いた分は、今日の寄り前の版があれば上書きしない（src/run_timing.py）。
+    - cron: "37 21 * * 0-4"
+    - cron: "7 22 * * 0-4"
+    - cron: "37 22 * * 0-4"
   workflow_dispatch:
   push:
     branches: [main]
@@ -44,6 +48,7 @@ jobs:
           python tests/test_focus_stocks.py
           python tests/test_focus_backtest.py
           python tests/test_expected_range.py
+          python tests/test_run_timing.py
 
       - name: Generate signal dashboard
         run: python src/main.py
