@@ -82,6 +82,7 @@ section > h2.section-title {
 .focus-line .lbl { display: inline-block; min-width: 4.5em; color: var(--muted); font-size: 12px; }
 .focus-conflict { margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: rgba(239, 68, 68, 0.12); color: #fca5a5; font-size: 13px; font-weight: 600; }
 .focus-foot { margin-top: 10px; font-size: 11px; color: var(--muted); }
+.late-notice { border: 2px solid var(--accent); border-radius: 10px; padding: 12px 16px; background: rgba(251, 191, 36, 0.10); color: var(--accent); font-size: 14px; font-weight: 600; }
 .focus-range { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--panel-2); }
 .focus-range-title { font-size: 12px; color: var(--muted); }
 .focus-range-main { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -261,10 +262,12 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-10-28 19:20 JST</div>
+      <div class="timestamp">Updated: 2026-10-28 20:50 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
     </div>
   </header>
+
+  <section><div class="late-notice">⚠️ この判定は寄り付き後（20:50）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
 
   
     <section>
@@ -328,15 +331,15 @@ section > h2.section-title {
         </div>
         <div class="direction-meta-item">
           <div class="direction-meta-label">日経先物 現対</div>
-          <div class="futures-value" style="color: var(--long);">+306円</div>
+          <div class="futures-value" style="color: var(--long);">+431円</div>
           <div class="sub" style="font-size: 12px;">
-            先物: ¥64,260 / 現物終値: ¥63,954
+            先物: ¥64,385 / 現物終値: ¥63,954
           </div>
         </div>
       </div>
 
       <div class="reasons-list">
-        <ul><li>米指数が揃って上げ（ナスダック, SOX）</li><li>日経先物が米に追随（現対+306円）</li><li>→ 米日連動の上昇相場として買い目線</li></ul>
+        <ul><li>米指数が揃って上げ（ナスダック, SOX）</li><li>日経先物が米に追随（現対+431円）</li><li>→ 米日連動の上昇相場として買い目線</li></ul>
       </div>
 
       <div class="time-nodes-note">
@@ -410,7 +413,7 @@ section > h2.section-title {
             <span class="fx-symbol">USD/JPY</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">157.87</span>
+            <span class="fx-price">157.88</span>
             <span class="fx-change" style="color: var(--muted);">━ +0.22%</span>
           </div>
           <div class="fx-interpretation">変動なし</div>
@@ -422,10 +425,10 @@ section > h2.section-title {
             <span class="fx-symbol">XAU/USD</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$4,065.7</span>
-            <span class="fx-change" style="color: var(--muted);">━ -0.22%</span>
+            <span class="fx-price">$4,062.1</span>
+            <span class="fx-change" style="color: var(--short);">▼ -0.31%</span>
           </div>
-          <div class="fx-interpretation">変動なし</div>
+          <div class="fx-interpretation">ゴールド小幅下落</div>
         </div>
         
         <div class="fx-item">
@@ -434,8 +437,8 @@ section > h2.section-title {
             <span class="fx-symbol">CL</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$101.57</span>
-            <span class="fx-change" style="color: var(--long);">▲ +1.67%</span>
+            <span class="fx-price">$101.74</span>
+            <span class="fx-change" style="color: var(--long);">▲ +1.84%</span>
           </div>
           <div class="fx-interpretation">原油上昇 → エネルギー株に追い風</div>
         </div>
@@ -704,7 +707,7 @@ section > h2.section-title {
           <td class="num">+1.18%</td>
           <td class="num">+0.03%</td>
           <td class="num">+3.60%</td>
-          <td class="num">+306</td>
+          <td class="num">+431</td>
         </tr>
         
         <tr>
