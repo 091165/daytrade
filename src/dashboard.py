@@ -229,6 +229,20 @@ def render_range_block(rg: dict | None) -> str:
         f'<div class="focus-range-sub {rg["level"]}">{rg["level_text"]}</div>'
         if rg.get("level_text") else ""
     )
+    mo = rg.get("morning") or {}
+    morning = ""
+    if mo.get("available"):
+        rough_m = f'（荒れた日は約{mo["rough_lot_yen"]:,.0f}円）' if mo.get("rough_lot_yen") else ""
+        morning = (f'<div class="focus-range-sub"><b>9時台の目安：100株で約{mo["morning_lot_yen"]:,.0f}円</b>{rough_m}</div>')
+        if mo.get("first5_lot_yen"):
+            morning += (f'<div class="focus-range-sub">9:05の確認：最初の5分で約{mo["first5_lot_yen"]:,.0f}円（100株）以上動いたら、'
+                        f'9時台は約{mo["first5_morning_lot_yen"]:,.0f}円まで広がりやすい</div>')
+    earn = ""
+    if mo.get("earnings_today"):
+        times = f'目安の約{mo["earnings_ratio"]:.1f}倍（過去{mo["earnings_n"]}回の平均）' if mo.get("earnings_ratio") else "目安より大きく"
+        earn = f'<div class="focus-range-sub high">⚠️ 決算明け：今日の値幅は{times}になりやすい。ロットを抑える</div>'
+    elif mo.get("next_earnings"):
+        earn = f'<div class="focus-range-sub">次の決算：{mo["next_earnings"][5:].replace("-", "/")}</div>'
     v = rg.get("validation")
     if v and v.get("r") is not None:
         foot = (f'検証（{v["n"]}日）: 直近{v["window"]}日の平均で翌日の値幅を予測 r={v["r"]:+.2f}'
@@ -242,6 +256,8 @@ def render_range_block(rg: dict | None) -> str:
             {rough}
             <div class="focus-range-sub">損切り-{rg["stop_yen"]:,}円（{rg["stop_width"]:.0f}円幅）は{_frac_text(rg.get("stop_frac"))}</div>
             {level}
+            {morning}
+            {earn}
             <div class="focus-foot">{foot}</div>
           </div>"""
 
