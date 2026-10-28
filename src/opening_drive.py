@@ -36,22 +36,27 @@ def drive_rows(bars: pd.DataFrame, bar_minutes: int) -> pd.DataFrame:
     rows = []
     for day, g in bars.groupby(bars.index.date):
         g = g.sort_index()
-        start = g[g.index.strftime("%H:%M") == "09:00"]
-        if start.empty:
-            continue
-        o = float(start["Open"].iloc[0])
-        ends = g.index + pd.Timedelta(minutes=bar_minutes)
-        closes = pd.Series(g["Close"].values, index=ends.strftime("%H:%M"))
-        closes = closes[~closes.index.duplicated(keep="last")]
-        if END not in closes.index:
-            continue
+        hm = g.index.strftime("%H:%M")
+        g = g[(hm >= "09:00") & (hm < END)]
+        if g.empty or g.index[0].strftime("%H:%M") >= WINDOWS[0]:
+            continue                                   # 寄りの足がない日（寄らなかった・データ欠け）
+        o = float(g["Open"].iloc[0])
+        # 各時刻の時点でわかっている最新の終値（足の終わり = 始まり + bar_minutes）
+        ends = (g.index + pd.Timedelta(minutes=bar_minutes)).strftime("%H:%M")
+        closes = pd.Series(g["Close"].values, index=ends)
+
+        def close_at(hhmm: str) -> float | None:
+            c = closes[closes.index <= hhmm]
+            return float(c.iloc[-1]) if len(c) else None
+
+        c_end = close_at(END)
         row = {"date": pd.Timestamp(day)}
         for w in WINDOWS:
-            if w not in closes.index:
-                continue
-            c_w = float(closes[w])
+            c_w = close_at(w)
+            if c_w is None or c_end is None or closes.index[-1] <= w:
+                continue                               # 区切りより後の足がない
             row[f"first_{w}"] = (c_w / o - 1) * 100
-            row[f"after_{w}"] = (float(closes[END]) / c_w - 1) * 100
+            row[f"after_{w}"] = (c_end / c_w - 1) * 100
         rows.append(row)
     return pd.DataFrame(rows).set_index("date") if rows else pd.DataFrame()
 

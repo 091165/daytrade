@@ -25,7 +25,7 @@ from expected_range import RANGE_WINDOW, daily_range_pct
 from focus_backtest import _norm
 
 MORNING_FROM, MORNING_TO = "09:00", "09:55"     # 5分足の始まりの時刻（9:55の足で10:00まで）
-FIRST_BAR_TO = "09:00"                          # 最初の5分足（9:00-9:05）
+FIRST5_END = "09:05"                            # 最初の5分 = これより前に始まった足
 FIRST5_LEVELS = (0.10, 0.20, 0.35)              # 最初の5分の動き ÷ 1日の目安 の区切り
 MIN_DAYS = 20
 ANNOUNCE_AFTER = time(15, 0)                    # これ以降の発表は翌営業日に反応する
@@ -45,20 +45,21 @@ def morning_rows(m5: pd.DataFrame, daily: pd.DataFrame) -> pd.DataFrame:
     for day, g in x.groupby(x.index.date):
         a = g.between_time(MORNING_FROM, MORNING_TO)
         ts = pd.Timestamp(day)
-        if len(a) < 6 or pd.isna(avg.get(ts)):
+        if len(a) < 6 or ts not in avg.index or pd.isna(avg[ts]):
             continue
         prev = close[close.index < ts]
         if prev.empty:
             continue
         pc = float(prev.iloc[-1])
-        first = a.between_time(FIRST_BAR_TO, FIRST_BAR_TO)
+        # 最初の5分 = 9:05より前に始まった足（1分足でも5分足でも同じ扱い）
+        first = a[a.index.strftime("%H:%M") < FIRST5_END]
         if first.empty:
             continue
         rows.append({
             "date": ts,
             "morning": (a["High"].max() - a["Low"].min()) / pc * 100,
             "avg10": float(avg[ts]),
-            "first5": (first["High"].iloc[0] - first["Low"].iloc[0]) / pc * 100,
+            "first5": (first["High"].max() - first["Low"].min()) / pc * 100,
         })
     return pd.DataFrame(rows).set_index("date") if rows else pd.DataFrame(columns=["morning", "avg10", "first5"])
 
@@ -203,6 +204,13 @@ def run_morning_validation(period: str = "2y") -> dict:
     d1 = yf.download(" ".join(tickers), period=period, interval="1d", progress=False,
                      group_by="ticker", auto_adjust=True, threads=True)
     pooled, per_code = [], {}
+    try:   # 診断用：5分足の各日の最初の足の時刻
+        x = m5[tickers[0]].dropna(subset=["Open"])
+        x = x.tz_convert("Asia/Tokyo") if getattr(x.index, "tz", None) is not None else x
+        firsts = pd.Series([g.index.min().strftime("%H:%M") for _, g in x.groupby(x.index.date)]).value_counts()
+        print(f"  {tickers[0]} の5分足 {x.index.normalize().nunique()}日・各日の最初の足: {firsts.head(5).to_dict()}")
+    except Exception as e:
+        print(f"  診断に失敗: {e}")
     for t in tickers:
         try:
             rows = morning_rows(m5[t], d1[t])
