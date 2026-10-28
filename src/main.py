@@ -25,6 +25,8 @@ from history import append_today_signal, load_history, get_recent_entries
 from stock_picks import build_stock_picks
 from focus_stocks import build_all_focus_signals, get_focus_us_tickers
 from trading_rules import build_trading_rules
+from focus_stocks import FOCUS_STOCKS
+from expected_range import RANGE_WINDOW, build_range_signal, ohlc_to_records, records_to_ohlc
 from dashboard import render_dashboard, render_error_page
 
 
@@ -66,6 +68,38 @@ def _load_focus_validation(docs_dir: Path) -> dict[str, dict] | None:
     except (json.JSONDecodeError, OSError, KeyError) as e:
         print(f"⚠️ Failed to load focus validation: {e}")
         return None
+
+
+def _load_range_validation(docs_dir: Path) -> dict[str, dict] | None:
+    """過去のバックテスト結果から、銘柄コード → 想定値幅の検証結果（RANGE_WINDOW分）を返す"""
+    backtest_path = docs_dir / "backtest_report.json"
+    if not backtest_path.exists():
+        return None
+    try:
+        with backtest_path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        out = {}
+        for r in (data.get("range_validation") or {}).get("results", []):
+            for v in r.get("by_window", []):
+                if v.get("window") == RANGE_WINDOW and v.get("r") is not None:
+                    out[r["code"]] = v
+        return out
+    except (json.JSONDecodeError, OSError, KeyError) as e:
+        print(f"⚠️ Failed to load range validation: {e}")
+        return None
+
+
+def _fetch_focus_ohlc(use_stub: bool) -> dict[str, list[dict]]:
+    """承認銘柄の日足を取得してJSON用の形で返す。失敗してもページ生成は続ける。"""
+    if use_stub:
+        return _build_stub_focus_ohlc()
+    try:
+        from fetch_data import fetch_daily_ohlc
+        raw = fetch_daily_ohlc([s.ticker for s in FOCUS_STOCKS], period="6mo")
+        return {s.code: ohlc_to_records(raw[s.ticker]) for s in FOCUS_STOCKS if s.ticker in raw}
+    except Exception as e:
+        print(f"⚠️ Failed to fetch focus OHLC (想定値幅はスキップ): {e}")
+        return {}
 
 
 def main() -> int:
@@ -170,6 +204,17 @@ def main() -> int:
     )
     focus_signals_dict = [f.as_dict() for f in focus_signals]
 
+    # 想定値幅（承認銘柄）
+    focus_ohlc = _fetch_focus_ohlc(use_stub)
+    market["focus_ohlc"] = focus_ohlc
+    range_validation = _load_range_validation(output_dir) or {}
+    for f in focus_signals_dict:
+        f["range"] = build_range_signal(
+            records_to_ohlc(focus_ohlc.get(f["code"])),
+            today=today,
+            validation=range_validation.get(f["code"]),
+        )
+
     # JSON
     json_path = output_dir / "signal.json"
     with json_path.open("w", encoding="utf-8") as f:
@@ -221,6 +266,25 @@ def main() -> int:
     print("=" * 60)
 
     return 0
+
+
+def _build_stub_focus_ohlc() -> dict[str, list[dict]]:
+    """開発用: 承認銘柄の合成日足"""
+    import numpy as np
+    import pandas as pd
+
+    out = {}
+    idx = pd.bdate_range(end="2026-04-23", periods=90)
+    for k, (code, base) in enumerate((("5803", 4200.0), ("9984", 6500.0))):
+        rng = np.random.default_rng(10 + k)
+        close = base * np.exp(rng.normal(0, 0.02, len(idx)).cumsum())
+        open_ = close * np.exp(rng.normal(0, 0.01, len(idx)))
+        spread = np.abs(rng.normal(0.025, 0.008, len(idx)))
+        high = np.maximum(open_, close) * (1 + spread / 2)
+        low = np.minimum(open_, close) * (1 - spread / 2)
+        df = pd.DataFrame({"Open": open_, "High": high, "Low": low, "Close": close}, index=idx)
+        out[code] = ohlc_to_records(df)
+    return out
 
 
 def _build_stub_data() -> dict:

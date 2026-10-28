@@ -140,6 +140,13 @@ _RULES_FOCUS_CSS = """
 .focus-line .lbl { display: inline-block; min-width: 4.5em; color: var(--muted); font-size: 12px; }
 .focus-conflict { margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: rgba(239, 68, 68, 0.12); color: #fca5a5; font-size: 13px; font-weight: 600; }
 .focus-foot { margin-top: 10px; font-size: 11px; color: var(--muted); }
+.focus-range { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--panel-2); }
+.focus-range-title { font-size: 12px; color: var(--muted); }
+.focus-range-main { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.focus-range-main .lot { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+.focus-range-sub { font-size: 13px; margin-top: 2px; }
+.focus-range-sub.high { color: #fca5a5; font-weight: 600; }
+.focus-range-sub.low { color: var(--muted); }
 
 /* スマホで履歴の表がページ全体をはみ出さないように、表だけ横スクロールさせる */
 @media (max-width: 720px) {
@@ -196,6 +203,46 @@ def _focus_chip(ticker: str, pct: float) -> str:
     return f'<span class="focus-chip">{ticker} <span style="color: {color};">{pct:+.1f}%</span></span>'
 
 
+def _frac_text(frac: float | None) -> str:
+    if frac is None:
+        return "—"
+    if frac >= 1:
+        return f"値幅の約{frac:.1f}倍"
+    return f"値幅の約{max(1, round(frac * 10))}割"
+
+
+def render_range_block(rg: dict | None) -> str:
+    """想定値幅のブロック（フジクラ・SBGカードの中）"""
+    if not rg:
+        return ""
+    if not rg.get("available"):
+        return f'<div class="focus-range"><div class="focus-range-title">今日の値幅の目安</div><div class="focus-range-sub low">{rg.get("reason", "データなし")}</div></div>'
+    rough = (
+        f'<div class="focus-range-sub">荒れた日（5日に1日）は約{rg["rough_yen"]:,.0f}円まで'
+        f'（100株で約{rg["rough_yen"] * rg["shares"]:,.0f}円）</div>'
+        if rg.get("rough_yen") else ""
+    )
+    level = (
+        f'<div class="focus-range-sub {rg["level"]}">{rg["level_text"]}</div>'
+        if rg.get("level_text") else ""
+    )
+    v = rg.get("validation")
+    if v and v.get("r") is not None:
+        foot = (f'検証（{v["n"]}日）: 直近{v["window"]}日の平均で翌日の値幅を予測 r={v["r"]:+.2f}'
+                f'／予測以内に収まった日 {v["within_rate"] * 100:.0f}%')
+    else:
+        foot = "検証: まだ（毎週日曜のバックテスト後に、当たり具合を表示）"
+    return f"""
+          <div class="focus-range">
+            <div class="focus-range-title">今日の値幅の目安（高値−安値・直近{rg["window"]}日平均）</div>
+            <div class="focus-range-main">約{rg["pred_yen"]:,.0f}円<span class="lot">100株で約{rg["lot_yen"]:,.0f}円</span></div>
+            {rough}
+            <div class="focus-range-sub">損切り-{rg["stop_yen"]:,}円（{rg["stop_width"]:.0f}円幅）は{_frac_text(rg.get("stop_frac"))}</div>
+            {level}
+            <div class="focus-foot">{foot}</div>
+          </div>"""
+
+
 def render_focus_section(focus_signals: list[dict] | None) -> str:
     if not focus_signals:
         return ""
@@ -226,6 +273,7 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
           <div class="focus-line"><span class="lbl">寄り（窓）</span>{f["gap_text"]}</div>
           <div class="focus-line"><span class="lbl">寄り後</span>{f["intraday_text"]}</div>
           {conflict}
+          {render_range_block(f.get("range"))}
           <div class="focus-foot">{_focus_validation_foot(f.get("validation"))}</div>
         </div>
         """
