@@ -2,7 +2,8 @@
 # Daytrade Signal Board
 
 日経225デイトレ・スキャルピング向けの毎朝の寄り前シグナルを自動計算するダッシュボード。
-GitHub Actions で毎朝 8:40 JST に実行、GitHub Pages で配信。
+GitHub Actions で平日の寄り前（6:37 / 7:07 / 7:37 JST）に実行、GitHub Pages で配信。
+定期実行は混雑で遅れることがあるため、9:00以降に遅れて動いた分は寄り前の版を上書きしない。寄り前に1度も間に合わなかった日は、ページ上部に注意を出す。
 
 ## 提供するシグナル
 
@@ -91,7 +92,7 @@ python tests/test_kiriban.py    # テスト
 ## デプロイ
 
 1. GitHubにpushし、**Settings → Pages → Source: GitHub Actions** を選択
-2. 平日 8:40 JST に自動でダッシュボード更新
+2. 平日の寄り前（6:37 / 7:07 / 7:37 JST）に自動でダッシュボード更新
 3. `workflow_dispatch` で手動トリガーも可能
 
 ## 今後の拡張候補

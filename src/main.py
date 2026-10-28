@@ -25,6 +25,7 @@ from history import append_today_signal, load_history, get_recent_entries
 from stock_picks import build_stock_picks
 from focus_stocks import build_all_focus_signals, get_focus_us_tickers
 from trading_rules import build_trading_rules
+from run_timing import late_notice, read_existing_timestamp, should_skip_scheduled_run
 from focus_stocks import FOCUS_STOCKS
 from expected_range import RANGE_WINDOW, build_range_signal, ohlc_to_records, records_to_ohlc
 from dashboard import render_dashboard, render_error_page
@@ -108,6 +109,15 @@ def main() -> int:
     html_path = output_dir / "index.html"
     history_path = output_dir / "history.json"
 
+    # 遅れて動いた定期実行が、今日の寄り前の版を上書きしないようにする
+    event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+    now_jst = datetime.now(JST)
+    existing_ts = read_existing_timestamp(output_dir / "signal.json")
+    if should_skip_scheduled_run(event_name, now_jst, existing_ts):
+        print(f"ℹ️ 今日の寄り前の版（{existing_ts:%H:%M}）があるため、"
+              f"{now_jst:%H:%M} に遅れて動いた定期実行では上書きしません。")
+        return 0
+
     us_tickers = sorted(set(get_all_us_tickers()) | set(get_focus_us_tickers()))
 
     # データ取得（失敗時はエラーページを出して終了）
@@ -125,7 +135,9 @@ def main() -> int:
             render_error_page(html_path, err_msg)
             return 1
 
-    today = datetime.fromisoformat(market["timestamp"]).date()
+    generated_at = datetime.fromisoformat(market["timestamp"])
+    today = generated_at.date()
+    notice = late_notice(generated_at)
 
     # 警告
     warnings = get_all_warnings(
@@ -229,6 +241,7 @@ def main() -> int:
                 "recent_history": recent_history,
                 "stock_picks": stock_picks.as_dict(),
                 "trading_rules": trading_rules.as_dict(),
+                "generated_after_open": notice is not None,
                 "focus_stocks": focus_signals_dict,
             },
             f,
@@ -250,6 +263,7 @@ def main() -> int:
         output_path=html_path,
         trading_rules=trading_rules.as_dict(),
         focus_signals=focus_signals_dict,
+        late_notice=notice,
     )
 
     # サマリ
@@ -263,6 +277,8 @@ def main() -> int:
     if market_ctx.combined_note:
         print(f"💱 マクロ警戒: {market_ctx.combined_note}")
     print(f"📅 履歴: {len(history)} 件")
+    if notice:
+        print(f"⚠️ 寄り付き後の生成（{generated_at:%H:%M}）")
     print("=" * 60)
 
     return 0

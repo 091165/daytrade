@@ -140,6 +140,7 @@ _RULES_FOCUS_CSS = """
 .focus-line .lbl { display: inline-block; min-width: 4.5em; color: var(--muted); font-size: 12px; }
 .focus-conflict { margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: rgba(239, 68, 68, 0.12); color: #fca5a5; font-size: 13px; font-weight: 600; }
 .focus-foot { margin-top: 10px; font-size: 11px; color: var(--muted); }
+.late-notice { border: 2px solid var(--accent); border-radius: 10px; padding: 12px 16px; background: rgba(251, 191, 36, 0.10); color: var(--accent); font-size: 14px; font-weight: 600; }
 .focus-range { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--panel-2); }
 .focus-range-title { font-size: 12px; color: var(--muted); }
 .focus-range-main { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -658,6 +659,7 @@ def render_dashboard(
     output_path: Path,
     trading_rules: dict | None = None,
     focus_signals: list[dict] | None = None,
+    late_notice: str | None = None,
 ) -> None:
     """HTMLダッシュボードを生成してファイルに書き出す。"""
     direction_verdict_html = render_direction_verdict(direction_signal)
@@ -670,6 +672,9 @@ def render_dashboard(
     history_html = render_history_section(recent_history)
     stock_picks_html = render_stock_picks_section(stock_picks)
     rules_html = render_trading_rules_banner(trading_rules)
+    late_html = (
+        f'<section><div class="late-notice">{late_notice}</div></section>' if late_notice else ""
+    )
     focus_html = render_focus_section(focus_signals)
 
     futures_diff = direction_signal["futures_diff"]
@@ -857,6 +862,8 @@ def render_dashboard(
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
     </div>
   </header>
+
+  {late_html}
 
   {rules_html}
 
