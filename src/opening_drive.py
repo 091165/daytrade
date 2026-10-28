@@ -2,8 +2,8 @@
 寄り直後の動きは10時まで続くか（研究用・週次レポート）
 
 「寄りで飛びつかず、動いた方向に乗る」が数字で裏付けられるかを確かめる。
-  最初の動き: 寄り（9:00の始値） → 9:05 または 9:15 の終値
-  その後:     9:05 / 9:15 の終値 → 10:00 の直前の終値
+  最初の動き: 寄り（最初の足の始値） → 9:10 または 9:20 の終値
+  その後:     9:10 / 9:20 の終値 → 10:00 の直前の終値
 最初の動きと同じ向きにその後も動くか（続く）、逆に戻すか（戻す）を、
 銘柄ごとと全銘柄まとめで測る。
 
@@ -22,7 +22,8 @@ import pandas as pd
 from correlation_scan import Q_THRESHOLD, bh_qvalues
 from focus_backtest import _corr
 
-WINDOWS = ("09:05", "09:15")     # 最初の動きを測る区切り
+WINDOWS = ("09:10", "09:20")     # 最初の動きを測る区切り
+OPEN_BY = "09:05"                # この時刻までに始まる足がない日は除く（Yahooの5分足は9:00の足が欠ける日が多い）
 END = "10:00"
 MIN_SAVED_DAYS = 40
 MIN_DAYS = 20
@@ -38,7 +39,7 @@ def drive_rows(bars: pd.DataFrame, bar_minutes: int) -> pd.DataFrame:
         g = g.sort_index()
         hm = g.index.strftime("%H:%M")
         g = g[(hm >= "09:00") & (hm < END)]
-        if g.empty or g.index[0].strftime("%H:%M") >= WINDOWS[0]:
+        if g.empty or g.index[0].strftime("%H:%M") > OPEN_BY:
             continue                                   # 寄りの足がない日（寄らなかった・データ欠け）
         o = float(g["Open"].iloc[0])
         # 各時刻の時点でわかっている最新の終値（足の終わり = 始まり + bar_minutes）

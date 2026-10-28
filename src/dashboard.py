@@ -235,7 +235,7 @@ def render_range_block(rg: dict | None) -> str:
         rough_m = f'（荒れた日は約{mo["rough_lot_yen"]:,.0f}円）' if mo.get("rough_lot_yen") else ""
         morning = (f'<div class="focus-range-sub"><b>9時台の目安：100株で約{mo["morning_lot_yen"]:,.0f}円</b>{rough_m}</div>')
         if mo.get("first5_lot_yen"):
-            morning += (f'<div class="focus-range-sub">9:05の確認：最初の5分で約{mo["first5_lot_yen"]:,.0f}円（100株）以上動いたら、'
+            morning += (f'<div class="focus-range-sub">9:10の確認：最初の10分で約{mo["first5_lot_yen"]:,.0f}円（100株）以上動いたら、'
                         f'9時台は約{mo["first5_morning_lot_yen"]:,.0f}円まで広がりやすい</div>')
     earn = ""
     if mo.get("earnings_today"):

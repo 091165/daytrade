@@ -330,7 +330,7 @@ def render_morning_section(morning: dict | None) -> str:
           <tr><td><b>{v["name"]}</b><div class="muted tiny">{code}</div></td>
             <td class="num">{v["n"]}</td><td class="num">{ratio}</td><td class="num">{rough}</td><td class="num">{earn}</td></tr>"""
     first5 = "".join(
-        f'<li>最初の5分の値幅が1日の目安の{r["from"] * 100:.0f}%' + (f'〜{r["to"] * 100:.0f}%' if r["to"] else "以上")
+        f'<li>最初の10分の値幅が1日の目安の{r["from"] * 100:.0f}%' + (f'〜{r["to"] * 100:.0f}%' if r["to"] else "以上")
         + f'：9時台は目安の<b>{r["ratio"]:.2f}倍</b>（{r["n"]}件）</li>'
         for r in morning.get("first5_table", [])
     )
@@ -343,7 +343,7 @@ def render_morning_section(morning: dict | None) -> str:
       <tbody>{rows}</tbody>
     </table>
     <div class="explainer">
-      <h3>📖 寄り直後5分の動きの大きさ別（売買代金上位20銘柄まとめ）</h3>
+      <h3>📖 寄り直後10分の動きの大きさ別（売買代金上位20銘柄まとめ）</h3>
       <ul>{first5}</ul>
       <ul>
         <li>毎朝のカードの「9時台の目安」は、1日の目安 × 上の「9時台÷1日の目安」で出している。</li>
@@ -386,7 +386,7 @@ def render_drive_section(drive: dict | None) -> str:
     return f"""
   <section class="section-box">
     <h2 class="section-title">🚀 寄り直後の動きは10時まで続くか</h2>
-    <div class="period-note">データ: {drive["source"]}　／　寄りから9:05・9:15までに動いた向きに乗り、10:00の直前に出た場合</div>
+    <div class="period-note">データ: {drive["source"]}　／　寄りから9:10・9:20までに動いた向きに乗り、10:00の直前に出た場合</div>
     <div class="explainer" style="margin-top: 0;"><h3>全銘柄まとめ</h3><ul>{pooled}</ul></div>
     <table class="results">
       <thead><tr><th>銘柄</th>{"".join(f"<th>寄り→{w} の向き</th>" for w in ws)}</tr></thead>
@@ -397,7 +397,7 @@ def render_drive_section(drive: dict | None) -> str:
       <ul>
         <li><b>続いた</b>が50%より大きければ「動いた方向に乗る」、小さければ「寄り直後の動きは戻しやすい」。</li>
         <li>銘柄ごとの結果は全銘柄×区切りで BH 補正し、q&lt;0.05 のものだけ ✅。手数料は含まない。</li>
-        <li>1分足が40日分たまるまでは、Yahoo の5分足（直近60日）での予備検証。</li>
+        <li>1分足が40日分たまるまでは、Yahoo の5分足（直近60日）での予備検証。5分足は9:00の足が欠ける日が多いため、9:05までに始まる最初の足を「寄り」として扱う。</li>
       </ul>
     </div>
   </section>

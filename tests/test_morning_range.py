@@ -48,7 +48,7 @@ def test_morning_rows_and_ratio():
     m5 = _m5(daily.index[20:50], spread=10.0, first=4.0)
     rows = morning_rows(m5, daily)
     assert len(rows) == 30
-    # 1日の目安は 4%（高値1020-安値980 / 1000）、9時台は 1%、最初の5分は 0.4%
+    # 1日の目安は 4%（高値1020-安値980 / 1000）、9時台は 1%、最初の10分は 0.4%
     assert abs(rows["avg10"].iloc[0] - 4.0) < 1e-9
     assert abs(rows["morning"].iloc[0] - 1.0) < 1e-9
     assert abs(rows["first5"].iloc[0] - 0.4) < 1e-9
@@ -73,7 +73,7 @@ def test_first5_table_buckets():
     first = rng.uniform(0, 0.6, n)
     rows = pd.DataFrame({"avg10": np.full(n, 1.0), "first5": first, "morning": 0.4 + first})
     t = first5_table(rows)
-    assert [r["from"] for r in t] == [0.0, 0.10, 0.20, 0.35]
+    assert [r["from"] for r in t] == [0.0, 0.15, 0.30, 0.45]
     assert t[-1]["to"] is None
     assert t[0]["ratio"] < t[-1]["ratio"]
     print("✅ test_first5_table_buckets")
@@ -104,7 +104,7 @@ def test_earnings_ratio_and_today():
 def test_build_morning_signal():
     rng = {"available": True, "pred_yen": 100.0, "shares": 100, "as_of": "2026-10-28"}
     val = {"n": 40, "ratio": 0.6, "rough_ratio": 0.9, "earnings": {"n": 8, "ratio": 2.3}}
-    table = [{"from": 0.0, "to": 0.1, "n": 50, "ratio": 0.5}, {"from": 0.35, "to": None, "n": 50, "ratio": 0.9}]
+    table = [{"from": 0.0, "to": 0.15, "n": 50, "ratio": 0.5}, {"from": 0.35, "to": None, "n": 50, "ratio": 0.9}]
     ann = [datetime(2026, 10, 28, 15, 30)]
     m = build_morning_signal(rng, val, table, ann, date(2026, 10, 29))
     assert m["available"] and abs(m["morning_lot_yen"] - 6000) < 1e-9 and abs(m["rough_lot_yen"] - 9000) < 1e-9

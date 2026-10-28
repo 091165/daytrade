@@ -4,12 +4,12 @@
 背景（2026/10 の検証）:
   - 1日の値幅の目安（直近10日の平均）に、米国株の動きの大きさ・窓の大きさを足しても、当たりはほとんど良くならない
   - 一方、9時台（9:00-10:00）の値幅は、1日の目安からかなりよく当たる（20銘柄・60日で r=0.74）。
-    寄り直後の5分の動きを足すと r=0.80 まで上がる
+    寄り直後の動きを足すと r=0.80 まで上がる
   - 決算発表の翌営業日は、銘柄によって値幅が目安の約2倍になる（フジクラ・村田・ルネサスなど）
 
 ここでは、週次バックテストで
   - 銘柄ごとの「9時台の値幅 ÷ 1日の目安」（中央値）
-  - 寄り直後の5分の動きの大きさ別の「9時台の値幅 ÷ 1日の目安」（全銘柄まとめ）
+  - 寄り直後10分の動きの大きさ別の「9時台の値幅 ÷ 1日の目安」（全銘柄まとめ）
   - 決算明けの「1日の値幅 ÷ 1日の目安」
 を測り、毎朝のカードで円に直して出す。
 """
@@ -25,14 +25,15 @@ from expected_range import RANGE_WINDOW, daily_range_pct
 from focus_backtest import _norm
 
 MORNING_FROM, MORNING_TO = "09:00", "09:55"     # 5分足の始まりの時刻（9:55の足で10:00まで）
-FIRST5_END = "09:05"                            # 最初の5分 = これより前に始まった足
-FIRST5_LEVELS = (0.10, 0.20, 0.35)              # 最初の5分の動き ÷ 1日の目安 の区切り
+FIRST_END = "09:10"                             # 最初の10分 = これより前に始まった足
+OPEN_BY = "09:05"                               # この時刻までに始まる足がない日は除く（Yahooの5分足は9:00の足が欠ける日が多い）
+FIRST5_LEVELS = (0.15, 0.30, 0.45)              # 最初の10分の動き ÷ 1日の目安 の区切り
 MIN_DAYS = 20
 ANNOUNCE_AFTER = time(15, 0)                    # これ以降の発表は翌営業日に反応する
 
 
 def morning_rows(m5: pd.DataFrame, daily: pd.DataFrame) -> pd.DataFrame:
-    """5分足と日足から、日ごとの 9時台の値幅・1日の目安・最初の5分の動き（すべて前日終値に対する%）を作る。"""
+    """5分足と日足から、日ごとの 9時台の値幅・1日の目安・最初の10分の動き（すべて前日終値に対する%）を作る。"""
     if m5 is None or daily is None or m5.empty or daily.empty:
         return pd.DataFrame(columns=["morning", "avg10", "first5"])
     x = m5.dropna(subset=["Open", "High", "Low", "Close"])
@@ -51,10 +52,10 @@ def morning_rows(m5: pd.DataFrame, daily: pd.DataFrame) -> pd.DataFrame:
         if prev.empty:
             continue
         pc = float(prev.iloc[-1])
-        # 最初の5分 = 9:05より前に始まった足（1分足でも5分足でも同じ扱い）
-        first = a[a.index.strftime("%H:%M") < FIRST5_END]
-        if first.empty:
+        # 最初の10分 = 9:10より前に始まった足（1分足でも5分足でも同じ扱い）
+        if a.index[0].strftime("%H:%M") > OPEN_BY:
             continue
+        first = a[a.index.strftime("%H:%M") < FIRST_END]
         rows.append({
             "date": ts,
             "morning": (a["High"].max() - a["Low"].min()) / pc * 100,
@@ -73,7 +74,7 @@ def morning_ratio(rows: pd.DataFrame) -> dict:
 
 
 def first5_table(rows: pd.DataFrame) -> list[dict]:
-    """最初の5分の動き（÷1日の目安）の大きさ別に、9時台の値幅 ÷ 1日の目安 の中央値を出す（全銘柄まとめ）。"""
+    """最初の10分の動き（÷1日の目安）の大きさ別に、9時台の値幅 ÷ 1日の目安 の中央値を出す（全銘柄まとめ）。"""
     if len(rows) < MIN_DAYS * 4:
         return []
     f = rows["first5"] / rows["avg10"]
@@ -159,7 +160,7 @@ def build_morning_signal(
     announcements: list[datetime],
     today: date,
 ) -> dict:
-    """毎朝のカード用：9時台の値幅の目安（円）・寄り直後5分の確認・決算明けの注意。
+    """毎朝のカード用：9時台の値幅の目安（円）・寄り直後10分の確認・決算明けの注意。
 
     Args:
         rng: build_range_signal の結果（pred_yen = 1日の目安、as_of = 前営業日）
@@ -191,7 +192,7 @@ def build_morning_signal(
 
 
 def run_morning_validation(period: str = "2y") -> dict:
-    """承認・試用銘柄の 9時台の値幅の比・決算明けの比 と、全銘柄まとめの最初の5分の表を作る（週次）。"""
+    """承認・試用銘柄の 9時台の値幅の比・決算明けの比 と、全銘柄まとめの最初の10分の表を作る（週次）。"""
     import yfinance as yf
     from focus_stocks import FOCUS_STOCKS
     from stock_screen import SCREEN_JP
@@ -226,5 +227,5 @@ def run_morning_validation(period: str = "2y") -> dict:
                   f" 決算明け÷目安 {v['earnings']['ratio'] or float('nan'):.2f}（{v['earnings']['n']}回）")
     table = first5_table(pd.concat(pooled)) if pooled else []
     for row in table:
-        print(f"  最初の5分が目安の{row['from'] * 100:.0f}%〜: 9時台は目安の{row['ratio']:.2f}倍（n={row['n']}）")
+        print(f"  最初の10分が目安の{row['from'] * 100:.0f}%〜: 9時台は目安の{row['ratio']:.2f}倍（n={row['n']}）")
     return {"period": period, "per_code": per_code, "first5_table": table}
