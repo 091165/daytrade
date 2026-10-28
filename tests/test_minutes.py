@@ -69,7 +69,7 @@ def test_drive_rows_5min_and_1min():
     # 9:00 の足が欠けて 9:05 から始まる日も測る（Yahoo の5分足でよくある）
     late = _bars("2026-10-28", 5, path5).iloc[1:]
     assert len(drive_rows(late, 5)) == 1
-    # 9:05 より後に始まる日は除く
+    # 9:07 より後に始まる日は除く
     assert drive_rows(_bars("2026-10-28", 5, path5).iloc[2:], 5).empty
     # 1分足（60本）でも同じ区切りで測れる
     path1 = list(np.linspace(1001, 1030, 60))

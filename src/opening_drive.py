@@ -23,7 +23,7 @@ from correlation_scan import Q_THRESHOLD, bh_qvalues
 from focus_backtest import _corr
 
 WINDOWS = ("09:10", "09:20")     # 最初の動きを測る区切り
-OPEN_BY = "09:05"                # この時刻までに始まる足がない日は除く（Yahooの5分足は9:00の足が欠ける日が多い）
+OPEN_BY = "09:07"                # この時刻までに始まる足がない日は除く（Yahoo は 9:00〜9:05 の足が欠ける日が多い）
 END = "10:00"
 MIN_SAVED_DAYS = 40
 MIN_DAYS = 20

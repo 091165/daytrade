@@ -77,7 +77,7 @@ def collect(now: datetime | None = None) -> int:
     now = now or datetime.now(JST)
     by_day: dict[date, list[list]] = {}
     for code, t, _ in SCREEN_JP:
-        df = fetch_intraday(t, "1m", days=29, chunk_days=7)     # yfinance だと 9:00〜9:05 の足が欠けるため
+        df = fetch_intraday(t, "1m", days=29, chunk_days=7)     # 直近29日分（初回はさかのぼって保存できる）
         if df.empty:
             print(f"⚠️ no data: {t}")
             continue

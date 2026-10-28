@@ -26,7 +26,7 @@ from focus_backtest import _norm
 
 MORNING_FROM, MORNING_TO = "09:00", "09:55"     # 5分足の始まりの時刻（9:55の足で10:00まで）
 FIRST_END = "09:10"                             # 最初の10分 = これより前に始まった足
-OPEN_BY = "09:05"                               # この時刻までに始まる足がない日は除く（Yahooの5分足は9:00の足が欠ける日が多い）
+OPEN_BY = "09:07"                               # この時刻までに始まる足がない日は除く（Yahoo は 9:00〜9:05 の足が欠ける日が多い）
 FIRST5_LEVELS = (0.15, 0.30, 0.45)              # 最初の10分の動き ÷ 1日の目安 の区切り
 MIN_DAYS = 20
 ANNOUNCE_AFTER = time(15, 0)                    # これ以降の発表は翌営業日に反応する
