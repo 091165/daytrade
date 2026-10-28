@@ -39,6 +39,8 @@ jobs:
           python tests/test_correlation_scan.py
           python tests/test_expected_range.py
           python tests/test_stock_screen.py
+          python tests/test_morning_range.py
+          python tests/test_minutes.py
 
       - name: Run backtest and generate report
         run: |

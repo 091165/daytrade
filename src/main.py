@@ -29,6 +29,7 @@ from focus_stocks import build_all_focus_signals, get_focus_us_tickers
 from trading_rules import build_trading_rules
 from run_timing import late_notice, read_existing_timestamp, should_skip_scheduled_run
 from focus_stocks import FOCUS_STOCKS
+from morning_range import build_morning_signal, fetch_announcements
 from expected_range import RANGE_WINDOW, build_range_signal, ohlc_to_records, records_to_ohlc
 from dashboard import render_dashboard, render_error_page
 
@@ -90,6 +91,19 @@ def _load_range_validation(docs_dir: Path) -> dict[str, dict] | None:
     except (json.JSONDecodeError, OSError, KeyError) as e:
         print(f"⚠️ Failed to load range validation: {e}")
         return None
+
+
+def _load_morning_validation(docs_dir: Path) -> dict:
+    """過去のバックテスト結果から、9時台の値幅の比・決算明けの比・寄り直後5分の表を返す。"""
+    backtest_path = docs_dir / "backtest_report.json"
+    if not backtest_path.exists():
+        return {}
+    try:
+        with backtest_path.open("r", encoding="utf-8") as f:
+            return json.load(f).get("morning_range") or {}
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"⚠️ Failed to load morning range validation: {e}")
+        return {}
 
 
 def _fetch_focus_ohlc(use_stub: bool) -> dict[str, list[dict]]:
@@ -227,6 +241,19 @@ def main() -> int:
             records_to_ohlc(focus_ohlc.get(f["code"])),
             today=today,
             validation=range_validation.get(f["code"]),
+        )
+
+    # 9時台の値幅の目安・決算明けの注意（承認・試用銘柄）
+    morning_val = _load_morning_validation(output_dir)
+    tickers = {s.code: s.ticker for s in FOCUS_STOCKS}
+    for f in focus_signals_dict:
+        announcements = [] if use_stub else fetch_announcements(tickers[f["code"]])
+        f["range"]["morning"] = build_morning_signal(
+            f["range"],
+            (morning_val.get("per_code") or {}).get(f["code"]),
+            morning_val.get("first5_table"),
+            announcements,
+            today,
         )
 
     # JSON

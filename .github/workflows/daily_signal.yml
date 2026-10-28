@@ -50,6 +50,7 @@ jobs:
           python tests/test_expected_range.py
           python tests/test_run_timing.py
           python tests/test_archive.py
+          python tests/test_morning_range.py
 
       - name: Generate signal dashboard
         run: python src/main.py

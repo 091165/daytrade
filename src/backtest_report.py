@@ -311,6 +311,99 @@ def render_range_section(range_results: list[dict] | None, period: str) -> str:
 """
 
 
+def render_morning_section(morning: dict | None) -> str:
+    """9時台の値幅・決算明けの検証"""
+    if not morning or not morning.get("per_code"):
+        return """
+  <section class="section-box">
+    <h2 class="section-title">🌅 9時台の値幅・決算明けの検証</h2>
+    <div class="muted" style="padding: 16px;">まだ検証結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    rows = ""
+    for code, v in morning["per_code"].items():
+        e = v.get("earnings") or {}
+        ratio = f'{v["ratio"]:.2f}倍' if v.get("ratio") else "—"
+        rough = f'{v["rough_ratio"]:.2f}倍' if v.get("rough_ratio") else "—"
+        earn = f'{e["ratio"]:.2f}倍（{e["n"]}回）' if e.get("ratio") else "—"
+        rows += f"""
+          <tr><td><b>{v["name"]}</b><div class="muted tiny">{code}</div></td>
+            <td class="num">{v["n"]}</td><td class="num">{ratio}</td><td class="num">{rough}</td><td class="num">{earn}</td></tr>"""
+    first5 = "".join(
+        f'<li>最初の10分の値幅が1日の目安の{r["from"] * 100:.0f}%' + (f'〜{r["to"] * 100:.0f}%' if r["to"] else "以上")
+        + f'：9時台は目安の<b>{r["ratio"]:.2f}倍</b>（{r["n"]}件）</li>'
+        for r in morning.get("first5_table", [])
+    )
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">🌅 9時台の値幅・決算明けの検証</h2>
+    <div class="period-note">9時台: 5分足・直近60日　／　決算明け: 日足・{morning["period"]}</div>
+    <table class="results">
+      <thead><tr><th>銘柄</th><th class="num">日数</th><th class="num">9時台÷1日の目安<br>（中央値）</th><th class="num">同<br>（5日に1日）</th><th class="num">決算明けの値幅<br>÷1日の目安</th></tr></thead>
+      <tbody>{rows}</tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 寄り直後10分の動きの大きさ別（売買代金上位20銘柄まとめ）</h3>
+      <ul>{first5}</ul>
+      <ul>
+        <li>毎朝のカードの「9時台の目安」は、1日の目安 × 上の「9時台÷1日の目安」で出している。</li>
+        <li>決算明けは値幅が大きくなりやすい銘柄がある。カードに注意を出す。</li>
+      </ul>
+    </div>
+  </section>
+"""
+
+
+def render_drive_section(drive: dict | None) -> str:
+    """寄り直後の動きは10時まで続くか"""
+    if not drive or not drive.get("per_stock"):
+        return """
+  <section class="section-box">
+    <h2 class="section-title">🚀 寄り直後の動きは10時まで続くか</h2>
+    <div class="muted" style="padding: 16px;">まだ結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    ws = drive["windows"]
+
+    def cell(v: dict) -> str:
+        if not v or v.get("n", 0) < 20:
+            return '<td class="muted">—</td>'
+        cls = "verdict-confirmed" if v.get("significant") else "verdict-neutral"
+        yen = f' ／ 1回{v["mean_yen"]:+,.0f}円' if v.get("mean_yen") is not None else ""
+        mark = "✅ " if v.get("significant") else ""
+        return (f'<td class="tiny"><span class="verdict {cls}">{mark}続いた {v["follow_rate"] * 100:.0f}%</span>'
+                f'<div class="muted">{v["n"]}日{yen}<br>q={v.get("q", 1):.2f}</div></td>')
+
+    rows = "".join(
+        f'<tr><td><b>{r["name"]}</b><div class="muted tiny">{r["code"]}</div></td>' + "".join(cell(r.get(w)) for w in ws) + "</tr>"
+        for r in sorted(drive["per_stock"], key=lambda r: -(r.get(ws[0], {}).get("follow_rate") or 0))
+    )
+    pooled = "".join(
+        f'<li>寄り→{w} の向きに乗って {drive["end"]} まで持つと：続いた <b>{p["follow_rate"] * 100:.1f}%</b>'
+        f'（{p["n"]}件・p={p["p"]:.3f}）、平均 {p["mean_pct"]:+.3f}%</li>'
+        for w, p in drive["pooled"].items() if p.get("n")
+    )
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">🚀 寄り直後の動きは10時まで続くか</h2>
+    <div class="period-note">データ: {drive["source"]}　／　寄りから9:10・9:20までに動いた向きに乗り、10:00の直前に出た場合</div>
+    <div class="explainer" style="margin-top: 0;"><h3>全銘柄まとめ</h3><ul>{pooled}</ul></div>
+    <table class="results">
+      <thead><tr><th>銘柄</th>{"".join(f"<th>寄り→{w} の向き</th>" for w in ws)}</tr></thead>
+      <tbody>{rows}</tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>続いた</b>が50%より大きければ「動いた方向に乗る」、小さければ「寄り直後の動きは戻しやすい」。</li>
+        <li>銘柄ごとの結果は全銘柄×区切りで BH 補正し、q&lt;0.05 のものだけ ✅。手数料は含まない。</li>
+        <li>1分足が40日分たまるまでは、Yahoo の5分足（直近60日）での予備検証。5分足は9:00の足が欠ける日が多いため、9:05までに始まる最初の足を「寄り」として扱う。</li>
+      </ul>
+    </div>
+  </section>
+"""
+
+
 def render_screen_section(screen: dict | None) -> str:
     """売買代金上位の銘柄スクリーニング（研究用）"""
     if not screen or not screen.get("results"):
@@ -387,6 +480,8 @@ def render_report(
     scan_result: dict | None = None,
     range_results: list[dict] | None = None,
     screen_result: dict | None = None,
+    morning_result: dict | None = None,
+    drive_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -500,6 +595,8 @@ def render_report(
     focus_section = render_focus_section(focus_results, focus_period)
     scan_section = render_scan_section(scan_result)
     range_section = render_range_section(range_results, focus_period)
+    morning_section = render_morning_section(morning_result)
+    drive_section = render_drive_section(drive_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -676,6 +773,8 @@ def render_report(
   {focus_section}
 
   {range_section}
+  {morning_section}
+  {drive_section}
 
   {scan_section}
   {screen_section}
@@ -770,6 +869,8 @@ def render_report(
         "correlation_scan": scan_result,
         "range_validation": {"period": focus_period, "results": range_results} if range_results else None,
         "stock_screen": screen_result,
+        "morning_range": morning_result,
+        "opening_drive": drive_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -832,6 +933,24 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Correlation scan failed: {e}")
 
     print()
+    print("🔍 Running morning range validation (5m 60d)")
+    morning_result = None
+    try:
+        from morning_range import run_morning_validation
+        morning_result = run_morning_validation(period="2y")
+    except Exception as e:
+        print(f"⚠️ Morning range validation failed: {e}")
+
+    print()
+    print("🔍 Running opening drive study")
+    drive_result = None
+    try:
+        from opening_drive import run_opening_drive
+        drive_result = run_opening_drive()
+    except Exception as e:
+        print(f"⚠️ Opening drive study failed: {e}")
+
+    print()
     print("🔍 Running stock screen (top turnover) for period: 2y")
     screen_result = None
     try:
@@ -852,6 +971,8 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         scan_result=scan_result,
         range_results=range_results,
         screen_result=screen_result,
+        morning_result=morning_result,
+        drive_result=drive_result,
     )
 
 
