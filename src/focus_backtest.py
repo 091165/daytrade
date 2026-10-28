@@ -47,29 +47,43 @@ def align_focus_returns(us_ret: pd.Series, jp_open: pd.Series, jp_close: pd.Seri
     Returns:
         DataFrame index=T, columns=[us, gap, intraday]（すべて%）
     """
+    empty = pd.DataFrame(columns=["us", "gap", "intraday"])
     us = _norm(us_ret)
     jo = _norm(jp_open)
     jc = _norm(jp_close)
-    dates = sorted(set(jo.index) & set(jc.index))
-    rows = []
-    for i in range(1, len(dates)):
-        t, t_prev = dates[i], dates[i - 1]
-        prior = us.loc[: t - pd.Timedelta(days=1)]
-        if prior.empty:
-            continue
-        us_date = prior.index[-1]
-        if us_date < t_prev:      # 米国休場などで新しい情報がない日
-            continue
-        prev_close, o, c = jc[t_prev], jo[t], jc[t]
-        if not (prev_close > 0 and o > 0):
-            continue
-        rows.append({
-            "date": t,
-            "us": float(prior.iloc[-1]),
-            "gap": (o / prev_close - 1) * 100,
-            "intraday": (c / o - 1) * 100,
-        })
-    return pd.DataFrame(rows).set_index("date") if rows else pd.DataFrame(columns=["us", "gap", "intraday"])
+    us = us[~us.index.duplicated(keep="last")]
+    jo = jo[~jo.index.duplicated(keep="last")]
+    jc = jc[~jc.index.duplicated(keep="last")]
+    dates = jo.index.intersection(jc.index).sort_values()
+    if len(dates) < 2 or us.empty:
+        return empty
+
+    t = dates[1:]
+    t_prev = dates[:-1]
+    # 各T について「T-1日以前で最新の米国営業日」を二分探索で引く（ループより大幅に速い）
+    us_idx = us.index.values
+    pos = np.searchsorted(us_idx, (t - pd.Timedelta(days=1)).values, side="right") - 1
+    valid = pos >= 0
+    safe_pos = np.clip(pos, 0, None)
+    # 米国休場などで新しい情報がない日（米の最新日が日本の前営業日より前）は除外
+    valid &= us_idx[safe_pos] >= t_prev.values
+
+    prev_close = jc.reindex(t_prev).values
+    o = jo.reindex(t).values
+    c = jc.reindex(t).values
+    with np.errstate(invalid="ignore", divide="ignore"):
+        valid &= (prev_close > 0) & (o > 0)
+        gap = (o / prev_close - 1) * 100
+        intraday = (c / o - 1) * 100
+    if not valid.any():
+        return empty
+
+    df = pd.DataFrame(
+        {"us": us.values[safe_pos][valid], "gap": gap[valid], "intraday": intraday[valid]},
+        index=t[valid],
+    )
+    df.index.name = "date"
+    return df.dropna()
 
 
 def _corr(x: pd.Series, y: pd.Series) -> tuple[float | None, float | None]:
