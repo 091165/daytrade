@@ -40,6 +40,9 @@ jobs:
           python tests/test_market_context.py
           python tests/test_history.py
           python tests/test_stock_picks.py
+          python tests/test_trading_rules.py
+          python tests/test_focus_stocks.py
+          python tests/test_focus_backtest.py
 
       - name: Generate signal dashboard
         run: python src/main.py

@@ -23,6 +23,8 @@ from warnings_module import get_all_warnings
 from market_context import build_market_context
 from history import append_today_signal, load_history, get_recent_entries
 from stock_picks import build_stock_picks
+from focus_stocks import build_all_focus_signals, get_focus_us_tickers
+from trading_rules import build_trading_rules
 from dashboard import render_dashboard, render_error_page
 
 
@@ -51,13 +53,28 @@ def _load_sector_validation(docs_dir: Path) -> dict[str, dict] | None:
         return None
 
 
+def _load_focus_validation(docs_dir: Path) -> dict[str, dict] | None:
+    """過去のバックテスト結果から、銘柄コード → 個別予測の検証結果 のマップを返す"""
+    backtest_path = docs_dir / "backtest_report.json"
+    if not backtest_path.exists():
+        return None
+    try:
+        with backtest_path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        fv = data.get("focus_validation") or {}
+        return {r["code"]: r for r in fv.get("results", []) if r.get("n", 0) > 0}
+    except (json.JSONDecodeError, OSError, KeyError) as e:
+        print(f"⚠️ Failed to load focus validation: {e}")
+        return None
+
+
 def main() -> int:
     output_dir = Path(__file__).resolve().parent.parent / "docs"
     output_dir.mkdir(exist_ok=True)
     html_path = output_dir / "index.html"
     history_path = output_dir / "history.json"
 
-    us_tickers = get_all_us_tickers()
+    us_tickers = sorted(set(get_all_us_tickers()) | set(get_focus_us_tickers()))
 
     # データ取得（失敗時はエラーページを出して終了）
     use_stub = os.environ.get("USE_STUB", "0") == "1"
@@ -139,6 +156,20 @@ def main() -> int:
         sector_signals=sector_signals_dict,
     )
 
+    # マイルール連動バナー
+    trading_rules = build_trading_rules(
+        verdict=direction_signal.verdict,
+        confidence=direction_signal.confidence,
+    )
+
+    # 承認銘柄（フジクラ・SBG）の個別予測
+    focus_signals = build_all_focus_signals(
+        us_changes=market.get("us_sector_changes", {}),
+        market_verdict=direction_signal.verdict,
+        validation_by_code=_load_focus_validation(output_dir),
+    )
+    focus_signals_dict = [f.as_dict() for f in focus_signals]
+
     # JSON
     json_path = output_dir / "signal.json"
     with json_path.open("w", encoding="utf-8") as f:
@@ -152,6 +183,8 @@ def main() -> int:
                 "sectors": sector_signals_dict,
                 "recent_history": recent_history,
                 "stock_picks": stock_picks.as_dict(),
+                "trading_rules": trading_rules.as_dict(),
+                "focus_stocks": focus_signals_dict,
             },
             f,
             ensure_ascii=False,
@@ -170,6 +203,8 @@ def main() -> int:
         recent_history=recent_history,
         stock_picks=stock_picks.as_dict(),
         output_path=html_path,
+        trading_rules=trading_rules.as_dict(),
+        focus_signals=focus_signals_dict,
     )
 
     # サマリ
@@ -223,6 +258,8 @@ def _build_stub_data() -> dict:
             "CRM": -1.4, "MSFT": -0.8, "ORCL": -2.1, "ADBE": -1.6, "INTU": -1.2, "NOW": -1.8,
             "UPS": -0.2, "FDX": 0.1,
             "KO": 0.3, "PG": 0.1, "CL": -0.1, "MCD": 0.4,
+            "GLW": -1.8, "COHR": -3.2, "LITE": -2.6, "VRT": -2.0,
+            "ARM": 1.4, "QQQ": -1.1,
         },
     }
 
