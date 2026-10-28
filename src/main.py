@@ -5,6 +5,7 @@ Daytrade Signal Board - メインエントリポイント (v6)
   - エラー時にスタブデータを使わず、エラーページを生成して exit 1
   - 判定履歴を docs/history.json に追記
   - キリバン水準セクションを削除（運用上ほとんど効かないため）
+  - その日の判定一式を docs/archive/YYYY-MM-DD.json に残す（振り返りページ用）
 """
 
 from __future__ import annotations
@@ -21,6 +22,7 @@ from market_direction import build_market_direction
 from sector_mapping import build_all_sector_signals, get_all_us_tickers
 from warnings_module import get_all_warnings
 from market_context import build_market_context
+from archive import backfill_from_history, save_daily_archive, write_archive_index
 from history import append_today_signal, load_history, get_recent_entries
 from stock_picks import build_stock_picks
 from focus_stocks import build_all_focus_signals, get_focus_us_tickers
@@ -228,28 +230,32 @@ def main() -> int:
         )
 
     # JSON
+    signal = {
+        "market": market,
+        "warnings": warnings_dict,
+        "market_context": market_ctx.as_dict(),
+        "direction": direction_signal.as_dict(),
+        "kiriban": kiriban_signal,
+        "sectors": sector_signals_dict,
+        "recent_history": recent_history,
+        "stock_picks": stock_picks.as_dict(),
+        "trading_rules": trading_rules.as_dict(),
+        "generated_after_open": notice is not None,
+        "focus_stocks": focus_signals_dict,
+    }
     json_path = output_dir / "signal.json"
     with json_path.open("w", encoding="utf-8") as f:
-        json.dump(
-            {
-                "market": market,
-                "warnings": warnings_dict,
-                "market_context": market_ctx.as_dict(),
-                "direction": direction_signal.as_dict(),
-                "kiriban": kiriban_signal,
-                "sectors": sector_signals_dict,
-                "recent_history": recent_history,
-                "stock_picks": stock_picks.as_dict(),
-                "trading_rules": trading_rules.as_dict(),
-                "generated_after_open": notice is not None,
-                "focus_stocks": focus_signals_dict,
-            },
-            f,
-            ensure_ascii=False,
-            indent=2,
-            default=str,
-        )
+        json.dump(signal, f, ensure_ascii=False, indent=2, default=str)
     print(f"✅ Signal JSON: {json_path}")
+
+    # 日付ごとの記録（daytrade-journal の振り返りページで使う）
+    archive_dir = output_dir / "archive"
+    if not save_daily_archive(archive_dir, signal, generated_at):
+        print(f"ℹ️ archive/{today}.json は寄り前の版を残します（今回は寄り後の生成）")
+    backfilled = backfill_from_history(archive_dir, history)
+    if backfilled:
+        print(f"ℹ️ archive に履歴から {backfilled} 日分を補完しました")
+    write_archive_index(archive_dir)
 
     # HTML
     render_dashboard(

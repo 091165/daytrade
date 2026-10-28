@@ -860,6 +860,7 @@ def render_dashboard(
     <div class="header-right">
       <div class="timestamp">Updated: {datetime.fromisoformat(market['timestamp']).strftime('%Y-%m-%d %H:%M JST')}</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
+      <a href="../daytrade-journal/review.html" class="report-link">✅ ルール遵守の振り返り →</a>
     </div>
   </header>
 

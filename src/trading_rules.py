@@ -9,6 +9,8 @@
 
 設計:
   純粋関数のみ（I/Oなし）。ルールの文言は定数で管理し、ここを書き換えれば反映される。
+  文言とは別に、トレード記録と機械的に突き合わせられる形（checks）も出す。
+  daytrade-journal の振り返りページが、これを使ってルールを守れたかを判定する。
 """
 
 from __future__ import annotations
@@ -19,10 +21,15 @@ from typing import Literal
 
 # ----- マイルール（ここを編集すれば表示が変わる） -----
 
-APPROVED_STOCKS: tuple[str, ...] = ("フジクラ(5803)", "SBG(9984)")
+_APPROVED: tuple[tuple[str, str], ...] = (("フジクラ", "5803"), ("SBG", "9984"))
+APPROVED_STOCKS: tuple[str, ...] = tuple(f"{name}({code})" for name, code in _APPROVED)
+APPROVED_CODES: tuple[str, ...] = tuple(code for _, code in _APPROVED)
 BANNED_STOCKS: tuple[str, ...] = ("太陽誘電(6976)", "イビデン(4062)", "アドバンテスト(6857)")
 DAILY_LOSS_LIMIT_YEN = 10_000
-PER_TRADE_STOP_YEN = "3,000〜5,000"
+PER_TRADE_STOP_MAX_YEN = 5_000
+PER_TRADE_STOP_YEN = f"3,000〜{PER_TRADE_STOP_MAX_YEN:,}"
+NO_TREND_MAX_QTY = 100
+MAX_CONSECUTIVE_LOSSES = 2
 END_TIME = "10:00"
 CHOP_WINDOW = "09:05〜09:15"
 
@@ -47,9 +54,29 @@ class TradingRulesBanner:
     subline: str                     # 補足（なぜ注意なのか）
     day_rules: list[str]             # その日タイプ専用のルール
     always_rules: list[str] = field(default_factory=lambda: list(ALWAYS_RULES))
+    checks: dict = field(default_factory=dict)  # トレード記録との突き合わせ用（build_checks）
 
     def as_dict(self) -> dict:
         return asdict(self)
+
+
+def build_checks(day_type: DayType) -> dict:
+    """ルールのうち、約定記録から機械的に判定できるものを数値で返す。
+
+    該当しないルールは None。「ロット半分」は普段の株数がわからないので含めない。
+    """
+    trend = day_type in ("trend_up", "trend_down")
+    return {
+        "approved_codes": list(APPROVED_CODES),
+        "daily_loss_limit_yen": DAILY_LOSS_LIMIT_YEN,
+        "end_time": END_TIME,
+        "require_day_trade": True,  # 期限が「日計り」であること
+        "direction": {"trend_up": "buy", "trend_down": "sell"}.get(day_type),
+        "per_trade_stop_yen": PER_TRADE_STOP_MAX_YEN if trend else None,
+        "max_qty": None if trend else NO_TREND_MAX_QTY,
+        "wait_window": None if trend else CHOP_WINDOW.split("〜"),
+        "max_consecutive_losses": None if trend else MAX_CONSECUTIVE_LOSSES,
+    }
 
 
 def build_trading_rules(verdict: str, confidence: str = "medium") -> TradingRulesBanner:
@@ -97,13 +124,15 @@ def build_trading_rules(verdict: str, confidence: str = "medium") -> TradingRule
             headline="⏸️ 方向なしの日：承認銘柄だけ、小さく",
             subline="指数の方向が読めない日。やるなら最小単位で、取れたらすぐ終える。",
             day_rules=[
-                f"{'・'.join(APPROVED_STOCKS)} の100株だけ",
+                f"{'・'.join(APPROVED_STOCKS)} の{NO_TREND_MAX_QTY}株だけ",
                 f"{CHOP_WINDOW} は方向が定まりにくいので様子見",
-                "2回続けて損切りしたら、その日は終了",
+                f"{MAX_CONSECUTIVE_LOSSES}回続けて損切りしたら、その日は終了",
             ],
         )
 
     if confidence == "low":
         banner.day_rules.append("判定の確度が低い日。迷ったら見送り")
+
+    banner.checks = build_checks(banner.day_type)
 
     return banner
