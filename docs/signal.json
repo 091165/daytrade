@@ -1,6 +1,6 @@
 {
   "market": {
-    "timestamp": "2026-10-28T20:50:37.603503+09:00",
+    "timestamp": "2026-10-28T22:23:56.952495+09:00",
     "nikkei": {
       "prev_close": 63954.19140625,
       "change_pct": 1.0839860433323967,
@@ -8,7 +8,7 @@
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 64385.0
+      "price": 64520.0
     },
     "etf_1570": {
       "prev_close": 64590.0
@@ -19,12 +19,12 @@
       "sox_change_pct": 3.6002288388192083
     },
     "fx_commodities": {
-      "usdjpy_price": 157.8820037841797,
-      "usdjpy_change_pct": 0.2247244340843002,
-      "gold_price": 4062.10009765625,
-      "gold_change_pct": -0.30677857213987636,
-      "oil_price": 101.73999786376953,
-      "oil_change_pct": 1.8418381479343493
+      "usdjpy_price": 157.96400451660156,
+      "usdjpy_change_pct": 0.2774087529198388,
+      "gold_price": 4067.39990234375,
+      "gold_change_pct": -0.1767092509677659,
+      "oil_price": 101.62000274658203,
+      "oil_change_pct": 1.7217229173490667
     },
     "us_sector_changes": {
       "ADBE": -3.9672085301010296,
@@ -1340,24 +1340,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 157.8820037841797,
-        "change_pct": 0.2247244340843002,
+        "current": 157.96400451660156,
+        "change_pct": 0.2774087529198388,
         "direction": "flat",
         "interpretation": "変動なし"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4062.10009765625,
-        "change_pct": -0.30677857213987636,
-        "direction": "down",
-        "interpretation": "ゴールド小幅下落"
+        "current": 4067.39990234375,
+        "change_pct": -0.1767092509677659,
+        "direction": "flat",
+        "interpretation": "変動なし"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 101.73999786376953,
-        "change_pct": 1.8418381479343493,
+        "current": 101.62000274658203,
+        "change_pct": 1.7217229173490667,
         "direction": "up",
         "interpretation": "原油上昇 → エネルギー株に追い風"
       }
@@ -1386,11 +1386,11 @@
       }
     ],
     "us_consensus_direction": "bullish",
-    "futures_diff": 430.80859375,
+    "futures_diff": 565.80859375,
     "futures_aligned": true,
     "reasons": [
       "米指数が揃って上げ（ナスダック, SOX）",
-      "日経先物が米に追随（現対+431円）",
+      "日経先物が米に追随（現対+566円）",
       "→ 米日連動の上昇相場として買い目線"
     ]
   },
@@ -1407,13 +1407,13 @@
       }
     },
     "sayatori_signal": {
-      "futures_price": 64385.0,
+      "futures_price": 64520.0,
       "spot_price": 63954.19140625,
-      "diff": 430.80859375,
-      "abs_diff": 430.80859375,
+      "diff": 565.80859375,
+      "abs_diff": 565.80859375,
       "direction": "neutral",
       "threshold": 1000,
-      "rationale": "現対+431円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+      "rationale": "現対+566円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
       "current_price": 63954.19140625,
@@ -1615,7 +1615,7 @@
       "verdict": "buy_bias",
       "verdict_label": "買いポジ主体",
       "confidence": "high",
-      "futures_diff": 430.80859375,
+      "futures_diff": 565.80859375,
       "nasdaq_pct": 1.1785899298015101,
       "dow_pct": 0.030541836347675044,
       "sox_pct": 3.6002288388192083,
@@ -1689,7 +1689,21 @@
       "1日 -10,000円 でその日は終了",
       "触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない",
       "注文画面で「日計り」になっているか毎回確認する"
-    ]
+    ],
+    "checks": {
+      "approved_codes": [
+        "5803",
+        "9984"
+      ],
+      "daily_loss_limit_yen": 10000,
+      "end_time": "10:00",
+      "require_day_trade": true,
+      "direction": "buy",
+      "per_trade_stop_yen": 5000,
+      "max_qty": null,
+      "wait_window": null,
+      "max_consecutive_losses": null
+    }
   },
   "generated_after_open": true,
   "focus_stocks": [

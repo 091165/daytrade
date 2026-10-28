@@ -1,0 +1,43 @@
+{
+  "date": "2026-08-25",
+  "reconstructed": true,
+  "direction": {
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "futures_diff": -656.359375
+  },
+  "warnings": [],
+  "trading_rules": {
+    "day_type": "trend_down",
+    "tone": "danger",
+    "headline": "📉 トレンド日（下）：全部「売り」で統一する",
+    "subline": "方向がはっきり出る日は値動きが荒い。過去の記録では、予想が当たった日ほど逆張り・塩持ちで大きく負けている。",
+    "day_rules": [
+      "買いは入れない（1銘柄だけ逆を張らない）",
+      "落ちている銘柄を拾わない（落ちるナイフを掴まない）",
+      "ロットは普段の半分",
+      "逆行したら即損切り（-3,000〜5,000円）。粘らない"
+    ],
+    "always_rules": [
+      "10:00前に「取引終了」を宣言する",
+      "1日 -10,000円 でその日は終了",
+      "触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない",
+      "注文画面で「日計り」になっているか毎回確認する"
+    ],
+    "checks": {
+      "approved_codes": [
+        "5803",
+        "9984"
+      ],
+      "daily_loss_limit_yen": 10000,
+      "end_time": "10:00",
+      "require_day_trade": true,
+      "direction": "sell",
+      "per_trade_stop_yen": 5000,
+      "max_qty": null,
+      "wait_window": null,
+      "max_consecutive_losses": null
+    }
+  }
+}

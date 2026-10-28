@@ -1,0 +1,482 @@
+[
+  {
+    "date": "2026-08-06",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-07",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-10",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "high",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-11",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-12",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-13",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "medium",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-14",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "medium",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-17",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-18",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-19",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-20",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-21",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-24",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-25",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-26",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "medium",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-27",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-28",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-08-31",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-01",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-02",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-03",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-04",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-07",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-08",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-09",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-10",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-11",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-14",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-15",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-16",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-17",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-18",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-21",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-22",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "high",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-23",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "medium",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-24",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-25",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-28",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-29",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-09-30",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-01",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-02",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-05",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "high",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-06",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-07",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-08",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-09",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-12",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-13",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-14",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-15",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-16",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-19",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-20",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-21",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-22",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-23",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-26",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-27",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": true,
+    "generated_after_open": false
+  },
+  {
+    "date": "2026-10-28",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "high",
+    "reconstructed": false,
+    "generated_after_open": true
+  }
+]
