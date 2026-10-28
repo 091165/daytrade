@@ -23,7 +23,7 @@ from correlation_scan import Q_THRESHOLD, bh_qvalues
 from focus_backtest import _corr
 
 WINDOWS = ("09:10", "09:20")     # 最初の動きを測る区切り
-OPEN_BY = "09:05"                # この時刻までに始まる足がない日は除く（Yahooの5分足は9:00の足が欠ける日が多い）
+OPEN_BY = "09:07"                # この時刻までに始まる足がない日は除く（Yahoo は 9:00〜9:05 の足が欠ける日が多い）
 END = "10:00"
 MIN_SAVED_DAYS = 40
 MIN_DAYS = 20
@@ -109,7 +109,6 @@ def summarize(per_stock: dict[str, dict]) -> dict:
 
 
 def run_opening_drive() -> dict:
-    import yfinance as yf
     from collect_minutes import load_minutes
     from stock_screen import SCREEN_JP
 
@@ -123,6 +122,7 @@ def run_opening_drive() -> dict:
             idx = pd.to_datetime(g["date"].dt.strftime("%Y-%m-%d") + " " + g["time"]).dt.tz_localize("Asia/Tokyo")
             bars_by_code[code] = pd.DataFrame({"Open": g["open"].values, "Close": g["close"].values}, index=idx.values)
     else:
+        import yfinance as yf
         source, bar_minutes = f"Yahoo 5分足・直近60日（1分足は{n_saved}日分たまったところ）", 5
         tickers = {t: c for c, t, _ in SCREEN_JP}
         m5 = yf.download(" ".join(tickers), period="60d", interval="5m", progress=False,

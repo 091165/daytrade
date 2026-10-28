@@ -1,7 +1,7 @@
 """
 1分足を毎日貯める（9:00〜10:29、売買代金上位20銘柄）
 
-Yahoo の1分足は直近7日分しか取れないため、毎日の引け後に保存して、
+Yahoo の1分足は直近30日分しか取れないため、毎日の引け後に保存して、
 「寄り直後の動きが続くか」などの分足の検証に使える期間を伸ばしていく。
 
 保存先: data/minutes/YYYY-MM-DD.csv（code,time,open,high,low,close,volume）
@@ -71,18 +71,14 @@ def load_minutes(minutes_dir: Path = MINUTES_DIR) -> pd.DataFrame:
 
 
 def collect(now: datetime | None = None) -> int:
-    import yfinance as yf
     from stock_screen import SCREEN_JP
+    from yahoo_chart import fetch_intraday
 
     now = now or datetime.now(JST)
-    tickers = {t: code for code, t, _ in SCREEN_JP}
-    data = yf.download(" ".join(tickers), period="7d", interval="1m", progress=False,
-                       group_by="ticker", auto_adjust=True, threads=True)
     by_day: dict[date, list[list]] = {}
-    for t, code in tickers.items():
-        try:
-            df = data[t]
-        except KeyError:
+    for code, t, _ in SCREEN_JP:
+        df = fetch_intraday(t, "1m", days=29, chunk_days=7)     # 直近29日分（初回はさかのぼって保存できる）
+        if df.empty:
             print(f"⚠️ no data: {t}")
             continue
         for d, rows in minute_rows(df, code).items():
@@ -91,7 +87,9 @@ def collect(now: datetime | None = None) -> int:
     saved = days_to_save(set(by_day), existing, now)
     for d in saved:
         write_day(MINUTES_DIR / f"{d.isoformat()}.csv", by_day[d])
-        print(f"✅ data/minutes/{d.isoformat()}.csv  {len({r[0] for r in by_day[d]})}銘柄 {len(by_day[d])}行")
+        codes = {r[0] for r in by_day[d]}
+        opened = {r[0] for r in by_day[d] if r[1] == "09:00"}
+        print(f"✅ data/minutes/{d.isoformat()}.csv  {len(codes)}銘柄 {len(by_day[d])}行（9:00の足あり {len(opened)}銘柄）")
     print(f"保存 {len(saved)}日 ／ これまでの合計 {len(existing) + len(saved)}日")
     return len(saved)
 
