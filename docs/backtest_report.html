@@ -134,6 +134,14 @@
   .explainer li { margin: 4px 0; }
   .explainer code { background: var(--panel-2); padding: 1px 6px; border-radius: 3px; font-size: 12px; }
 
+  .scan-highlight { border: 1px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin: 12px 0; background: rgba(251,191,36,0.06); }
+  .scan-highlight h3 { margin: 0 0 6px 0; font-size: 14px; color: var(--accent); }
+  .scan-hits { margin: 0; padding-left: 20px; }
+  .scan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 12px 0; }
+  .scan-card { background: var(--panel-2); border-radius: 8px; padding: 12px 14px; font-size: 13px; }
+  .scan-card ul { margin: 4px 0 8px 0; padding-left: 18px; }
+  .scan-sub { margin-top: 8px; font-size: 11px; color: var(--muted); }
+
   .footer-note {
     margin-top: 32px;
     padding: 16px;
@@ -154,7 +162,7 @@
     </div>
     <div style="text-align: right;">
       <div class="period">検証期間: 過去 6mo (セクター) / 1y (日経方針・個別)</div>
-      <div class="timestamp">Updated: 2026-10-28 16:50 JST</div>
+      <div class="timestamp">Updated: 2026-10-28 17:18 JST</div>
     </div>
   </header>
 
@@ -282,7 +290,7 @@
             <td class="num"><b style="color: var(--short);">-0.086</b><br><span class="muted">0.192</span></td>
             <td><span class="verdict verdict-contradicted">✗ 連動なし</span></td>
             <td class="tiny"><span class="muted">n=68</span><br>窓 <span style="color: var(--long);">+3.50%</span>（同方向 93%）<br>寄り後 <span style="color: var(--short);">-0.29%</span>（同方向 41%）</td>
-            <td class="tiny"><span class="muted">n=69</span><br>窓 <span style="color: var(--short);">-3.25%</span>（同方向 84%）<br>寄り後 <span style="color: var(--long);">+0.02%</span>（同方向 45%）</td>
+            <td class="tiny"><span class="muted">n=69</span><br>窓 <span style="color: var(--short);">-3.25%</span>（同方向 83%）<br>寄り後 <span style="color: var(--long);">+0.02%</span>（同方向 45%）</td>
             <td class="tiny muted">ARM(窓+0.66/寄後-0.01), NVDA(窓+0.50/寄後-0.19), QQQ(窓+0.61/寄後-0.12)</td>
           </tr>
         
@@ -294,6 +302,111 @@
         <li><b>窓</b>: 前日終値 → 寄り付き。米国の動きは主にここに出る。デイトレでは取れない部分。</li>
         <li><b>寄り後</b>: 寄り付き → 引け。デイトレで実際に取れる部分。ここの連動が弱ければ「寄りの方向は読めても、寄り後は読めない」。</li>
         <li><b>逆に動きやすい</b>: 米が上げた翌日、寄り後は下げやすい（寄り天型）。寄りで飛びつかない根拠になる。</li>
+      </ul>
+    </div>
+  </section>
+
+
+  
+  <section class="section-box">
+    <h2 class="section-title">🔬 米国株 × 日本株 連動スキャン（研究用）</h2>
+    <div class="period-note">
+      検証期間: 1y　／　日本株11銘柄 × 米国株25銘柄 = 275組
+      ／　窓で有意: 265組　／　寄り後で有意: <b>0組</b>
+      （補正前の p&lt;0.05 は 33組）
+    </div>
+    <div class="scan-highlight">
+      <h3>⭐ 寄り後まで連動する組み合わせ（多重検定補正後 q&lt;0.05）</h3>
+      <div class="muted">なし。どの組み合わせも、補正後は寄り後の連動が確認できなかった（＝米国の動きは寄り付きでほぼ織り込まれる）。</div>
+    </div>
+    <div class="scan-grid">
+        <div class="scan-card">
+          <div><b>キオクシア</b> <span class="muted tiny">285A ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>SNDK</b> <span class="muted tiny">SanDisk</span> <b style="color: var(--long);">+0.633</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--long);">+0.562</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>STX</b> <span class="muted tiny">Seagate</span> <b style="color: var(--long);">+0.553</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>NVDA</b> <span class="muted tiny">NVIDIA</span> <b style="color: var(--short);">-0.179</b> <span class="muted tiny">q=0.249</span> </li><li><b>SPY</b> <span class="muted tiny">S&P500</span> <b style="color: var(--short);">-0.175</b> <span class="muted tiny">q=0.249</span> </li><li><b>AVGO</b> <span class="muted tiny">Broadcom</span> <b style="color: var(--short);">-0.174</b> <span class="muted tiny">q=0.249</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>アドバンテスト</b> <span class="muted tiny">6857 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.611</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--long);">+0.604</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--long);">+0.586</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>SPY</b> <span class="muted tiny">S&P500</span> <b style="color: var(--short);">-0.109</b> <span class="muted tiny">q=0.436</span> </li><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--short);">-0.090</b> <span class="muted tiny">q=0.499</span> </li><li><b>APH</b> <span class="muted tiny">Amphenol</span> <b style="color: var(--muted);">+0.079</b> <span class="muted tiny">q=0.556</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>データセクション</b> <span class="muted tiny">3905 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--accent);">+0.332</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--accent);">+0.307</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--accent);">+0.305</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>AMD</b> <span class="muted tiny">AMD</span> <b style="color: var(--muted);">+0.079</b> <span class="muted tiny">q=0.549</span> </li><li><b>ANET</b> <span class="muted tiny">Arista</span> <b style="color: var(--short);">-0.074</b> <span class="muted tiny">q=0.595</span> </li><li><b>WDC</b> <span class="muted tiny">Western Digital</span> <b style="color: var(--muted);">+0.064</b> <span class="muted tiny">q=0.679</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>太陽誘電</b> <span class="muted tiny">6976 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.599</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--long);">+0.585</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>TSM</b> <span class="muted tiny">TSMC</span> <b style="color: var(--long);">+0.551</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>AVGO</b> <span class="muted tiny">Broadcom</span> <b style="color: var(--short);">-0.158</b> <span class="muted tiny">q=0.276</span> </li><li><b>TER</b> <span class="muted tiny">Teradyne</span> <b style="color: var(--short);">-0.138</b> <span class="muted tiny">q=0.378</span> </li><li><b>TEL</b> <span class="muted tiny">TE Connectivity</span> <b style="color: var(--short);">-0.131</b> <span class="muted tiny">q=0.411</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>ソフトバンクG</b> <span class="muted tiny">9984 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>ARM</b> <span class="muted tiny">Arm</span> <b style="color: var(--long);">+0.664</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--long);">+0.611</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.595</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>NVDA</b> <span class="muted tiny">NVIDIA</span> <b style="color: var(--short);">-0.186</b> <span class="muted tiny">q=0.249</span> </li><li><b>MU</b> <span class="muted tiny">Micron</span> <b style="color: var(--short);">-0.163</b> <span class="muted tiny">q=0.276</span> </li><li><b>KLAC</b> <span class="muted tiny">KLA</span> <b style="color: var(--short);">-0.151</b> <span class="muted tiny">q=0.300</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>イビデン</b> <span class="muted tiny">4062 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.645</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--long);">+0.603</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--long);">+0.597</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>APH</b> <span class="muted tiny">Amphenol</span> <b style="color: var(--muted);">+0.104</b> <span class="muted tiny">q=0.447</span> </li><li><b>AVGO</b> <span class="muted tiny">Broadcom</span> <b style="color: var(--short);">-0.097</b> <span class="muted tiny">q=0.488</span> </li><li><b>NVDA</b> <span class="muted tiny">NVIDIA</span> <b style="color: var(--short);">-0.089</b> <span class="muted tiny">q=0.501</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>フジクラ</b> <span class="muted tiny">5803 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.651</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>GLW</b> <span class="muted tiny">Corning</span> <b style="color: var(--long);">+0.648</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--long);">+0.624</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>GLW</b> <span class="muted tiny">Corning</span> <b style="color: var(--muted);">+0.154</b> <span class="muted tiny">q=0.300</span> </li><li><b>LITE</b> <span class="muted tiny">Lumentum</span> <b style="color: var(--muted);">+0.110</b> <span class="muted tiny">q=0.436</span> </li><li><b>AVGO</b> <span class="muted tiny">Broadcom</span> <b style="color: var(--short);">-0.094</b> <span class="muted tiny">q=0.491</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>東京エレクトロン</b> <span class="muted tiny">8035 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--long);">+0.686</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.661</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>ASML</b> <span class="muted tiny">ASML</span> <b style="color: var(--long);">+0.633</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>NVDA</b> <span class="muted tiny">NVIDIA</span> <b style="color: var(--short);">-0.198</b> <span class="muted tiny">q=0.249</span> </li><li><b>STX</b> <span class="muted tiny">Seagate</span> <b style="color: var(--short);">-0.174</b> <span class="muted tiny">q=0.249</span> </li><li><b>SPY</b> <span class="muted tiny">S&P500</span> <b style="color: var(--short);">-0.160</b> <span class="muted tiny">q=0.276</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>レーザーテック</b> <span class="muted tiny">6920 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>TER</b> <span class="muted tiny">Teradyne</span> <b style="color: var(--long);">+0.629</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--long);">+0.615</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.603</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>AAPL</b> <span class="muted tiny">Apple</span> <b style="color: var(--short);">-0.090</b> <span class="muted tiny">q=0.499</span> </li><li><b>MU</b> <span class="muted tiny">Micron</span> <b style="color: var(--short);">-0.084</b> <span class="muted tiny">q=0.530</span> </li><li><b>TSM</b> <span class="muted tiny">TSMC</span> <b style="color: var(--short);">-0.083</b> <span class="muted tiny">q=0.530</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>日経レバ(1570)</b> <span class="muted tiny">1570 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--long);">+0.643</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>SPY</b> <span class="muted tiny">S&P500</span> <b style="color: var(--long);">+0.637</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.636</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>MU</b> <span class="muted tiny">Micron</span> <b style="color: var(--short);">-0.189</b> <span class="muted tiny">q=0.249</span> </li><li><b>SNDK</b> <span class="muted tiny">SanDisk</span> <b style="color: var(--short);">-0.178</b> <span class="muted tiny">q=0.249</span> </li><li><b>NVDA</b> <span class="muted tiny">NVIDIA</span> <b style="color: var(--short);">-0.161</b> <span class="muted tiny">q=0.276</span> </li></ul>
+        </div>
+        <div class="scan-card">
+          <div><b>村田製作所</b> <span class="muted tiny">6981 ／ n=232</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul><li><b>SOXX</b> <span class="muted tiny">半導体ETF</span> <b style="color: var(--long);">+0.612</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>QQQ</b> <span class="muted tiny">ナスダック100</span> <b style="color: var(--long);">+0.569</b> <span class="muted tiny">q&lt;0.001</span> ✅</li><li><b>LRCX</b> <span class="muted tiny">Lam Research</span> <b style="color: var(--long);">+0.565</b> <span class="muted tiny">q&lt;0.001</span> ✅</li></ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul><li><b>NVDA</b> <span class="muted tiny">NVIDIA</span> <b style="color: var(--short);">-0.169</b> <span class="muted tiny">q=0.249</span> </li><li><b>AAPL</b> <span class="muted tiny">Apple</span> <b style="color: var(--muted);">+0.132</b> <span class="muted tiny">q=0.411</span> </li><li><b>VRT</b> <span class="muted tiny">Vertiv</span> <b style="color: var(--short);">-0.130</b> <span class="muted tiny">q=0.411</span> </li></ul>
+        </div></div>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>r</b>: 米国株の前日騰落率と、翌日の日本株の値動きの相関（1に近いほど同じ向きに動く）。</li>
+        <li><b>q</b>: たくさんの組み合わせを同時に調べたことを補正したp値。<b>q&lt;0.05（✅）だけが「偶然とは言いにくい」</b>。
+          補正前のp&lt;0.05は、数百組調べると偶然でも十数組出る。</li>
+        <li>✅ が付いても、1回の検証だけで信じない。<b>数週間続けて残るか</b>を見てから使う。</li>
+        <li><b>窓</b>: 前日終値→寄り付き。米国の動きはほぼここに出る。デイトレでは取れない。</li>
+        <li><b>寄り後</b>: 寄り付き→引け。デイトレで取れる部分。ここで ✅ が付く組み合わせが見つかれば、使える可能性がある。</li>
+        <li>この結果は毎朝のダッシュボードには出さない（承認銘柄以外を触るきっかけを作らないため）。</li>
       </ul>
     </div>
   </section>
@@ -379,11 +492,11 @@
               <div class="sector-name"><b>建機</b></div>
               <div class="muted tiny">期待: high</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.248</b></td>
-            <td class="num"><b style="color: var(--long);">0.010</b></td>
+            <td class="num"><b style="color: var(--accent);">+0.368</b></td>
+            <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
             <td class="num">107</td>
-            <td class="num"><span style="color: var(--text);">47.4%</span><span class="muted"> (n=38)</span></td>
-            <td class="num"><span style="color: var(--text);">59.0%</span><span class="muted"> (n=39)</span></td>
+            <td class="num"><span style="color: var(--text);">51.9%</span><span class="muted"> (n=27)</span></td>
+            <td class="num"><span style="color: var(--long);">67.7%</span><span class="muted"> (n=31)</span></td>
             <td><span class="verdict verdict-weak">△ 期待より弱い連動</span></td>
             <td class="tiny muted">
               米: CAT, DE<br>
@@ -464,11 +577,11 @@
               <div class="sector-name"><b>電線（CAT連動系）</b></div>
               <div class="muted tiny">期待: medium</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.357</b></td>
-            <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num"><b style="color: var(--accent);">+0.254</b></td>
+            <td class="num"><b style="color: var(--long);">0.008</b></td>
             <td class="num">107</td>
-            <td class="num"><span style="color: var(--text);">55.3%</span><span class="muted"> (n=38)</span></td>
-            <td class="num"><span style="color: var(--long);">66.7%</span><span class="muted"> (n=39)</span></td>
+            <td class="num"><span style="color: var(--text);">55.6%</span><span class="muted"> (n=27)</span></td>
+            <td class="num"><span style="color: var(--long);">80.6%</span><span class="muted"> (n=31)</span></td>
             <td><span class="verdict verdict-confirmed">✅ 中程度の連動を確認</span></td>
             <td class="tiny muted">
               米: CAT, DE<br>
