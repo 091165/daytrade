@@ -22,9 +22,13 @@ FUJIKURA = next(s for s in FOCUS_STOCKS if s.code == "5803")
 SBG = next(s for s in FOCUS_STOCKS if s.code == "9984")
 
 
-def test_focus_stocks_are_only_approved_two():
-    assert {s.code for s in FOCUS_STOCKS} == {"5803", "9984"}
-    print("✅ test_focus_stocks_are_only_approved_two")
+def test_focus_stocks_are_approved_two_and_trial_murata():
+    assert {s.code for s in FOCUS_STOCKS if not s.trial} == {"5803", "9984"}
+    assert {s.code for s in FOCUS_STOCKS if s.trial} == {"6981"}
+    murata = build_focus_signal(next(s for s in FOCUS_STOCKS if s.code == "6981"), {"SOXX": 3.0}, "hands_off")
+    assert murata.trial is True
+    assert build_focus_signal(FUJIKURA, {}, "hands_off").trial is False
+    print("✅ test_focus_stocks_are_approved_two_and_trial_murata")
 
 
 def test_classify_move_thresholds():
@@ -101,7 +105,7 @@ def test_reverse_intraday_warns_yoritaka():
 
 def test_build_all_and_tickers():
     sigs = build_all_focus_signals({"ARM": 1.5}, "hands_off", {"9984": {"gap_r": 0.4, "gap_p": 0.01}})
-    assert [s.code for s in sigs] == ["5803", "9984"]
+    assert [s.code for s in sigs] == ["5803", "9984", "6981"]
     assert sigs[1].validation is not None and sigs[0].validation is None
     t = get_focus_us_tickers()
     assert "ARM" in t and "GLW" in t and t == sorted(set(t))
@@ -109,7 +113,7 @@ def test_build_all_and_tickers():
 
 
 if __name__ == "__main__":
-    test_focus_stocks_are_only_approved_two()
+    test_focus_stocks_are_approved_two_and_trial_murata()
     test_classify_move_thresholds()
     test_classify_link()
     test_average_uses_only_available_tickers()

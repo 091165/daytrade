@@ -24,6 +24,13 @@ from typing import Literal
 _APPROVED: tuple[tuple[str, str], ...] = (("フジクラ", "5803"), ("SBG", "9984"))
 APPROVED_STOCKS: tuple[str, ...] = tuple(f"{name}({code})" for name, code in _APPROVED)
 APPROVED_CODES: tuple[str, ...] = tuple(code for _, code in _APPROVED)
+# 試用銘柄: 条件つきで試し、TRIAL_REVIEW_AFTER 回たまったら承認するか決め直す
+_TRIAL: tuple[tuple[str, str], ...] = (("村田", "6981"),)
+TRIAL_STOCKS: tuple[str, ...] = tuple(f"{name}({code})" for name, code in _TRIAL)
+TRIAL_CODES: tuple[str, ...] = tuple(code for _, code in _TRIAL)
+TRIAL_SINCE = "2026-10-29"
+TRIAL_MAX_QTY = 100
+TRIAL_REVIEW_AFTER = 20
 BANNED_STOCKS: tuple[str, ...] = ("太陽誘電(6976)", "イビデン(4062)", "アドバンテスト(6857)")
 DAILY_LOSS_LIMIT_YEN = 10_000
 PER_TRADE_STOP_MAX_YEN = 5_000
@@ -38,6 +45,7 @@ ALWAYS_RULES: tuple[str, ...] = (
     f"{END_TIME}前に「取引終了」を宣言する",
     f"1日 -{DAILY_LOSS_LIMIT_YEN:,}円 でその日は終了",
     f"触るのは {'・'.join(APPROVED_STOCKS)} だけ。{'・'.join(BANNED_STOCKS)} と承認外の銘柄は触らない",
+    f"試用：{'・'.join(TRIAL_STOCKS)} は {TRIAL_MAX_QTY}株だけ・{END_TIME}前だけ・-{PER_TRADE_STOP_MAX_YEN:,}円で即損切り",
     "注文画面で「日計り」になっているか毎回確認する",
 )
 
@@ -76,6 +84,14 @@ def build_checks(day_type: DayType) -> dict:
         "max_qty": None if trend else NO_TREND_MAX_QTY,
         "wait_window": None if trend else CHOP_WINDOW.split("〜"),
         "max_consecutive_losses": None if trend else MAX_CONSECUTIVE_LOSSES,
+        "trial": {
+            "codes": list(TRIAL_CODES),
+            "names": [name for name, _ in _TRIAL],
+            "since": TRIAL_SINCE,
+            "max_qty": TRIAL_MAX_QTY,
+            "stop_yen": PER_TRADE_STOP_MAX_YEN,
+            "review_after": TRIAL_REVIEW_AFTER,
+        },
     }
 
 

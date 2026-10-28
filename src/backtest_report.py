@@ -121,7 +121,7 @@ def render_focus_section(focus_results: list[dict] | None, focus_period: str) ->
     if not focus_results:
         return """
   <section class="section-box">
-    <h2 class="section-title">🎯 承認銘柄（フジクラ・SBG）の個別予測の検証</h2>
+    <h2 class="section-title">🎯 承認銘柄・試用銘柄の個別予測の検証</h2>
     <div class="muted" style="padding: 16px;">まだ検証結果がありません（データ取得失敗、または未実行）。</div>
   </section>
 """
@@ -145,7 +145,7 @@ def render_focus_section(focus_results: list[dict] | None, focus_period: str) ->
         """
     return f"""
   <section class="section-box">
-    <h2 class="section-title">🎯 承認銘柄（フジクラ・SBG）の個別予測の検証</h2>
+    <h2 class="section-title">🎯 承認銘柄・試用銘柄の個別予測の検証</h2>
     <div class="period-note">検証期間: {focus_period}　／　米関連株の前日騰落率（平均） vs 翌日の日本株</div>
     <table class="results">
       <thead>

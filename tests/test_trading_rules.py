@@ -83,6 +83,12 @@ def test_checks_match_day_type():
     assert flat["wait_window"] == ["09:05", "09:15"]
     assert flat["max_consecutive_losses"] == 2
     assert flat["daily_loss_limit_yen"] == 10000 and flat["end_time"] == "10:00"
+    for c in (up, flat):
+        assert c["trial"]["codes"] == ["6981"]
+        assert c["trial"]["max_qty"] == 100 and c["trial"]["stop_yen"] == 5000
+        assert c["trial"]["review_after"] == 20
+        assert "6981" not in c["approved_codes"]
+    assert any("試用" in r and "村田(6981)" in r for r in ALWAYS_RULES)
     print("✅ test_checks_match_day_type")
 
 
