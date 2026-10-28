@@ -58,6 +58,15 @@ GitHub Actions で平日の寄り前（6:37 / 7:07 / 7:37 JST）に実行、GitH
 - **毎朝のダッシュボードには出さない**（承認銘柄以外を触るきっかけを作らないため）
 - 銘柄の入れ替えは `src/correlation_scan.py` の `SCAN_JP` / `SCAN_US` を編集
 
+### 8. 日付ごとの記録（振り返り用）
+- 毎朝の判定一式を `docs/archive/YYYY-MM-DD.json` に残し、日付一覧を `docs/archive/index.json` に書く
+- 寄り前に作られた版がある日は、寄り後の版で上書きしない（トレード前に見ていた判定を残すため）
+- `trading_rules.checks` に、約定記録と機械的に突き合わせられる形のルールを入れる
+  （承認銘柄・1日の損失上限・終了時刻・日計り・方向・1回の損切り幅・株数・様子見の時間帯・連敗で終了）
+- `history.json` にあって記録がない日は、判定ラベルから今のルールで組み立て直して埋める（`reconstructed: true`）
+- [daytrade-journal](https://github.com/okanemochi-banzai/daytrade-journal) の `review.html` がこれを読み、
+  その日のルールを守れたかと成績を表示する
+
 ## アーキテクチャ
 
 ```

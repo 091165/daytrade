@@ -70,6 +70,22 @@ def test_unknown_verdict_falls_back_to_no_trend():
     print("✅ test_unknown_verdict_falls_back_to_no_trend")
 
 
+def test_checks_match_day_type():
+    up = build_trading_rules("buy_bias", "high").checks
+    assert up["direction"] == "buy"
+    assert up["approved_codes"] == ["5803", "9984"]
+    assert up["per_trade_stop_yen"] == 5000
+    assert up["max_qty"] is None and up["wait_window"] is None
+    assert build_trading_rules("sell_bias", "high").checks["direction"] == "sell"
+    flat = build_trading_rules("hands_off", "low").checks
+    assert flat["direction"] is None
+    assert flat["max_qty"] == 100
+    assert flat["wait_window"] == ["09:05", "09:15"]
+    assert flat["max_consecutive_losses"] == 2
+    assert flat["daily_loss_limit_yen"] == 10000 and flat["end_time"] == "10:00"
+    print("✅ test_checks_match_day_type")
+
+
 if __name__ == "__main__":
     test_buy_bias_is_trend_up_danger()
     test_sell_bias_is_trend_down_danger()
@@ -78,4 +94,5 @@ if __name__ == "__main__":
     test_always_rules_present_every_day()
     test_low_confidence_does_not_leak_between_calls()
     test_unknown_verdict_falls_back_to_no_trend()
+    test_checks_match_day_type()
     print("\n🎉 All trading_rules tests passed!")
