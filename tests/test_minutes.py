@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from collect_minutes import days_to_save, load_minutes, minute_rows, write_day
 from opening_drive import binom_p, drive_rows, follow_stats, summarize
+from yahoo_chart import chart_to_frame
 
 JST = ZoneInfo("Asia/Tokyo")
 
@@ -94,6 +95,22 @@ def test_follow_stats_detects_continuation():
     print("✅ test_follow_stats_detects_continuation")
 
 
+def test_chart_to_frame():
+    payload = {"chart": {"result": [{
+        "timestamp": [1792972800, 1792972860, 1792972920],          # 2026-10-26 09:00 / 09:01 / 09:02 JST
+        "indicators": {"quote": [{"open": [6175, 6178, None], "high": [6228, 6198, None],
+                                  "low": [6168, 6159, None], "close": [6180, 6182, None],
+                                  "volume": [18900800, 108000, None]}]},
+    }]}}
+    df = chart_to_frame(payload)
+    assert len(df) == 2                                              # 値のない足は除く
+    assert df.index[0].tz_convert(JST).strftime("%H:%M") == "09:00"
+    rows = minute_rows(df, "6981")
+    assert rows[date(2026, 10, 26)][0][:3] == ["6981", "09:00", 6175.0]
+    assert chart_to_frame({"chart": {"result": None}}).empty
+    print("✅ test_chart_to_frame")
+
+
 def test_binom_p():
     assert binom_p(50, 100) == 1.0
     assert binom_p(70, 100) < 0.001
@@ -106,5 +123,6 @@ if __name__ == "__main__":
     test_write_and_load_roundtrip()
     test_drive_rows_5min_and_1min()
     test_follow_stats_detects_continuation()
+    test_chart_to_frame()
     test_binom_p()
     print("\n🎉 All minutes tests passed!")

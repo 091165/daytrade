@@ -93,6 +93,7 @@ GitHub Actions で平日の寄り前（6:37 / 7:07 / 7:37 JST）に実行、GitH
 - `src/opening_drive.py`。寄りから9:10・9:20までに動いた向きに乗り、10:00の直前に出た場合に「続いた」率を銘柄ごと・全銘柄まとめで測る
 - 1分足は `src/collect_minutes.py` が平日の引け後に `data/minutes/YYYY-MM-DD.csv`（9:00〜10:29、20銘柄）へ貯める（`.github/workflows/collect_minutes.yml`）
 - 1分足が40日分たまるまでは、Yahoo の5分足（直近60日）で予備検証する
+- 分足は Yahoo のチャートデータを直接取る（`src/yahoo_chart.py`）。yfinance 経由だと東証の寄りの 9:00〜9:05 の足が欠けるため
 
 ## アーキテクチャ
 
