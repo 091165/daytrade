@@ -162,7 +162,7 @@
     </div>
     <div style="text-align: right;">
       <div class="period">検証期間: 過去 6mo (セクター) / 1y (日経方針・個別)</div>
-      <div class="timestamp">Updated: 2026-10-28 17:18 JST</div>
+      <div class="timestamp">Updated: 2026-10-28 19:19 JST</div>
     </div>
   </header>
 
@@ -277,7 +277,7 @@
             <td><span class="verdict verdict-confirmed">✅ 連動を確認</span></td>
             <td class="num"><b style="color: var(--muted);">+0.103</b><br><span class="muted">0.118</span></td>
             <td><span class="verdict verdict-weak">△ 弱い連動</span></td>
-            <td class="tiny"><span class="muted">n=106</span><br>窓 <span style="color: var(--long);">+2.22%</span>（同方向 77%）<br>寄り後 <span style="color: var(--long);">+0.34%</span>（同方向 51%）</td>
+            <td class="tiny"><span class="muted">n=106</span><br>窓 <span style="color: var(--long);">+2.22%</span>（同方向 75%）<br>寄り後 <span style="color: var(--long);">+0.34%</span>（同方向 51%）</td>
             <td class="tiny"><span class="muted">n=77</span><br>窓 <span style="color: var(--short);">-2.46%</span>（同方向 82%）<br>寄り後 <span style="color: var(--short);">-0.48%</span>（同方向 55%）</td>
             <td class="tiny muted">GLW(窓+0.65/寄後+0.15), COHR(窓+0.56/寄後+0.05), LITE(窓+0.53/寄後+0.11), VRT(窓+0.52/寄後+0.05)</td>
           </tr>
@@ -302,6 +302,84 @@
         <li><b>窓</b>: 前日終値 → 寄り付き。米国の動きは主にここに出る。デイトレでは取れない部分。</li>
         <li><b>寄り後</b>: 寄り付き → 引け。デイトレで実際に取れる部分。ここの連動が弱ければ「寄りの方向は読めても、寄り後は読めない」。</li>
         <li><b>逆に動きやすい</b>: 米が上げた翌日、寄り後は下げやすい（寄り天型）。寄りで飛びつかない根拠になる。</li>
+      </ul>
+    </div>
+  </section>
+
+
+  
+  <section class="section-box">
+    <h2 class="section-title">📏 想定値幅の検証（フジクラ・SBG）</h2>
+    <div class="period-note">検証期間: 1y　／　直近N日の平均値幅（高値−安値）で、翌日の値幅を予測</div>
+    <table class="results">
+      <thead>
+        <tr>
+          <th>銘柄</th><th class="num">予測に使う期間</th><th class="num">r / p</th><th class="num">n</th>
+          <th class="num">予測以内に<br>収まった日</th><th class="num">実際÷予測<br>（中央値）</th><th class="num">実際÷予測<br>（5日に1日）</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td><b>フジクラ</b></td>
+            <td class="num">直近5日</td>
+            <td class="num"><b style="color: var(--long);">+0.420</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">237</td>
+            <td class="num">54%</td>
+            <td class="num">0.96倍</td>
+            <td class="num">1.29倍</td>
+          </tr>
+          <tr>
+            <td><b>フジクラ</b></td>
+            <td class="num">直近10日</td>
+            <td class="num"><b style="color: var(--accent);">+0.366</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">232</td>
+            <td class="num">59%</td>
+            <td class="num">0.93倍</td>
+            <td class="num">1.22倍</td>
+          </tr>
+          <tr>
+            <td><b>フジクラ</b></td>
+            <td class="num">直近20日</td>
+            <td class="num"><b style="color: var(--accent);">+0.290</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">222</td>
+            <td class="num">58%</td>
+            <td class="num">0.93倍</td>
+            <td class="num">1.29倍</td>
+          </tr>
+          <tr>
+            <td><b>ソフトバンクG</b></td>
+            <td class="num">直近5日</td>
+            <td class="num"><b style="color: var(--accent);">+0.256</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">237</td>
+            <td class="num">55%</td>
+            <td class="num">0.94倍</td>
+            <td class="num">1.38倍</td>
+          </tr>
+          <tr>
+            <td><b>ソフトバンクG</b></td>
+            <td class="num">直近10日</td>
+            <td class="num"><b style="color: var(--accent);">+0.237</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">232</td>
+            <td class="num">56%</td>
+            <td class="num">0.92倍</td>
+            <td class="num">1.32倍</td>
+          </tr>
+          <tr>
+            <td><b>ソフトバンクG</b></td>
+            <td class="num">直近20日</td>
+            <td class="num"><b style="color: var(--accent);">+0.224</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">222</td>
+            <td class="num">61%</td>
+            <td class="num">0.89倍</td>
+            <td class="num">1.29倍</td>
+          </tr></tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>r</b>: 予測した値幅と実際の値幅の相関。大きいほど「最近荒れていれば今日も荒れる」が当たっている。</li>
+        <li><b>実際÷予測（中央値）</b>: 1より小さければ、ふつうの日は予測より小さく収まる。</li>
+        <li><b>実際÷予測（5日に1日）</b>: 荒れた日に予測の何倍まで動くか。毎朝のカードの「荒れた日」の幅に使っている。</li>
       </ul>
     </div>
   </section>
