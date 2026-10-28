@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-25 14:28 JST",
-  "period": "6mo (セクター) / 1y (日経方針)",
+  "generated_at": "2026-10-28 16:50 JST",
+  "period": "6mo (セクター) / 1y (日経方針・個別)",
   "sector_validation": {
     "summary": {
       "total": 10,
@@ -26,13 +26,13 @@
           "6146.T",
           "6920.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.5086941157589137,
-        "p_value": 3.0161572914304825e-08,
-        "hit_rate_up": 0.6923076923076923,
-        "hit_rate_down": 0.7368421052631579,
-        "n_us_up_days": 39,
-        "n_us_down_days": 38,
+        "n_samples": 107,
+        "pearson_r": 0.513356419171726,
+        "p_value": 1.5656298431377522e-08,
+        "hit_rate_up": 0.7073170731707317,
+        "hit_rate_down": 0.7297297297297297,
+        "n_us_up_days": 41,
+        "n_us_down_days": 37,
         "expected_correlation": "high",
         "verdict": "confirmed",
         "verdict_label": "✅ 強連動を確認"
@@ -48,13 +48,13 @@
         "jp_tickers_used": [
           "285A.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.4073781061868161,
-        "p_value": 1.610269241254075e-05,
-        "hit_rate_up": 0.7045454545454546,
-        "hit_rate_down": 0.5476190476190477,
-        "n_us_up_days": 44,
-        "n_us_down_days": 42,
+        "n_samples": 107,
+        "pearson_r": 0.41464342049155656,
+        "p_value": 8.98309023000726e-06,
+        "hit_rate_up": 0.7111111111111111,
+        "hit_rate_down": 0.5581395348837209,
+        "n_us_up_days": 45,
+        "n_us_down_days": 43,
         "expected_correlation": "high",
         "verdict": "confirmed",
         "verdict_label": "✅ 強連動を確認"
@@ -71,13 +71,13 @@
           "6305.T",
           "6326.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.3713161019191339,
-        "p_value": 9.631690709800373e-05,
-        "hit_rate_up": 0.5384615384615384,
-        "hit_rate_down": 0.7,
-        "n_us_up_days": 26,
-        "n_us_down_days": 30,
+        "n_samples": 107,
+        "pearson_r": 0.2476139447804155,
+        "p_value": 0.0101279418068824,
+        "hit_rate_up": 0.47368421052631576,
+        "hit_rate_down": 0.5897435897435898,
+        "n_us_up_days": 38,
+        "n_us_down_days": 39,
         "expected_correlation": "high",
         "verdict": "weak",
         "verdict_label": "△ 期待より弱い連動"
@@ -96,13 +96,13 @@
           "5019.T",
           "5021.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.3005651904715796,
-        "p_value": 0.0018370996914443796,
-        "hit_rate_up": 0.6875,
-        "hit_rate_down": 0.8,
-        "n_us_up_days": 32,
-        "n_us_down_days": 20,
+        "n_samples": 107,
+        "pearson_r": 0.34357928545872507,
+        "p_value": 0.0002909616534094845,
+        "hit_rate_up": 0.696969696969697,
+        "hit_rate_down": 0.8095238095238095,
+        "n_us_up_days": 33,
+        "n_us_down_days": 21,
         "expected_correlation": "high",
         "verdict": "weak",
         "verdict_label": "△ 期待より弱い連動"
@@ -122,13 +122,13 @@
           "7013.T",
           "7012.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.2763817419133445,
-        "p_value": 0.004317497971203597,
-        "hit_rate_up": 0.7083333333333334,
-        "hit_rate_down": 0.782608695652174,
-        "n_us_up_days": 24,
-        "n_us_down_days": 23,
+        "n_samples": 107,
+        "pearson_r": 0.2733263200373961,
+        "p_value": 0.004391838261984666,
+        "hit_rate_up": 0.72,
+        "hit_rate_down": 0.7916666666666666,
+        "n_us_up_days": 25,
+        "n_us_down_days": 24,
         "expected_correlation": "high",
         "verdict": "weak",
         "verdict_label": "△ 期待より弱い連動"
@@ -146,13 +146,13 @@
           "9432.T",
           "9434.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.264652357805839,
-        "p_value": 0.006367271870682373,
+        "n_samples": 107,
+        "pearson_r": 0.2516864972913812,
+        "p_value": 0.008919444990499799,
         "hit_rate_up": 0.6538461538461539,
-        "hit_rate_down": 0.4166666666666667,
+        "hit_rate_down": 0.44,
         "n_us_up_days": 26,
-        "n_us_down_days": 24,
+        "n_us_down_days": 25,
         "expected_correlation": "medium",
         "verdict": "confirmed",
         "verdict_label": "✅ 中程度の連動を確認"
@@ -175,13 +175,13 @@
           "4684.T",
           "3994.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.5362935956776265,
-        "p_value": 3.7178768060962775e-09,
+        "n_samples": 107,
+        "pearson_r": 0.5355630766361565,
+        "p_value": 2.7837703942231376e-09,
         "hit_rate_up": 0.7894736842105263,
-        "hit_rate_down": 0.6666666666666666,
+        "hit_rate_down": 0.6764705882352942,
         "n_us_up_days": 38,
-        "n_us_down_days": 33,
+        "n_us_down_days": 34,
         "expected_correlation": "medium",
         "verdict": "confirmed",
         "verdict_label": "✅ 中程度の連動を確認"
@@ -198,13 +198,13 @@
           "5802.T",
           "5801.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.25148859979880833,
-        "p_value": 0.009656944912444652,
-        "hit_rate_up": 0.5384615384615384,
-        "hit_rate_down": 0.8,
-        "n_us_up_days": 26,
-        "n_us_down_days": 30,
+        "n_samples": 107,
+        "pearson_r": 0.3568265620729052,
+        "p_value": 0.00016151057431955496,
+        "hit_rate_up": 0.5526315789473685,
+        "hit_rate_down": 0.6666666666666666,
+        "n_us_up_days": 38,
+        "n_us_down_days": 39,
         "expected_correlation": "medium",
         "verdict": "confirmed",
         "verdict_label": "✅ 中程度の連動を確認"
@@ -221,13 +221,13 @@
           "9104.T",
           "9107.T"
         ],
-        "n_samples": 105,
-        "pearson_r": -0.154612362837656,
-        "p_value": 0.11529663669915,
-        "hit_rate_up": 0.5161290322580645,
-        "hit_rate_down": 0.3181818181818182,
-        "n_us_up_days": 31,
-        "n_us_down_days": 22,
+        "n_samples": 107,
+        "pearson_r": -0.1810607514128962,
+        "p_value": 0.06199018420589962,
+        "hit_rate_up": 0.5,
+        "hit_rate_down": 0.30434782608695654,
+        "n_us_up_days": 32,
+        "n_us_down_days": 23,
         "expected_correlation": "low",
         "verdict": "contradicted",
         "verdict_label": "⚠️ 期待と逆方向の相関"
@@ -247,9 +247,9 @@
           "2269.T",
           "2801.T"
         ],
-        "n_samples": 105,
-        "pearson_r": 0.2638479128728634,
-        "p_value": 0.006535249195410656,
+        "n_samples": 107,
+        "pearson_r": 0.2797772360454179,
+        "p_value": 0.0035164444236924675,
         "hit_rate_up": 0.8260869565217391,
         "hit_rate_down": 0.6111111111111112,
         "n_us_up_days": 23,
@@ -262,23 +262,23 @@
   },
   "direction_validation": {
     "period": "1y",
-    "total_days": 240,
-    "start_date": "2025-10-28",
-    "end_date": "2026-10-23",
+    "total_days": 241,
+    "start_date": "2025-10-30",
+    "end_date": "2026-10-28",
     "stats_by_verdict": [
       {
         "verdict": "buy_bias",
         "verdict_label": "買いポジ主体",
-        "n": 73,
-        "mean_intraday_pct": 0.5160325834523355,
-        "median_intraday_pct": 0.5216300991933043,
-        "std_intraday_pct": 1.3522862203296995,
-        "mean_daily_pct": 1.152916781321362,
-        "median_daily_pct": 1.201400542230946,
-        "std_daily_pct": 1.6254492206568592,
-        "directional_win_rate": 0.6438356164383562,
-        "n_aligned": 47,
-        "avg_when_aligned": 1.2639082515856008,
+        "n": 74,
+        "mean_intraday_pct": 0.5058513212608045,
+        "median_intraday_pct": 0.46323239058586596,
+        "std_intraday_pct": 1.3378906138449014,
+        "mean_daily_pct": 1.1461357325907533,
+        "median_daily_pct": 1.181627440596722,
+        "std_daily_pct": 1.611349093634965,
+        "directional_win_rate": 0.6486486486486487,
+        "n_aligned": 48,
+        "avg_when_aligned": 1.2326313959542141,
         "avg_when_not_aligned": -0.8358965089424131
       },
       {
@@ -300,49 +300,19 @@
         "verdict": "hands_off",
         "verdict_label": "初心者手出し無用",
         "n": 121,
-        "mean_intraday_pct": -0.003566805447466259,
+        "mean_intraday_pct": -0.004747410913668658,
         "median_intraday_pct": 0.0023994667537996506,
-        "std_intraday_pct": 1.2584346172535137,
-        "mean_daily_pct": 0.06657446066860784,
+        "std_intraday_pct": 1.258757388776395,
+        "mean_daily_pct": 0.06473312427771413,
         "median_daily_pct": 0.00034068472876125355,
-        "std_daily_pct": 1.633762841738212,
-        "directional_win_rate": 0.2727272727272727,
-        "n_aligned": 33,
-        "avg_when_aligned": -0.0019597807912335504,
-        "avg_when_not_aligned": -0.004169439693553484
+        "std_daily_pct": 1.6346233463390023,
+        "directional_win_rate": 0.2644628099173554,
+        "n_aligned": 32,
+        "avg_when_aligned": 0.006540865624433956,
+        "avg_when_not_aligned": -0.00880611708467182
       }
     ],
     "daily_records": [
-      {
-        "date": "2025-10-28",
-        "verdict": "hands_off",
-        "verdict_label": "初心者手出し無用",
-        "confidence": "low",
-        "nasdaq_pct": 1.8642285558837957,
-        "dow_pct": 0.7148683126213307,
-        "sox_pct": 2.738163731763388,
-        "futures_diff": 62.6796875,
-        "nikkei_open": 50357.1484375,
-        "nikkei_close": 50219.1796875,
-        "nikkei_prev_close": 50512.3203125,
-        "intraday_pct": -0.27398046609259374,
-        "daily_pct": -0.5803349028246085
-      },
-      {
-        "date": "2025-10-29",
-        "verdict": "buy_bias",
-        "verdict_label": "買いポジ主体",
-        "confidence": "medium",
-        "nasdaq_pct": 0.8039327801639073,
-        "dow_pct": 0.34027267988150367,
-        "sox_pct": 0.37290813508943366,
-        "futures_diff": 565.8203125,
-        "nikkei_open": 50453.640625,
-        "nikkei_close": 51307.6484375,
-        "nikkei_prev_close": 50219.1796875,
-        "intraday_pct": 1.6926584522363175,
-        "daily_pct": 2.167436339608164
-      },
       {
         "date": "2025-10-30",
         "verdict": "hands_off",
@@ -3912,6 +3882,162 @@
         "nikkei_prev_close": 62907.83984375,
         "intraday_pct": 0.04166364089981389,
         "daily_pct": -0.341260625119566
+      },
+      {
+        "date": "2026-10-26",
+        "verdict": "hands_off",
+        "verdict_label": "初心者手出し無用",
+        "confidence": "low",
+        "nasdaq_pct": -0.2057742343804736,
+        "dow_pct": -1.2348122752407376,
+        "sox_pct": 0.4424112802455582,
+        "futures_diff": -3.16015625,
+        "nikkei_open": 62449.9609375,
+        "nikkei_close": 62189.6484375,
+        "nikkei_prev_close": 62693.16015625,
+        "intraday_pct": -0.41683372750308534,
+        "daily_pct": -0.8031366061227452
+      },
+      {
+        "date": "2026-10-27",
+        "verdict": "buy_bias",
+        "verdict_label": "買いポジ主体",
+        "confidence": "high",
+        "nasdaq_pct": 0.8246511774205878,
+        "dow_pct": 0.28041275428793977,
+        "sox_pct": 2.8202689812538706,
+        "futures_diff": 695.3515625,
+        "nikkei_open": 62569.078125,
+        "nikkei_close": 63268.37109375,
+        "nikkei_prev_close": 62189.6484375,
+        "intraday_pct": 1.1176334855900416,
+        "daily_pct": 1.734569471532077
+      },
+      {
+        "date": "2026-10-28",
+        "verdict": "buy_bias",
+        "verdict_label": "買いポジ主体",
+        "confidence": "high",
+        "nasdaq_pct": 1.1785899298015101,
+        "dow_pct": 0.030541836347675044,
+        "sox_pct": 3.6002288388192083,
+        "futures_diff": 1176.62890625,
+        "nikkei_open": 63738.98046875,
+        "nikkei_close": 63954.19140625,
+        "nikkei_prev_close": 63268.37109375,
+        "intraday_pct": 0.33764414792532005,
+        "daily_pct": 1.0839860433323967
+      }
+    ]
+  },
+  "focus_validation": {
+    "period": "1y",
+    "results": [
+      {
+        "code": "5803",
+        "name": "フジクラ",
+        "us_label": "光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ）",
+        "us_tickers_used": [
+          "COHR",
+          "GLW",
+          "LITE",
+          "VRT"
+        ],
+        "n": 232,
+        "gap_r": 0.6393528325528259,
+        "gap_p": 4.613356859785251e-28,
+        "intraday_r": 0.10302344549919723,
+        "intraday_p": 0.11760697416030656,
+        "gap_link": "confirmed",
+        "intraday_link": "weak",
+        "us_up": {
+          "n": 106,
+          "mean_gap": 2.219225778225054,
+          "mean_intraday": 0.3399485493283275,
+          "gap_hit": 0.7735849056603774,
+          "intraday_hit": 0.5094339622641509
+        },
+        "us_down": {
+          "n": 77,
+          "mean_gap": -2.4580436591002943,
+          "mean_intraday": -0.48288000564011885,
+          "gap_hit": 0.8181818181818182,
+          "intraday_hit": 0.5454545454545454
+        },
+        "per_proxy": {
+          "GLW": {
+            "gap_r": 0.6476108377026037,
+            "intraday_r": 0.15435057550620215,
+            "n": 232
+          },
+          "COHR": {
+            "gap_r": 0.560593409500931,
+            "intraday_r": 0.04828064183298834,
+            "n": 232
+          },
+          "LITE": {
+            "gap_r": 0.5277631579979158,
+            "intraday_r": 0.10983467852777001,
+            "n": 232
+          },
+          "VRT": {
+            "gap_r": 0.5154310060902602,
+            "intraday_r": 0.045924417269072086,
+            "n": 232
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "△ 弱い連動"
+      },
+      {
+        "code": "9984",
+        "name": "ソフトバンクG",
+        "us_label": "Arm・NVIDIA・ナスダック100",
+        "us_tickers_used": [
+          "ARM",
+          "NVDA",
+          "QQQ"
+        ],
+        "n": 232,
+        "gap_r": 0.7130324232938042,
+        "gap_p": 2.5091155663171702e-37,
+        "intraday_r": -0.08601615191890823,
+        "intraday_p": 0.19172153594643548,
+        "gap_link": "confirmed",
+        "intraday_link": "none",
+        "us_up": {
+          "n": 68,
+          "mean_gap": 3.501413755793239,
+          "mean_intraday": -0.2924965989593517,
+          "gap_hit": 0.9264705882352942,
+          "intraday_hit": 0.4117647058823529
+        },
+        "us_down": {
+          "n": 69,
+          "mean_gap": -3.246848618395428,
+          "mean_intraday": 0.0163075530516188,
+          "gap_hit": 0.8405797101449275,
+          "intraday_hit": 0.4492753623188406
+        },
+        "per_proxy": {
+          "ARM": {
+            "gap_r": 0.6636613722266977,
+            "intraday_r": -0.008795652757958003,
+            "n": 232
+          },
+          "NVDA": {
+            "gap_r": 0.5020143185751177,
+            "intraday_r": -0.18601908058058972,
+            "n": 232
+          },
+          "QQQ": {
+            "gap_r": 0.6113280307552387,
+            "intraday_r": -0.11711650907514473,
+            "n": 232
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "✗ 連動なし"
       }
     ]
   }

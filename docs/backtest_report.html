@@ -153,8 +153,8 @@
       <a href="./index.html" class="back-link">← メインダッシュボードに戻る</a>
     </div>
     <div style="text-align: right;">
-      <div class="period">検証期間: 過去 6mo (セクター) / 1y (日経方針)</div>
-      <div class="timestamp">Updated: 2026-10-25 14:28 JST</div>
+      <div class="period">検証期間: 過去 6mo (セクター) / 1y (日経方針・個別)</div>
+      <div class="timestamp">Updated: 2026-10-28 16:50 JST</div>
     </div>
   </header>
 
@@ -162,8 +162,8 @@
   <section class="section-box">
     <h2 class="section-title">📈 日経デイトレ方針判定の検証</h2>
     <div class="period-note">
-      検証期間: 2025-10-28 ～ 2026-10-23
-      (240営業日)
+      検証期間: 2025-10-30 ～ 2026-10-28
+      (241営業日)
     </div>
 
     <table class="results">
@@ -183,12 +183,12 @@
         
               <tr>
                 <td><span class="dir-badge dir-buy">📈 買いポジ主体</span></td>
-                <td class="num">73</td>
-                <td class="num"><span style="color: var(--long);">+0.52%</span></td>
-                <td class="num"><span style="color: var(--long);">+0.52%</span></td>
-                <td class="num"><span class="muted">±1.35%</span></td>
-                <td class="num"><span style="color: var(--long);">64.4%</span> <span class="muted">(47日)</span></td>
-                <td class="num"><span style="color: var(--long);">+1.26%</span></td>
+                <td class="num">74</td>
+                <td class="num"><span style="color: var(--long);">+0.51%</span></td>
+                <td class="num"><span style="color: var(--long);">+0.46%</span></td>
+                <td class="num"><span class="muted">±1.34%</span></td>
+                <td class="num"><span style="color: var(--long);">64.9%</span> <span class="muted">(48日)</span></td>
+                <td class="num"><span style="color: var(--long);">+1.23%</span></td>
                 <td class="num"><span style="color: var(--long);">+1.15%</span></td>
               </tr>
             
@@ -209,9 +209,9 @@
                 <td class="num"><span style="color: var(--short);">-0.00%</span></td>
                 <td class="num"><span style="color: var(--long);">+0.00%</span></td>
                 <td class="num"><span class="muted">±1.26%</span></td>
-                <td class="num"><span style="color: var(--short);">27.3%</span> <span class="muted">(33日)</span></td>
-                <td class="num"><span style="color: var(--short);">-0.00%</span></td>
-                <td class="num"><span style="color: var(--long);">+0.07%</span></td>
+                <td class="num"><span style="color: var(--short);">26.4%</span> <span class="muted">(32日)</span></td>
+                <td class="num"><span style="color: var(--long);">+0.01%</span></td>
+                <td class="num"><span style="color: var(--long);">+0.06%</span></td>
               </tr>
             
       </tbody>
@@ -237,6 +237,63 @@
         <li><b>方向一致率 ≥ 60%</b>: シグナルを信頼して OCO不成デイトレで使える水準。</li>
         <li><b>方向一致率 50-60%</b>: 参考程度。他の指標（キリバン、セクター）と組み合わせて判断。</li>
         <li><b>方向一致率 < 50%</b>: シグナルが実相場で機能していない。しきい値や条件を見直す候補。</li>
+      </ul>
+    </div>
+  </section>
+
+
+  
+  <section class="section-box">
+    <h2 class="section-title">🎯 承認銘柄（フジクラ・SBG）の個別予測の検証</h2>
+    <div class="period-note">検証期間: 1y　／　米関連株の前日騰落率（平均） vs 翌日の日本株</div>
+    <table class="results">
+      <thead>
+        <tr>
+          <th>銘柄</th>
+          <th class="num">n</th>
+          <th class="num">窓<br>r / p</th>
+          <th>窓の判定</th>
+          <th class="num">寄り後<br>r / p</th>
+          <th>寄り後の判定</th>
+          <th>米が+1%以上の日</th>
+          <th>米が-1%以下の日</th>
+          <th>ティッカー別 r</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+          <tr>
+            <td><b>フジクラ</b><div class="muted tiny">5803</div></td>
+            <td class="num">232</td>
+            <td class="num"><b style="color: var(--long);">+0.639</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td><span class="verdict verdict-confirmed">✅ 連動を確認</span></td>
+            <td class="num"><b style="color: var(--muted);">+0.103</b><br><span class="muted">0.118</span></td>
+            <td><span class="verdict verdict-weak">△ 弱い連動</span></td>
+            <td class="tiny"><span class="muted">n=106</span><br>窓 <span style="color: var(--long);">+2.22%</span>（同方向 77%）<br>寄り後 <span style="color: var(--long);">+0.34%</span>（同方向 51%）</td>
+            <td class="tiny"><span class="muted">n=77</span><br>窓 <span style="color: var(--short);">-2.46%</span>（同方向 82%）<br>寄り後 <span style="color: var(--short);">-0.48%</span>（同方向 55%）</td>
+            <td class="tiny muted">GLW(窓+0.65/寄後+0.15), COHR(窓+0.56/寄後+0.05), LITE(窓+0.53/寄後+0.11), VRT(窓+0.52/寄後+0.05)</td>
+          </tr>
+        
+          <tr>
+            <td><b>ソフトバンクG</b><div class="muted tiny">9984</div></td>
+            <td class="num">232</td>
+            <td class="num"><b style="color: var(--long);">+0.713</b><br><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td><span class="verdict verdict-confirmed">✅ 連動を確認</span></td>
+            <td class="num"><b style="color: var(--short);">-0.086</b><br><span class="muted">0.192</span></td>
+            <td><span class="verdict verdict-contradicted">✗ 連動なし</span></td>
+            <td class="tiny"><span class="muted">n=68</span><br>窓 <span style="color: var(--long);">+3.50%</span>（同方向 93%）<br>寄り後 <span style="color: var(--short);">-0.29%</span>（同方向 41%）</td>
+            <td class="tiny"><span class="muted">n=69</span><br>窓 <span style="color: var(--short);">-3.25%</span>（同方向 84%）<br>寄り後 <span style="color: var(--long);">+0.02%</span>（同方向 45%）</td>
+            <td class="tiny muted">ARM(窓+0.66/寄後-0.01), NVDA(窓+0.50/寄後-0.19), QQQ(窓+0.61/寄後-0.12)</td>
+          </tr>
+        
+      </tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>窓</b>: 前日終値 → 寄り付き。米国の動きは主にここに出る。デイトレでは取れない部分。</li>
+        <li><b>寄り後</b>: 寄り付き → 引け。デイトレで実際に取れる部分。ここの連動が弱ければ「寄りの方向は読めても、寄り後は読めない」。</li>
+        <li><b>逆に動きやすい</b>: 米が上げた翌日、寄り後は下げやすい（寄り天型）。寄りで飛びつかない根拠になる。</li>
       </ul>
     </div>
   </section>
@@ -288,11 +345,11 @@
               <div class="sector-name"><b>半導体</b></div>
               <div class="muted tiny">期待: high</div>
             </td>
-            <td class="num"><b style="color: var(--long);">+0.509</b></td>
+            <td class="num"><b style="color: var(--long);">+0.513</b></td>
             <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
-            <td class="num">105</td>
-            <td class="num"><span style="color: var(--long);">69.2%</span><span class="muted"> (n=39)</span></td>
-            <td class="num"><span style="color: var(--long);">73.7%</span><span class="muted"> (n=38)</span></td>
+            <td class="num">107</td>
+            <td class="num"><span style="color: var(--long);">70.7%</span><span class="muted"> (n=41)</span></td>
+            <td class="num"><span style="color: var(--long);">73.0%</span><span class="muted"> (n=37)</span></td>
             <td><span class="verdict verdict-confirmed">✅ 強連動を確認</span></td>
             <td class="tiny muted">
               米: AMAT, LRCX, KLAC, AMD, NVDA<br>
@@ -305,11 +362,11 @@
               <div class="sector-name"><b>ストレージ半導体</b></div>
               <div class="muted tiny">期待: high</div>
             </td>
-            <td class="num"><b style="color: var(--long);">+0.407</b></td>
+            <td class="num"><b style="color: var(--long);">+0.415</b></td>
             <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
-            <td class="num">105</td>
-            <td class="num"><span style="color: var(--long);">70.5%</span><span class="muted"> (n=44)</span></td>
-            <td class="num"><span style="color: var(--text);">54.8%</span><span class="muted"> (n=42)</span></td>
+            <td class="num">107</td>
+            <td class="num"><span style="color: var(--long);">71.1%</span><span class="muted"> (n=45)</span></td>
+            <td class="num"><span style="color: var(--text);">55.8%</span><span class="muted"> (n=43)</span></td>
             <td><span class="verdict verdict-confirmed">✅ 強連動を確認</span></td>
             <td class="tiny muted">
               米: SNDK, WDC, STX<br>
@@ -322,11 +379,11 @@
               <div class="sector-name"><b>建機</b></div>
               <div class="muted tiny">期待: high</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.371</b></td>
-            <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
-            <td class="num">105</td>
-            <td class="num"><span style="color: var(--text);">53.8%</span><span class="muted"> (n=26)</span></td>
-            <td class="num"><span style="color: var(--long);">70.0%</span><span class="muted"> (n=30)</span></td>
+            <td class="num"><b style="color: var(--accent);">+0.248</b></td>
+            <td class="num"><b style="color: var(--long);">0.010</b></td>
+            <td class="num">107</td>
+            <td class="num"><span style="color: var(--text);">47.4%</span><span class="muted"> (n=38)</span></td>
+            <td class="num"><span style="color: var(--text);">59.0%</span><span class="muted"> (n=39)</span></td>
             <td><span class="verdict verdict-weak">△ 期待より弱い連動</span></td>
             <td class="tiny muted">
               米: CAT, DE<br>
@@ -339,11 +396,11 @@
               <div class="sector-name"><b>エネルギー（原油）</b></div>
               <div class="muted tiny">期待: high</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.301</b></td>
-            <td class="num"><b style="color: var(--long);">0.002</b></td>
-            <td class="num">105</td>
-            <td class="num"><span style="color: var(--long);">68.8%</span><span class="muted"> (n=32)</span></td>
-            <td class="num"><span style="color: var(--long);">80.0%</span><span class="muted"> (n=20)</span></td>
+            <td class="num"><b style="color: var(--accent);">+0.344</b></td>
+            <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">107</td>
+            <td class="num"><span style="color: var(--long);">69.7%</span><span class="muted"> (n=33)</span></td>
+            <td class="num"><span style="color: var(--long);">81.0%</span><span class="muted"> (n=21)</span></td>
             <td><span class="verdict verdict-weak">△ 期待より弱い連動</span></td>
             <td class="tiny muted">
               米: XOM, CVX, COP<br>
@@ -356,11 +413,11 @@
               <div class="sector-name"><b>軍需・防衛</b></div>
               <div class="muted tiny">期待: high</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.276</b></td>
+            <td class="num"><b style="color: var(--accent);">+0.273</b></td>
             <td class="num"><b style="color: var(--long);">0.004</b></td>
-            <td class="num">105</td>
-            <td class="num"><span style="color: var(--long);">70.8%</span><span class="muted"> (n=24)</span></td>
-            <td class="num"><span style="color: var(--long);">78.3%</span><span class="muted"> (n=23)</span></td>
+            <td class="num">107</td>
+            <td class="num"><span style="color: var(--long);">72.0%</span><span class="muted"> (n=25)</span></td>
+            <td class="num"><span style="color: var(--long);">79.2%</span><span class="muted"> (n=24)</span></td>
             <td><span class="verdict verdict-weak">△ 期待より弱い連動</span></td>
             <td class="tiny muted">
               米: LMT, RTX, BA, HON, NOC<br>
@@ -373,11 +430,11 @@
               <div class="sector-name"><b>通信（配当ディフェンシブ）</b></div>
               <div class="muted tiny">期待: medium</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.265</b></td>
-            <td class="num"><b style="color: var(--long);">0.006</b></td>
-            <td class="num">105</td>
+            <td class="num"><b style="color: var(--accent);">+0.252</b></td>
+            <td class="num"><b style="color: var(--long);">0.009</b></td>
+            <td class="num">107</td>
             <td class="num"><span style="color: var(--long);">65.4%</span><span class="muted"> (n=26)</span></td>
-            <td class="num"><span style="color: var(--text);">41.7%</span><span class="muted"> (n=24)</span></td>
+            <td class="num"><span style="color: var(--text);">44.0%</span><span class="muted"> (n=25)</span></td>
             <td><span class="verdict verdict-confirmed">✅ 中程度の連動を確認</span></td>
             <td class="tiny muted">
               米: VZ, T, TMUS<br>
@@ -392,9 +449,9 @@
             </td>
             <td class="num"><b style="color: var(--long);">+0.536</b></td>
             <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
-            <td class="num">105</td>
+            <td class="num">107</td>
             <td class="num"><span style="color: var(--long);">78.9%</span><span class="muted"> (n=38)</span></td>
-            <td class="num"><span style="color: var(--long);">66.7%</span><span class="muted"> (n=33)</span></td>
+            <td class="num"><span style="color: var(--long);">67.6%</span><span class="muted"> (n=34)</span></td>
             <td><span class="verdict verdict-confirmed">✅ 中程度の連動を確認</span></td>
             <td class="tiny muted">
               米: CRM, MSFT, ORCL, ADBE, INTU, NOW<br>
@@ -407,11 +464,11 @@
               <div class="sector-name"><b>電線（CAT連動系）</b></div>
               <div class="muted tiny">期待: medium</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.251</b></td>
-            <td class="num"><b style="color: var(--long);">0.010</b></td>
-            <td class="num">105</td>
-            <td class="num"><span style="color: var(--text);">53.8%</span><span class="muted"> (n=26)</span></td>
-            <td class="num"><span style="color: var(--long);">80.0%</span><span class="muted"> (n=30)</span></td>
+            <td class="num"><b style="color: var(--accent);">+0.357</b></td>
+            <td class="num"><b style="color: var(--long);">&lt; 0.001</b></td>
+            <td class="num">107</td>
+            <td class="num"><span style="color: var(--text);">55.3%</span><span class="muted"> (n=38)</span></td>
+            <td class="num"><span style="color: var(--long);">66.7%</span><span class="muted"> (n=39)</span></td>
             <td><span class="verdict verdict-confirmed">✅ 中程度の連動を確認</span></td>
             <td class="tiny muted">
               米: CAT, DE<br>
@@ -424,11 +481,11 @@
               <div class="sector-name"><b>海運・物流</b></div>
               <div class="muted tiny">期待: low</div>
             </td>
-            <td class="num"><b style="color: var(--short);">-0.155</b></td>
-            <td class="num"><span class="muted">0.115</span></td>
-            <td class="num">105</td>
-            <td class="num"><span style="color: var(--text);">51.6%</span><span class="muted"> (n=31)</span></td>
-            <td class="num"><span style="color: var(--short);">31.8%</span><span class="muted"> (n=22)</span></td>
+            <td class="num"><b style="color: var(--short);">-0.181</b></td>
+            <td class="num"><span style="color: var(--accent);">0.062</span></td>
+            <td class="num">107</td>
+            <td class="num"><span style="color: var(--text);">50.0%</span><span class="muted"> (n=32)</span></td>
+            <td class="num"><span style="color: var(--short);">30.4%</span><span class="muted"> (n=23)</span></td>
             <td><span class="verdict verdict-contradicted">⚠️ 期待と逆方向の相関</span></td>
             <td class="tiny muted">
               米: UPS, FDX<br>
@@ -441,9 +498,9 @@
               <div class="sector-name"><b>生活防衛（配当王）</b></div>
               <div class="muted tiny">期待: low</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.264</b></td>
-            <td class="num"><b style="color: var(--long);">0.007</b></td>
-            <td class="num">105</td>
+            <td class="num"><b style="color: var(--accent);">+0.280</b></td>
+            <td class="num"><b style="color: var(--long);">0.004</b></td>
+            <td class="num">107</td>
             <td class="num"><span style="color: var(--long);">82.6%</span><span class="muted"> (n=23)</span></td>
             <td class="num"><span style="color: var(--long);">61.1%</span><span class="muted"> (n=18)</span></td>
             <td><span class="verdict verdict-confirmed">✅ 想定より強い連動</span></td>
