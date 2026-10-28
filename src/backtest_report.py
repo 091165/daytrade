@@ -85,12 +85,106 @@ def _verdict_badge(verdict: str, label: str) -> str:
     return f'<span class="dir-badge dir-hands-off">⏸️ {label}</span>'
 
 
+# ----- 個別銘柄（フジクラ・SBG）検証セクション -----
+
+def _fmt_r_opt(r: float | None) -> str:
+    return '<span class="muted">—</span>' if r is None else _format_r(r)
+
+
+def _fmt_p_opt(p: float | None) -> str:
+    return '<span class="muted">—</span>' if p is None else _format_p(p)
+
+
+def _fmt_bucket(b: dict, up: bool) -> str:
+    if not b or b.get("n", 0) == 0:
+        return '<span class="muted">該当日なし</span>'
+    return (
+        f'<span class="muted">n={b["n"]}</span><br>'
+        f'窓 {_format_pct(b["mean_gap"])}（同方向 {b["gap_hit"]*100:.0f}%）<br>'
+        f'寄り後 {_format_pct(b["mean_intraday"])}（同方向 {b["intraday_hit"]*100:.0f}%）'
+    )
+
+
+def _fmt_proxy(ticker: str, v: dict) -> str:
+    g = "" if v.get("gap_r") is None else f"{v['gap_r']:+.2f}"
+    i = "" if v.get("intraday_r") is None else f"{v['intraday_r']:+.2f}"
+    return f"{ticker}(窓{g}/寄後{i})"
+
+
+_LINK_CLASS = {
+    "confirmed": "verdict-confirmed", "weak": "verdict-weak",
+    "none": "verdict-contradicted", "reverse": "verdict-contradicted", "unknown": "verdict-neutral",
+}
+
+
+def render_focus_section(focus_results: list[dict] | None, focus_period: str) -> str:
+    if not focus_results:
+        return """
+  <section class="section-box">
+    <h2 class="section-title">🎯 承認銘柄（フジクラ・SBG）の個別予測の検証</h2>
+    <div class="muted" style="padding: 16px;">まだ検証結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    rows = ""
+    for r in focus_results:
+        proxies = ", ".join(
+            _fmt_proxy(t, v) for t, v in r.get("per_proxy", {}).items()
+        ) or "—"
+        rows += f"""
+          <tr>
+            <td><b>{r['name']}</b><div class="muted tiny">{r['code']}</div></td>
+            <td class="num">{r['n']}</td>
+            <td class="num">{_fmt_r_opt(r['gap_r'])}<br>{_fmt_p_opt(r['gap_p'])}</td>
+            <td><span class="verdict {_LINK_CLASS[r['gap_link']]}">{r['gap_label']}</span></td>
+            <td class="num">{_fmt_r_opt(r['intraday_r'])}<br>{_fmt_p_opt(r['intraday_p'])}</td>
+            <td><span class="verdict {_LINK_CLASS[r['intraday_link']]}">{r['intraday_label']}</span></td>
+            <td class="tiny">{_fmt_bucket(r.get('us_up'), True)}</td>
+            <td class="tiny">{_fmt_bucket(r.get('us_down'), False)}</td>
+            <td class="tiny muted">{proxies}</td>
+          </tr>
+        """
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">🎯 承認銘柄（フジクラ・SBG）の個別予測の検証</h2>
+    <div class="period-note">検証期間: {focus_period}　／　米関連株の前日騰落率（平均） vs 翌日の日本株</div>
+    <table class="results">
+      <thead>
+        <tr>
+          <th>銘柄</th>
+          <th class="num">n</th>
+          <th class="num">窓<br>r / p</th>
+          <th>窓の判定</th>
+          <th class="num">寄り後<br>r / p</th>
+          <th>寄り後の判定</th>
+          <th>米が+1%以上の日</th>
+          <th>米が-1%以下の日</th>
+          <th>ティッカー別 r</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows}
+      </tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>窓</b>: 前日終値 → 寄り付き。米国の動きは主にここに出る。デイトレでは取れない部分。</li>
+        <li><b>寄り後</b>: 寄り付き → 引け。デイトレで実際に取れる部分。ここの連動が弱ければ「寄りの方向は読めても、寄り後は読めない」。</li>
+        <li><b>逆に動きやすい</b>: 米が上げた翌日、寄り後は下げやすい（寄り天型）。寄りで飛びつかない根拠になる。</li>
+      </ul>
+    </div>
+  </section>
+"""
+
+
 def render_report(
     sector_results: list[PairValidationResult],
     direction_result: DirectionBacktestResult | None,
     period: str,
     output_html: Path,
     output_json: Path,
+    focus_results: list[dict] | None = None,
+    focus_period: str = "",
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -200,6 +294,8 @@ def render_report(
     <div class="muted" style="padding: 16px;">データ取得に失敗しました。</div>
   </section>
 """
+
+    focus_section = render_focus_section(focus_results, focus_period)
 
     # ===== HTML全体 =====
     html = f"""<!DOCTYPE html>
@@ -364,6 +460,8 @@ def render_report(
 
   {direction_section}
 
+  {focus_section}
+
   <section class="section-box">
     <h2 class="section-title">🔁 米→日セクター連動マッピングの検証</h2>
 
@@ -450,6 +548,7 @@ def render_report(
             "results": [r.as_dict() for r in sector_results],
         },
         "direction_validation": direction_result.as_dict() if direction_result else None,
+        "focus_validation": {"period": focus_period, "results": focus_results} if focus_results else None,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -485,12 +584,23 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Direction validation failed: {e}")
 
     print()
+    print(f"🔍 Running focus stock validation for period: {direction_period}")
+    focus_results = None
+    try:
+        from focus_backtest import validate_all_focus_stocks
+        focus_results = validate_all_focus_stocks(period=direction_period)
+    except Exception as e:
+        print(f"⚠️ Focus stock validation failed: {e}")
+
+    print()
     render_report(
         sector_results=sector_results,
         direction_result=direction_result,
-        period=f"{period} (セクター) / {direction_period} (日経方針)",
+        period=f"{period} (セクター) / {direction_period} (日経方針・個別)",
         output_html=output_dir / "backtest_report.html",
         output_json=output_dir / "backtest_report.json",
+        focus_results=focus_results,
+        focus_period=direction_period,
     )
 
 

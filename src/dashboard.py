@@ -101,6 +101,144 @@ def render_warnings_banner(warnings: list[dict]) -> str:
     """
 
 
+# ----- マイルール連動バナー -----
+
+_RULES_FOCUS_CSS = """
+.rules-banner { border-radius: 12px; padding: 18px 20px; border: 2px solid var(--accent); background: rgba(251, 191, 36, 0.07); }
+.rules-banner.tone-danger { border-color: var(--short); background: rgba(239, 68, 68, 0.08); }
+.rules-kicker { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 6px; }
+.rules-headline { font-size: 22px; font-weight: 700; line-height: 1.35; margin-bottom: 6px; }
+.tone-danger .rules-headline { color: #fca5a5; }
+.tone-caution .rules-headline { color: var(--accent); }
+.rules-subline { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.rules-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.rules-col h3 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 0.05em; }
+.rules-col ul { margin: 0; padding-left: 18px; }
+.rules-col li { margin: 4px 0; font-size: 14px; }
+.rules-col.day li { font-weight: 600; }
+@media (max-width: 720px) {
+  .container { padding: 16px; }
+  .rules-cols { grid-template-columns: 1fr; }
+  .rules-headline { font-size: 19px; }
+}
+
+.focus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 720px) { .focus-grid { grid-template-columns: 1fr; } }
+.focus-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.focus-card.conflict { border-color: var(--short); }
+.focus-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+.focus-name { font-size: 17px; font-weight: 700; }
+.focus-code { color: var(--muted); font-size: 12px; margin-left: 4px; font-weight: 400; }
+.focus-dir { font-size: 15px; font-weight: 700; white-space: nowrap; }
+.focus-dir.bullish { color: var(--long); }
+.focus-dir.bearish { color: var(--short); }
+.focus-dir.neutral { color: var(--muted); }
+.focus-us { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.focus-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.focus-chip { background: var(--panel-2); border-radius: 4px; padding: 2px 8px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.focus-line { font-size: 14px; margin: 4px 0; }
+.focus-line .lbl { display: inline-block; min-width: 4.5em; color: var(--muted); font-size: 12px; }
+.focus-conflict { margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: rgba(239, 68, 68, 0.12); color: #fca5a5; font-size: 13px; font-weight: 600; }
+.focus-foot { margin-top: 10px; font-size: 11px; color: var(--muted); }
+
+/* スマホで履歴の表がページ全体をはみ出さないように、表だけ横スクロールさせる */
+@media (max-width: 720px) {
+  .history-table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+}
+"""
+
+
+def render_trading_rules_banner(rules: dict | None) -> str:
+    """その日の判定に応じたマイルールをページ最上部に大きく表示する。"""
+    if not rules:
+        return ""
+    day_items = "".join(f"<li>{r}</li>" for r in rules.get("day_rules", []))
+    always_items = "".join(f"<li>{r}</li>" for r in rules.get("always_rules", []))
+    tone = rules.get("tone", "caution")
+    return f"""
+    <section>
+      <div class="rules-banner tone-{tone}">
+        <div class="rules-kicker">今日のマイルール</div>
+        <div class="rules-headline">{rules.get("headline", "")}</div>
+        <div class="rules-subline">{rules.get("subline", "")}</div>
+        <div class="rules-cols">
+          <div class="rules-col day">
+            <h3>今日のタイプのルール</h3>
+            <ul>{day_items}</ul>
+          </div>
+          <div class="rules-col">
+            <h3>毎日のルール</h3>
+            <ul>{always_items}</ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    """
+
+
+# ----- 承認銘柄（フジクラ・SBG）の個別予測 -----
+
+def _fmt_r(x: float | None) -> str:
+    return "—" if x is None else f"{x:+.2f}"
+
+
+def _focus_validation_foot(v: dict | None) -> str:
+    if not v:
+        return "検証: まだ（毎週日曜のバックテスト後に、窓・寄り後それぞれの連動の強さを表示）"
+    return (
+        f"検証（{v.get('n', 0)}日）: 窓 r={_fmt_r(v.get('gap_r'))} {v.get('gap_label', '')}"
+        f" ／ 寄り後 r={_fmt_r(v.get('intraday_r'))} {v.get('intraday_label', '')}"
+    )
+
+
+def _focus_chip(ticker: str, pct: float) -> str:
+    color = "var(--long)" if pct >= 0 else "var(--short)"
+    return f'<span class="focus-chip">{ticker} <span style="color: {color};">{pct:+.1f}%</span></span>'
+
+
+def render_focus_section(focus_signals: list[dict] | None) -> str:
+    if not focus_signals:
+        return ""
+    cards = ""
+    for f in focus_signals:
+        d = f["direction"]
+        strong = "（強）" if f["strength"] == "strong" else ""
+        if d == "bullish":
+            dir_html = "▲ 買い寄り" + strong
+        elif d == "bearish":
+            dir_html = "▼ 売り寄り" + strong
+        else:
+            dir_html = "― 方向感なし"
+        chips = "".join(_focus_chip(t, v) for t, v in f.get("us_changes", {}).items())
+        if not chips:
+            chips = '<span class="focus-chip">データなし</span>'
+        is_conflict = bool(f.get("conflict_with_market"))
+        conflict = f'<div class="focus-conflict">⚠️ {f["conflict_text"]}</div>' if is_conflict else ""
+        card_class = "focus-card conflict" if is_conflict else "focus-card"
+        cards += f"""
+        <div class="{card_class}">
+          <div class="focus-head">
+            <div class="focus-name">{f["name"]}<span class="focus-code">{f["code"]}</span></div>
+            <div class="focus-dir {d}">{dir_html}</div>
+          </div>
+          <div class="focus-us">米関連株の平均 {f["us_avg_change_pct"]:+.2f}%（{f["us_label"]}）</div>
+          <div class="focus-chips">{chips}</div>
+          <div class="focus-line"><span class="lbl">寄り（窓）</span>{f["gap_text"]}</div>
+          <div class="focus-line"><span class="lbl">寄り後</span>{f["intraday_text"]}</div>
+          {conflict}
+          <div class="focus-foot">{_focus_validation_foot(f.get("validation"))}</div>
+        </div>
+        """
+    return f"""
+    <section>
+      <h2 class="section-title">🎯 承認銘柄の寄り前予測（フジクラ・SBG）</h2>
+      <div class="focus-grid">
+        {cards}
+      </div>
+    </section>
+    """
+
+
 # ----- 注目銘柄（手出し無用日のセクター連動） -----
 
 def render_stock_picks_section(picks_result: dict) -> str:
@@ -470,6 +608,8 @@ def render_dashboard(
     recent_history: list[dict],
     stock_picks: dict,
     output_path: Path,
+    trading_rules: dict | None = None,
+    focus_signals: list[dict] | None = None,
 ) -> None:
     """HTMLダッシュボードを生成してファイルに書き出す。"""
     direction_verdict_html = render_direction_verdict(direction_signal)
@@ -481,6 +621,8 @@ def render_dashboard(
     sectors_html = render_sectors_section(sector_signals)
     history_html = render_history_section(recent_history)
     stock_picks_html = render_stock_picks_section(stock_picks)
+    rules_html = render_trading_rules_banner(trading_rules)
+    focus_html = render_focus_section(focus_signals)
 
     futures_diff = direction_signal["futures_diff"]
     futures_diff_color = (
@@ -496,6 +638,7 @@ def render_dashboard(
 <title>Daytrade Signal Board</title>
 <style>
 {_COMMON_CSS}
+{_RULES_FOCUS_CSS}
 
 /* 警告バナー */
 .warnings-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
@@ -667,6 +810,8 @@ def render_dashboard(
     </div>
   </header>
 
+  {rules_html}
+
   {warnings_html}
 
   <!-- 本日の日経デイトレ方針 -->
@@ -703,6 +848,8 @@ def render_dashboard(
       </div>
     </div>
   </section>
+
+  {focus_html}
 
   {market_context_html}
 

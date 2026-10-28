@@ -34,6 +34,8 @@ jobs:
         run: |
           python tests/test_backtest.py
           python tests/test_direction_backtest.py
+          python tests/test_focus_stocks.py
+          python tests/test_focus_backtest.py
 
       - name: Run backtest and generate report
         run: |
