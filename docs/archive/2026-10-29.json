@@ -1,0 +1,771 @@
+{
+  "date": "2026-10-29",
+  "reconstructed": false,
+  "market": {
+    "timestamp": "2026-10-29T00:51:24.167895+09:00",
+    "nikkei": {
+      "prev_close": 63268.37109375,
+      "change_pct": 1.734569471532077,
+      "week_is_positive": false,
+      "month_is_positive": false
+    },
+    "nikkei_futures": {
+      "price": 64675.0
+    },
+    "etf_1570": {
+      "prev_close": 64590.0
+    },
+    "us_markets": {
+      "nasdaq_change_pct": -0.07213439850393133,
+      "dow_change_pct": 0.3053624009203615,
+      "sox_change_pct": 0.808388784563463
+    },
+    "fx_commodities": {
+      "usdjpy_price": 158.24000549316406,
+      "usdjpy_change_pct": 0.45198670445008027,
+      "gold_price": 4059.10009765625,
+      "gold_change_pct": -0.38040542945345646,
+      "oil_price": 102.7300033569336,
+      "oil_change_pct": 2.832834622451519
+    },
+    "us_sector_changes": {
+      "ADBE": -0.28184769951760114,
+      "AMAT": 4.50079752831738,
+      "AMD": 1.0727179632433748,
+      "ARM": 2.797880038447298,
+      "BA": -0.6541192199780776,
+      "CAT": 0.09252262645835785,
+      "CL": -0.14104074644732956,
+      "COHR": 0.4834808185710582,
+      "COP": 1.6186732258693493,
+      "CRM": 0.014530973555593185,
+      "CVX": 1.41305094154478,
+      "DE": 0.38306578404045943,
+      "FDX": -1.7942069866868415,
+      "GLW": 3.159137084691843,
+      "HON": -0.27420632120152,
+      "INTU": 0.28021909102311504,
+      "KLAC": 3.1107631559139204,
+      "KO": 1.0912510893307692,
+      "LITE": 3.817914013698198,
+      "LMT": 0.9695242551533978,
+      "LRCX": 5.476432156264188,
+      "MCD": 1.0662619349394609,
+      "MSFT": -0.7622358351126124,
+      "NOC": 0.43920334408402706,
+      "NOW": -2.2903464251864847,
+      "NVDA": -0.31430556617429994,
+      "ORCL": -0.2719648593112245,
+      "PG": 0.03140303529454158,
+      "QQQ": 0.1053739709705459,
+      "RTX": 1.2795427319002517,
+      "SNDK": 5.803775363451624,
+      "SOXX": 1.0131243620276065,
+      "STX": 1.0848237451579035,
+      "T": 0.30228833554324375,
+      "TMUS": -0.15324259395878004,
+      "UPS": -1.0934075527916143,
+      "VRT": 12.857212675154894,
+      "VZ": -0.19348755720960398,
+      "WDC": 3.216236043624554,
+      "XOM": 1.9287427880998687
+    }
+  },
+  "warnings": [],
+  "market_context": {
+    "items": [
+      {
+        "name": "ドル円",
+        "symbol": "USD/JPY",
+        "current": 158.24000549316406,
+        "change_pct": 0.45198670445008027,
+        "direction": "up",
+        "interpretation": "円安傾向 → 輸出株にやや追い風"
+      },
+      {
+        "name": "ゴールド",
+        "symbol": "XAU/USD",
+        "current": 4059.10009765625,
+        "change_pct": -0.38040542945345646,
+        "direction": "down",
+        "interpretation": "ゴールド小幅下落"
+      },
+      {
+        "name": "WTI原油",
+        "symbol": "CL",
+        "current": 102.7300033569336,
+        "change_pct": 2.832834622451519,
+        "direction": "up",
+        "interpretation": "原油急騰 → リスクオフ懸念。エネルギー株（INPEX・ENEOS等）に追い風、他はリスクオフ警戒"
+      }
+    ],
+    "combined_note": null
+  },
+  "direction": {
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "medium",
+    "us_indices": [
+      {
+        "name": "ナスダック",
+        "change_pct": -0.07213439850393133,
+        "direction": "neutral"
+      },
+      {
+        "name": "ダウ",
+        "change_pct": 0.3053624009203615,
+        "direction": "bullish"
+      },
+      {
+        "name": "SOX",
+        "change_pct": 0.808388784563463,
+        "direction": "bullish"
+      }
+    ],
+    "us_consensus_direction": "bullish",
+    "futures_diff": 1406.62890625,
+    "futures_aligned": true,
+    "reasons": [
+      "米指数が揃って上げ（ダウ, SOX）",
+      "日経先物が米に追随（現対+1407円）",
+      "→ 米日連動の上昇相場として買い目線"
+    ]
+  },
+  "kiriban": {
+    "kiriban_bands": {
+      "prev_close": 63268.37109375,
+      "bands": {
+        "-1500": 61768.37109375,
+        "-1000": 62268.37109375,
+        "-500": 62768.37109375,
+        "+500": 63768.37109375,
+        "+1000": 64268.37109375,
+        "+1500": 64768.37109375
+      }
+    },
+    "sayatori_signal": {
+      "futures_price": 64675.0,
+      "spot_price": 63268.37109375,
+      "diff": 1406.62890625,
+      "abs_diff": 1406.62890625,
+      "direction": "short",
+      "threshold": 1000,
+      "rationale": "現対+1,407円。先物が現物より1,407円高い。鞘が閉じる方向（先物売り）を朝一で狙う。"
+    },
+    "round_number_levels": {
+      "current_price": 63268.37109375,
+      "resistance": 64000.0,
+      "support": 63000.0,
+      "step": 1000
+    },
+    "high_volatility": true,
+    "kiriban_effective": true
+  },
+  "sectors": [
+    {
+      "sector_name": "ストレージ半導体",
+      "us_label": "サンディスク等ストレージ",
+      "us_avg_change_pct": 3.3682783840780277,
+      "direction": "bullish",
+      "signal_strength": "strong",
+      "jp_stocks": [
+        "キオクシア"
+      ],
+      "correlation_strength": "high",
+      "note": "キオクシアはサンディスクの動きに強く連動。半導体カルテットとは別扱いが鉄則",
+      "rationale": "米サンディスク等ストレージが平均+3.37%。キオクシア等は買い目線で想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.41464337926357164,
+      "validation_label": "✅ 強連動を確認"
+    },
+    {
+      "sector_name": "半導体",
+      "us_label": "SOX指数（半導体）",
+      "us_avg_change_pct": 2.7692810475129126,
+      "direction": "bullish",
+      "signal_strength": "strong",
+      "jp_stocks": [
+        "東京エレクトロン",
+        "アドバンテスト",
+        "ディスコ",
+        "レーザーテック"
+      ],
+      "correlation_strength": "high",
+      "note": "SOX指数との連動が最も強いグループ（半導体カルテット）",
+      "rationale": "米SOX指数（半導体）が平均+2.77%。東京エレクトロン・アドバンテスト・ディスコ等は買い目線で想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.5133564605844549,
+      "validation_label": "✅ 強連動を確認"
+    },
+    {
+      "sector_name": "エネルギー（原油）",
+      "us_label": "エクソン・シェブロン等",
+      "us_avg_change_pct": 1.6534889851713326,
+      "direction": "bullish",
+      "signal_strength": "strong",
+      "jp_stocks": [
+        "INPEX",
+        "ENEOS",
+        "出光興産",
+        "コスモエネルギー"
+      ],
+      "correlation_strength": "high",
+      "note": "原油先物・XOM・CVXが上げればINPEX等は高確率で連動",
+      "rationale": "米エクソン・シェブロン等が平均+1.65%。INPEX・ENEOS・出光興産等は買い目線で想定。",
+      "validation_verdict": "weak",
+      "validation_pearson_r": 0.3435792457201898,
+      "validation_label": "△ 期待より弱い連動"
+    },
+    {
+      "sector_name": "海運・物流",
+      "us_label": "UPS・FedEx",
+      "us_avg_change_pct": -1.443807269739228,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "日本郵船",
+        "商船三井",
+        "川崎汽船"
+      ],
+      "correlation_strength": "low",
+      "note": "連動は弱め。海運は日本独自の材料（海峡・BDI）の影響が大きい",
+      "rationale": "米UPS・FedExが平均-1.44%。日本郵船・商船三井・川崎汽船等はやや売り寄りで想定。",
+      "validation_verdict": "contradicted",
+      "validation_pearson_r": -0.18106070915503597,
+      "validation_label": "⚠️ 期待と逆方向の相関"
+    },
+    {
+      "sector_name": "SaaS・ソフトウェア",
+      "us_label": "セールスフォース・MSFT等",
+      "us_avg_change_pct": -0.551940792424869,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "富士通",
+        "NEC",
+        "NRI",
+        "オービック",
+        "マネーフォワード"
+      ],
+      "correlation_strength": "medium",
+      "note": "「アメリカ下げ戦犯・ソフトウェアSaaS系」として頻出。下げ時の連動が特に強い",
+      "rationale": "米セールスフォース・MSFT等が平均-0.55%。富士通・NEC・NRI等はやや売り寄りで想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.5355629854274983,
+      "validation_label": "✅ 中程度の連動を確認"
+    },
+    {
+      "sector_name": "生活防衛（配当王）",
+      "us_label": "コカコーラ・P&G等",
+      "us_avg_change_pct": 0.5119688282793605,
+      "direction": "bullish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "花王",
+        "味の素",
+        "明治HD",
+        "キッコーマン"
+      ],
+      "correlation_strength": "low",
+      "note": "連動は弱い。配当ディフェンシブ資金フロー時のみ同方向",
+      "rationale": "米コカコーラ・P&G等が平均+0.51%。花王・味の素・明治HD等はやや買い寄りで想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.2797771479412425,
+      "validation_label": "✅ 想定より強い連動"
+    },
+    {
+      "sector_name": "軍需・防衛",
+      "us_label": "ロッキード・RTX等",
+      "us_avg_change_pct": 0.3519889579916158,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "三菱重工業",
+        "IHI",
+        "川崎重工業"
+      ],
+      "correlation_strength": "high",
+      "note": "地政学リスク連動。戦争懸念時の強い順張りセクター",
+      "rationale": "米ロッキード・RTX等が平均+0.35%。方向感なし、様子見。",
+      "validation_verdict": "weak",
+      "validation_pearson_r": 0.2733263482488852,
+      "validation_label": "△ 期待より弱い連動"
+    },
+    {
+      "sector_name": "建機",
+      "us_label": "キャタピラー・ディアー",
+      "us_avg_change_pct": 0.23779420524940864,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "コマツ",
+        "日立建機",
+        "クボタ"
+      ],
+      "correlation_strength": "high",
+      "note": "CAT・DEの動きから翌朝のコマツ方向が読みやすい",
+      "rationale": "米キャタピラー・ディアーが平均+0.24%。方向感なし、様子見。",
+      "validation_verdict": "weak",
+      "validation_pearson_r": 0.3681736725267452,
+      "validation_label": "△ 期待より弱い連動"
+    },
+    {
+      "sector_name": "電線（CAT連動系）",
+      "us_label": "キャタピラー・ディアー",
+      "us_avg_change_pct": 0.23779420524940864,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "フジクラ",
+        "住友電工",
+        "古河電工"
+      ],
+      "correlation_strength": "medium",
+      "note": "インフラ投資テーマでCAT・DEと一緒に動く傾向。PDFでは「電線3種」としてコマツとセットで語られる",
+      "rationale": "米キャタピラー・ディアーが平均+0.24%。方向感なし、様子見。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.25440953620160667,
+      "validation_label": "✅ 中程度の連動を確認"
+    },
+    {
+      "sector_name": "通信（配当ディフェンシブ）",
+      "us_label": "ベライゾン・AT&T",
+      "us_avg_change_pct": -0.014813938541713423,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "KDDI",
+        "NTT",
+        "ソフトバンク"
+      ],
+      "correlation_strength": "medium",
+      "note": "ディフェンシブ資金フロー時に連動。日本特有の材料（粉飾等）には非連動",
+      "rationale": "米ベライゾン・AT&Tが平均-0.01%。方向感なし、様子見。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.24575904498156306,
+      "validation_label": "✅ 中程度の連動を確認"
+    }
+  ],
+  "recent_history": [
+    {
+      "date": "2026-10-29",
+      "verdict": "buy_bias",
+      "verdict_label": "買いポジ主体",
+      "confidence": "medium",
+      "futures_diff": 1406.62890625,
+      "nasdaq_pct": -0.07213439850393133,
+      "dow_pct": 0.3053624009203615,
+      "sox_pct": 0.808388784563463,
+      "warnings": []
+    },
+    {
+      "date": "2026-10-28",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": 535.80859375,
+      "nasdaq_pct": -0.16640555229064935,
+      "dow_pct": 0.1381346291329022,
+      "sox_pct": 0.3307682887002006,
+      "warnings": []
+    },
+    {
+      "date": "2026-10-27",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": -23.91015625,
+      "nasdaq_pct": 0.8246511774205878,
+      "dow_pct": 0.28041275428793977,
+      "sox_pct": 2.8202689812538706,
+      "warnings": []
+    },
+    {
+      "date": "2026-10-26",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": 350.80078125,
+      "nasdaq_pct": -0.2057742343804736,
+      "dow_pct": -1.2348122752407376,
+      "sox_pct": 0.4424112802455582,
+      "warnings": []
+    },
+    {
+      "date": "2026-10-23",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": 209.0390625,
+      "nasdaq_pct": -2.598972605344818,
+      "dow_pct": 0.022496225194013064,
+      "sox_pct": -6.723549832778697,
+      "warnings": [
+        "📅 金曜 × 週足陰線 = ショートカバー買い警戒"
+      ]
+    }
+  ],
+  "stock_picks": {
+    "available": false,
+    "reason": "指数判定が出ているため、本機能は表示しません",
+    "picks": []
+  },
+  "trading_rules": {
+    "day_type": "trend_up",
+    "tone": "danger",
+    "headline": "📈 トレンド日（上）：全部「買い」で統一する",
+    "subline": "方向がはっきり出る日は値動きが荒い。過去の記録では、予想が当たった日ほど逆張り・塩持ちで大きく負けている。",
+    "day_rules": [
+      "売りは入れない（1銘柄だけ逆を張らない）",
+      "下げている銘柄を拾わない（ナンピン禁止）",
+      "ロットは普段の半分",
+      "逆行したら即損切り（-3,000〜5,000円）。粘らない"
+    ],
+    "always_rules": [
+      "10:00前に「取引終了」を宣言する",
+      "1日 -10,000円 でその日は終了",
+      "触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない",
+      "試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り",
+      "注文画面で「日計り」になっているか毎回確認する"
+    ],
+    "checks": {
+      "approved_codes": [
+        "5803",
+        "9984"
+      ],
+      "daily_loss_limit_yen": 10000,
+      "end_time": "10:00",
+      "require_day_trade": true,
+      "direction": "buy",
+      "per_trade_stop_yen": 5000,
+      "max_qty": null,
+      "wait_window": null,
+      "max_consecutive_losses": null,
+      "trial": {
+        "codes": [
+          "6981"
+        ],
+        "names": [
+          "村田"
+        ],
+        "since": "2026-10-29",
+        "max_qty": 100,
+        "stop_yen": 5000,
+        "review_after": 20
+      }
+    }
+  },
+  "generated_after_open": false,
+  "focus_stocks": [
+    {
+      "code": "5803",
+      "name": "フジクラ",
+      "us_label": "光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ）",
+      "us_avg_change_pct": 5.079436148028998,
+      "us_changes": {
+        "GLW": 3.159137084691843,
+        "COHR": 0.4834808185710582,
+        "LITE": 3.817914013698198,
+        "VRT": 12.857212675154894
+      },
+      "direction": "bullish",
+      "strength": "strong",
+      "gap_text": "寄りは高く始まりやすい（窓の連動：検証済み r=+0.64）",
+      "intraday_text": "寄り後の方向は読めない（r=+0.10）。寄り値で飛びつかない",
+      "conflict_with_market": false,
+      "conflict_text": "",
+      "validation": {
+        "code": "5803",
+        "name": "フジクラ",
+        "us_label": "光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ）",
+        "us_tickers_used": [
+          "COHR",
+          "GLW",
+          "LITE",
+          "VRT"
+        ],
+        "n": 232,
+        "gap_r": 0.6393528891849112,
+        "gap_p": 4.613291477967151e-28,
+        "intraday_r": 0.10302343630504178,
+        "intraday_p": 0.11760700708706852,
+        "gap_link": "confirmed",
+        "intraday_link": "weak",
+        "us_up": {
+          "n": 106,
+          "mean_gap": 2.2192254483592606,
+          "mean_intraday": 0.3399485493283279,
+          "gap_hit": 0.7547169811320755,
+          "intraday_hit": 0.5094339622641509
+        },
+        "us_down": {
+          "n": 77,
+          "mean_gap": -2.4580439347027796,
+          "mean_intraday": -0.4828800056401187,
+          "gap_hit": 0.8181818181818182,
+          "intraday_hit": 0.5454545454545454
+        },
+        "per_proxy": {
+          "GLW": {
+            "gap_r": 0.6476108695277233,
+            "intraday_r": 0.1543506098288309,
+            "n": 232
+          },
+          "COHR": {
+            "gap_r": 0.5605934593210385,
+            "intraday_r": 0.04828064183298842,
+            "n": 232
+          },
+          "LITE": {
+            "gap_r": 0.527763202191423,
+            "intraday_r": 0.10983467852777015,
+            "n": 232
+          },
+          "VRT": {
+            "gap_r": 0.5154311328667989,
+            "intraday_r": 0.04592434988393204,
+            "n": 232
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "△ 弱い連動"
+      },
+      "note": "AIデータセンター向け光ファイバー需要で動く。建機株（CAT等）より光通信・DC関連が近い",
+      "trial": false,
+      "range": {
+        "available": true,
+        "as_of": "2026-10-27",
+        "last_close": 4092.0,
+        "window": 10,
+        "pred_pct": 4.924624099104626,
+        "pred_yen": 201.5156181353613,
+        "lot_yen": 20151.56181353613,
+        "shares": 100,
+        "rough_yen": 246.66286815048227,
+        "level": "normal",
+        "level_text": "最近の値幅は普段どおり",
+        "stop_yen": 5000,
+        "stop_width": 50.0,
+        "stop_frac": 0.2481197262160305,
+        "validation": {
+          "window": 10,
+          "n": 232,
+          "r": 0.36559898290540427,
+          "p": 9.554773949710892e-09,
+          "within_rate": 0.5862068965517241,
+          "median_ratio": 0.9311624064922919,
+          "rough_ratio": 1.2240384662631698
+        },
+        "morning": {
+          "available": false,
+          "earnings_today": false,
+          "earnings_ratio": null,
+          "earnings_n": 0,
+          "next_earnings": "2026-11-10"
+        }
+      }
+    },
+    {
+      "code": "9984",
+      "name": "ソフトバンクG",
+      "us_label": "Arm・NVIDIA・ナスダック100",
+      "us_avg_change_pct": 0.8629828144145146,
+      "us_changes": {
+        "ARM": 2.797880038447298,
+        "NVDA": -0.31430556617429994,
+        "QQQ": 0.1053739709705459
+      },
+      "direction": "neutral",
+      "strength": "neutral",
+      "gap_text": "米関連株は小動き。寄りの方向感なし",
+      "intraday_text": "寄り後も手がかりなし",
+      "conflict_with_market": false,
+      "conflict_text": "",
+      "validation": {
+        "code": "9984",
+        "name": "ソフトバンクG",
+        "us_label": "Arm・NVIDIA・ナスダック100",
+        "us_tickers_used": [
+          "ARM",
+          "NVDA",
+          "QQQ"
+        ],
+        "n": 232,
+        "gap_r": 0.7130324725646169,
+        "gap_p": 2.5090741532644626e-37,
+        "intraday_r": -0.08601611466963359,
+        "intraday_p": 0.1917217290444068,
+        "gap_link": "confirmed",
+        "intraday_link": "none",
+        "us_up": {
+          "n": 68,
+          "mean_gap": 3.501413755793239,
+          "mean_intraday": -0.2924965989593517,
+          "gap_hit": 0.9264705882352942,
+          "intraday_hit": 0.4117647058823529
+        },
+        "us_down": {
+          "n": 69,
+          "mean_gap": -3.246848618395428,
+          "mean_intraday": 0.0163075530516188,
+          "gap_hit": 0.8405797101449275,
+          "intraday_hit": 0.4492753623188406
+        },
+        "per_proxy": {
+          "ARM": {
+            "gap_r": 0.6636613722266977,
+            "intraday_r": -0.00879565275795801,
+            "n": 232
+          },
+          "NVDA": {
+            "gap_r": 0.5020145085225609,
+            "intraday_r": -0.18601897017509056,
+            "n": 232
+          },
+          "QQQ": {
+            "gap_r": 0.6113280117394849,
+            "intraday_r": -0.11711646261910678,
+            "n": 232
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "✗ 連動なし"
+      },
+      "note": "保有株Arm（約9割保有）とAI関連の値動きに敏感",
+      "trial": false,
+      "range": {
+        "available": true,
+        "as_of": "2026-10-27",
+        "last_close": 4474.0,
+        "window": 10,
+        "pred_pct": 5.057310931966051,
+        "pred_yen": 226.26409109616114,
+        "lot_yen": 22626.409109616114,
+        "shares": 100,
+        "rough_yen": 298.3180086088176,
+        "level": "normal",
+        "level_text": "最近の値幅は普段どおり",
+        "stop_yen": 5000,
+        "stop_width": 50.0,
+        "stop_frac": 0.22098071221893642,
+        "validation": {
+          "window": 10,
+          "n": 232,
+          "r": 0.23715396611745268,
+          "p": 0.0002675530648529579,
+          "within_rate": 0.5603448275862069,
+          "median_ratio": 0.9150937368638874,
+          "rough_ratio": 1.3184505202022263
+        },
+        "morning": {
+          "available": false,
+          "earnings_today": false,
+          "earnings_ratio": null,
+          "earnings_n": 0,
+          "next_earnings": "2026-11-10"
+        }
+      }
+    },
+    {
+      "code": "6981",
+      "name": "村田製作所",
+      "us_label": "半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品）",
+      "us_avg_change_pct": 0.26806425560795083,
+      "us_changes": {
+        "SOXX": 1.0131243620276065,
+        "QQQ": 0.1053739709705459,
+        "NVDA": -0.31430556617429994
+      },
+      "direction": "neutral",
+      "strength": "neutral",
+      "gap_text": "米関連株は小動き。寄りの方向感なし",
+      "intraday_text": "寄り後も手がかりなし",
+      "conflict_with_market": false,
+      "conflict_text": "",
+      "validation": {
+        "code": "6981",
+        "name": "村田製作所",
+        "us_label": "半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品）",
+        "us_tickers_used": [
+          "NVDA",
+          "QQQ",
+          "SOXX"
+        ],
+        "n": 232,
+        "gap_r": 0.6150089770748047,
+        "gap_p": 1.569043956871606e-25,
+        "intraday_r": -0.11828455693763933,
+        "intraday_p": 0.07213844590836421,
+        "gap_link": "confirmed",
+        "intraday_link": "none",
+        "us_up": {
+          "n": 79,
+          "mean_gap": 1.6576555303952545,
+          "mean_intraday": -0.14587933564122424,
+          "gap_hit": 0.7215189873417721,
+          "intraday_hit": 0.4936708860759494
+        },
+        "us_down": {
+          "n": 56,
+          "mean_gap": -2.8218323237863423,
+          "mean_intraday": 0.8111264856128937,
+          "gap_hit": 0.8571428571428571,
+          "intraday_hit": 0.375
+        },
+        "per_proxy": {
+          "SOXX": {
+            "gap_r": 0.6122372163672236,
+            "intraday_r": -0.06842498150989525,
+            "n": 232
+          },
+          "QQQ": {
+            "gap_r": 0.5689856580581151,
+            "intraday_r": -0.07708456737324075,
+            "n": 232
+          },
+          "NVDA": {
+            "gap_r": 0.47265510817403594,
+            "intraday_r": -0.1690342991501963,
+            "n": 232
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "✗ 連動なし"
+      },
+      "note": "試用銘柄。100株だけ・10時前だけ・-5,000円で即損切り。値動きは承認銘柄の約2倍",
+      "trial": true,
+      "range": {
+        "available": true,
+        "as_of": "2026-10-27",
+        "last_close": 6367.0,
+        "window": 10,
+        "pred_pct": 5.135512853131014,
+        "pred_yen": 326.9781033588517,
+        "lot_yen": 32697.81033588517,
+        "shares": 100,
+        "rough_yen": 426.2021269705862,
+        "level": "normal",
+        "level_text": "最近の値幅は普段どおり",
+        "stop_yen": 5000,
+        "stop_width": 50.0,
+        "stop_frac": 0.15291543833174062,
+        "validation": {
+          "window": 10,
+          "n": 232,
+          "r": 0.6477082842998964,
+          "p": 5.516817333929159e-29,
+          "within_rate": 0.5991379310344828,
+          "median_ratio": 0.9477814322442457,
+          "rough_ratio": 1.3034577012725475
+        },
+        "morning": {
+          "available": false,
+          "earnings_today": false,
+          "earnings_ratio": null,
+          "earnings_n": 0,
+          "next_earnings": "2026-10-30"
+        }
+      }
+    }
+  ]
+}
