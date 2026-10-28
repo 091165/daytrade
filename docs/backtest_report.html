@@ -162,7 +162,7 @@
     </div>
     <div style="text-align: right;">
       <div class="period">検証期間: 過去 6mo (セクター) / 1y (日経方針・個別)</div>
-      <div class="timestamp">Updated: 2026-10-28 22:59 JST</div>
+      <div class="timestamp">Updated: 2026-10-28 23:57 JST</div>
     </div>
   </header>
 
@@ -290,7 +290,7 @@
             <td class="num"><b style="color: var(--short);">-0.086</b><br><span class="muted">0.192</span></td>
             <td><span class="verdict verdict-contradicted">✗ 連動なし</span></td>
             <td class="tiny"><span class="muted">n=68</span><br>窓 <span style="color: var(--long);">+3.50%</span>（同方向 93%）<br>寄り後 <span style="color: var(--short);">-0.29%</span>（同方向 41%）</td>
-            <td class="tiny"><span class="muted">n=69</span><br>窓 <span style="color: var(--short);">-3.25%</span>（同方向 83%）<br>寄り後 <span style="color: var(--long);">+0.02%</span>（同方向 45%）</td>
+            <td class="tiny"><span class="muted">n=69</span><br>窓 <span style="color: var(--short);">-3.25%</span>（同方向 84%）<br>寄り後 <span style="color: var(--long);">+0.02%</span>（同方向 45%）</td>
             <td class="tiny muted">ARM(窓+0.66/寄後-0.01), NVDA(窓+0.50/寄後-0.19), QQQ(窓+0.61/寄後-0.12)</td>
           </tr>
         
@@ -321,7 +321,7 @@
 
   
   <section class="section-box">
-    <h2 class="section-title">📏 想定値幅の検証（フジクラ・SBG）</h2>
+    <h2 class="section-title">📏 想定値幅の検証（承認銘柄・試用銘柄）</h2>
     <div class="period-note">検証期間: 1y　／　直近N日の平均値幅（高値−安値）で、翌日の値幅を予測</div>
     <table class="results">
       <thead>
@@ -528,6 +528,170 @@
     </div>
   </section>
 
+  
+  <section class="section-box">
+    <h2 class="section-title">🔬 売買代金上位の銘柄スクリーニング（研究用）</h2>
+    <div class="period-note">期間: 2y（前半で向きを決め、後半だけで検証）　／　寄り後の方向で「信頼できる」: 0件（q&lt;0.05 かつ前半と同じ向き）</div>
+    <table class="results">
+      <thead>
+        <tr>
+          <th>銘柄</th><th class="num">値幅予測<br>r</th><th class="num">1日の値幅<br>（直近60日）</th><th class="num">売買代金<br>（20日平均）</th>
+          <th>寄り後 ←<br>米国株の前日の動き</th><th>寄り後 ←<br>その日の窓</th><th>寄り後 ←<br>前日の寄り後</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td><b>太陽誘電</b><div class="muted tiny">6976</div></td>
+            <td class="num">+0.77<div class="muted tiny">予測以内 58%</div></td>
+            <td class="num">7.0%<div class="muted tiny">100株で約63,997円</div></td>
+            <td class="num tiny">2,998億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">SNDK r=-0.08</span><div class="muted">前半 r=+0.09 ／ q=0.47<br>当たり47% ／ 1回-1,858円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.12</span><div class="muted">前半 r=-0.00 ／ q=0.44<br>当たり52% ／ 1回+939円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.01</span><div class="muted">前半 r=-0.08 ／ q=0.98<br>当たり48% ／ 1回-437円</div></td>
+          </tr>
+          <tr>
+            <td><b>村田製作所</b><div class="muted tiny">6981</div></td>
+            <td class="num">+0.72<div class="muted tiny">予測以内 59%</div></td>
+            <td class="num">5.2%<div class="muted tiny">100株で約34,964円</div></td>
+            <td class="num tiny">1,530億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">GLW r=-0.00</span><div class="muted">前半 r=-0.13 ／ q=0.98<br>当たり53% ／ 1回+1,263円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.05</span><div class="muted">前半 r=-0.20 ／ q=0.72<br>当たり58% ／ 1回+2,335円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.10</span><div class="muted">前半 r=-0.06 ／ q=0.44<br>当たり52% ／ 1回+1,426円</div></td>
+          </tr>
+          <tr>
+            <td><b>イビデン</b><div class="muted tiny">4062</div></td>
+            <td class="num">+0.64<div class="muted tiny">予測以内 54%</div></td>
+            <td class="num">6.4%<div class="muted tiny">100株で約61,542円</div></td>
+            <td class="num tiny">1,388億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">ASML r=-0.01</span><div class="muted">前半 r=-0.11 ／ q=0.97<br>当たり49% ／ 1回+1,605円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.01</span><div class="muted">前半 r=+0.00 ／ q=0.98<br>当たり53% ／ 1回+2,244円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.09</span><div class="muted">前半 r=-0.13 ／ q=0.46<br>当たり51% ／ 1回+5,562円</div></td>
+          </tr>
+          <tr>
+            <td><b>ソフトバンクG</b><div class="muted tiny">9984</div></td>
+            <td class="num">+0.59<div class="muted tiny">予測以内 56%</div></td>
+            <td class="num">5.0%<div class="muted tiny">100株で約23,281円</div></td>
+            <td class="num tiny">2,816億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">WDC r=-0.06</span><div class="muted">前半 r=+0.09 ／ q=0.68<br>当たり49% ／ 1回-769円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.00</span><div class="muted">前半 r=+0.05 ／ q=0.98<br>当たり48% ／ 1回-803円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.04</span><div class="muted">前半 r=+0.03 ／ q=0.80<br>当たり47% ／ 1回-953円</div></td>
+          </tr>
+          <tr>
+            <td><b>信越化学</b><div class="muted tiny">4063</div></td>
+            <td class="num">+0.52<div class="muted tiny">予測以内 58%</div></td>
+            <td class="num">1.9%<div class="muted tiny">100株で約11,592円</div></td>
+            <td class="num tiny">386億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">AAPL r=+0.02</span><div class="muted">前半 r=-0.13 ／ q=0.95<br>当たり55% ／ 1回+576円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.07</span><div class="muted">前半 r=-0.18 ／ q=0.57<br>当たり50% ／ 1回-460円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.02</span><div class="muted">前半 r=-0.02 ／ q=0.95<br>当たり50% ／ 1回+475円</div></td>
+          </tr>
+          <tr>
+            <td><b>日経レバ(1570)</b><div class="muted tiny">1570</div></td>
+            <td class="num">+0.48<div class="muted tiny">予測以内 57%</div></td>
+            <td class="num">3.1%<div class="muted tiny">100株で約201,569円</div></td>
+            <td class="num tiny">1,944億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">XLF r=-0.02</span><div class="muted">前半 r=-0.19 ／ q=0.95<br>当たり52% ／ 1回+1,310円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.04</span><div class="muted">前半 r=-0.09 ／ q=0.79<br>当たり54% ／ 1回+3,394円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.11</span><div class="muted">前半 r=+0.03 ／ q=0.44<br>当たり43% ／ 1回-17,796円</div></td>
+          </tr>
+          <tr>
+            <td><b>古河電工</b><div class="muted tiny">5801</div></td>
+            <td class="num">+0.45<div class="muted tiny">予測以内 59%</div></td>
+            <td class="num">6.4%<div class="muted tiny">100株で約18,835円</div></td>
+            <td class="num tiny">820億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">AAPL r=-0.04</span><div class="muted">前半 r=-0.13 ／ q=0.81<br>当たり47% ／ 1回-302円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.02</span><div class="muted">前半 r=+0.09 ／ q=0.95<br>当たり49% ／ 1回-342円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.04</span><div class="muted">前半 r=+0.00 ／ q=0.85<br>当たり52% ／ 1回+503円</div></td>
+          </tr>
+          <tr>
+            <td><b>東京エレクトロン</b><div class="muted tiny">8035</div></td>
+            <td class="num">+0.43<div class="muted tiny">予測以内 59%</div></td>
+            <td class="num">4.0%<div class="muted tiny">100株で約39,493円</div></td>
+            <td class="num tiny">1,554億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">QQQ r=-0.14</span><div class="muted">前半 r=-0.19 ／ q=0.33<br>当たり56% ／ 1回+2,817円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.10</span><div class="muted">前半 r=-0.16 ／ q=0.44<br>当たり54% ／ 1回+1,799円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.15</span><div class="muted">前半 r=-0.04 ／ q=0.25<br>当たり52% ／ 1回+1,850円</div></td>
+          </tr>
+          <tr>
+            <td><b>ルネサス</b><div class="muted tiny">6723</div></td>
+            <td class="num">+0.42<div class="muted tiny">予測以内 61%</div></td>
+            <td class="num">4.4%<div class="muted tiny">100株で約13,791円</div></td>
+            <td class="num tiny">445億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">SPY r=-0.10</span><div class="muted">前半 r=-0.18 ／ q=0.44<br>当たり49% ／ 1回+361円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.16</span><div class="muted">前半 r=-0.15 ／ q=0.25<br>当たり54% ／ 1回+610円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.02</span><div class="muted">前半 r=-0.11 ／ q=0.95<br>当たり48% ／ 1回-276円</div></td>
+          </tr>
+          <tr>
+            <td><b>データセクション</b><div class="muted tiny">3905</div></td>
+            <td class="num">+0.42<div class="muted tiny">予測以内 58%</div></td>
+            <td class="num">9.0%<div class="muted tiny">100株で約20,568円</div></td>
+            <td class="num tiny">251億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">AAPL r=+0.01</span><div class="muted">前半 r=+0.12 ／ q=0.95<br>当たり46% ／ 1回-171円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.09</span><div class="muted">前半 r=-0.03 ／ q=0.44<br>当たり49% ／ 1回+869円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.17</span><div class="muted">前半 r=+0.08 ／ q=0.25<br>当たり47% ／ 1回-334円</div></td>
+          </tr>
+          <tr>
+            <td><b>キオクシア</b><div class="muted tiny">285A</div></td>
+            <td class="num">+0.41<div class="muted tiny">予測以内 57%</div></td>
+            <td class="num">6.8%<div class="muted tiny">100株で約97,863円</div></td>
+            <td class="num tiny">8,281億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">QQQ r=-0.14</span><div class="muted">前半 r=-0.21 ／ q=0.38<br>当たり55% ／ 1回+6,198円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.09</span><div class="muted">前半 r=-0.15 ／ q=0.47<br>当たり51% ／ 1回+2,921円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.11</span><div class="muted">前半 r=-0.02 ／ q=0.44<br>当たり54% ／ 1回+10,937円</div></td>
+          </tr>
+          <tr>
+            <td><b>フジクラ</b><div class="muted tiny">5803</div></td>
+            <td class="num">+0.41<div class="muted tiny">予測以内 58%</div></td>
+            <td class="num">5.4%<div class="muted tiny">100株で約21,995円</div></td>
+            <td class="num tiny">1,726億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">AAPL r=-0.01</span><div class="muted">前半 r=-0.14 ／ q=0.97<br>当たり45% ／ 1回-963円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.01</span><div class="muted">前半 r=+0.02 ／ q=0.95<br>当たり50% ／ 1回+838円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.03</span><div class="muted">前半 r=+0.03 ／ q=0.94<br>当たり52% ／ 1回+47円</div></td>
+          </tr>
+          <tr>
+            <td><b>レーザーテック</b><div class="muted tiny">6920</div></td>
+            <td class="num">+0.34<div class="muted tiny">予測以内 59%</div></td>
+            <td class="num">5.3%<div class="muted tiny">100株で約218,647円</div></td>
+            <td class="num tiny">2,107億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">AMD r=-0.01</span><div class="muted">前半 r=-0.17 ／ q=0.98<br>当たり49% ／ 1回+248円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.07</span><div class="muted">前半 r=+0.03 ／ q=0.57<br>当たり48% ／ 1回-1,142円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.10</span><div class="muted">前半 r=-0.05 ／ q=0.44<br>当たり47% ／ 1回-3,825円</div></td>
+          </tr>
+          <tr>
+            <td><b>ディスコ</b><div class="muted tiny">6146</div></td>
+            <td class="num">+0.31<div class="muted tiny">予測以内 58%</div></td>
+            <td class="num">4.1%<div class="muted tiny">100株で約213,631円</div></td>
+            <td class="num tiny">1,160億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">QQQ r=-0.07</span><div class="muted">前半 r=-0.15 ／ q=0.64<br>当たり52% ／ 1回+5,580円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.09</span><div class="muted">前半 r=+0.01 ／ q=0.47<br>当たり48% ／ 1回-1,960円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.04</span><div class="muted">前半 r=-0.08 ／ q=0.85<br>当たり54% ／ 1回+9,757円</div></td>
+          </tr>
+          <tr>
+            <td><b>三菱UFJ</b><div class="muted tiny">8306</div></td>
+            <td class="num">+0.31<div class="muted tiny">予測以内 57%</div></td>
+            <td class="num">2.3%<div class="muted tiny">100株で約7,773円</div></td>
+            <td class="num tiny">1,217億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">SPY r=-0.05</span><div class="muted">前半 r=-0.35 ／ q=0.79<br>当たり48% ／ 1回+2円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.07</span><div class="muted">前半 r=-0.44 ／ q=0.57<br>当たり46% ／ 1回-266円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.06</span><div class="muted">前半 r=-0.12 ／ q=0.68<br>当たり47% ／ 1回+108円</div></td>
+          </tr>
+          <tr>
+            <td><b>キーエンス</b><div class="muted tiny">6861</div></td>
+            <td class="num">+0.30<div class="muted tiny">予測以内 57%</div></td>
+            <td class="num">2.4%<div class="muted tiny">100株で約187,408円</div></td>
+            <td class="num tiny">448億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">LITE r=-0.09</span><div class="muted">前半 r=-0.26 ／ q=0.45<br>当たり58% ／ 1回+11,650円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.10</span><div class="muted">前半 r=-0.14 ／ q=0.44<br>当たり57% ／ 1回+8,468円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.17</span><div class="muted">前半 r=-0.01 ／ q=0.25<br>当たり52% ／ 1回+7,271円</div></td>
+          </tr>
+          <tr>
+            <td><b>東京海上</b><div class="muted tiny">8766</div></td>
+            <td class="num">+0.26<div class="muted tiny">予測以内 55%</div></td>
+            <td class="num">2.4%<div class="muted tiny">100株で約1,308円</div></td>
+            <td class="num tiny">528億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">STX r=-0.11</span><div class="muted">前半 r=+0.14 ／ q=0.44<br>当たり44% ／ 1回-108円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.06</span><div class="muted">前半 r=-0.03 ／ q=0.68<br>当たり54% ／ 1回+63円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.06</span><div class="muted">前半 r=+0.01 ／ q=0.68<br>当たり48% ／ 1回-44円</div></td>
+          </tr>
+          <tr>
+            <td><b>アドバンテスト</b><div class="muted tiny">6857</div></td>
+            <td class="num">+0.24<div class="muted tiny">予測以内 57%</div></td>
+            <td class="num">4.9%<div class="muted tiny">100株で約171,385円</div></td>
+            <td class="num tiny">5,893億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">SPY r=-0.10</span><div class="muted">前半 r=-0.18 ／ q=0.44<br>当たり55% ／ 1回+10,303円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.00</span><div class="muted">前半 r=-0.06 ／ q=0.98<br>当たり49% ／ 1回-1,122円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.10</span><div class="muted">前半 r=-0.01 ／ q=0.44<br>当たり52% ／ 1回+8,114円</div></td>
+          </tr>
+          <tr>
+            <td><b>リクルートHD</b><div class="muted tiny">6098</div></td>
+            <td class="num">+0.23<div class="muted tiny">予測以内 58%</div></td>
+            <td class="num">3.1%<div class="muted tiny">100株で約57,371円</div></td>
+            <td class="num tiny">724億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">AMAT r=-0.10</span><div class="muted">前半 r=-0.14 ／ q=0.44<br>当たり58% ／ 1回+4,102円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.07</span><div class="muted">前半 r=-0.14 ／ q=0.57<br>当たり53% ／ 1回+3,054円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=+0.03</span><div class="muted">前半 r=-0.08 ／ q=0.91<br>当たり46% ／ 1回-851円</div></td>
+          </tr>
+          <tr>
+            <td><b>ソニーG</b><div class="muted tiny">6758</div></td>
+            <td class="num">+0.18<div class="muted tiny">予測以内 55%</div></td>
+            <td class="num">2.4%<div class="muted tiny">100株で約9,654円</div></td>
+            <td class="num tiny">601億</td>
+            <td class="tiny"><span class="verdict verdict-neutral">TEL r=-0.02</span><div class="muted">前半 r=-0.17 ／ q=0.95<br>当たり53% ／ 1回+284円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.13</span><div class="muted">前半 r=-0.16 ／ q=0.38<br>当たり55% ／ 1回+233円</div></td><td class="tiny"><span class="verdict verdict-neutral">r=-0.03</span><div class="muted">前半 r=-0.01 ／ q=0.94<br>当たり48% ／ 1回-144円</div></td>
+          </tr></tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>値幅予測 r</b>: 直近10日の平均値幅で翌日の値幅を予測したときの相関。大きいほど「今日の値幅の目安」が当たる。</li>
+        <li><b>寄り後 ← ◯◯</b>: 寄り付き時点でわかる手がかりで、寄り→引けの方向を当てられるか。後半の期間での相関 r と、前半の向きで寄りに入り引けで出た場合の当たり率・100株あたりの平均損益（手数料なし）。</li>
+        <li><b>窓</b>の r がマイナスなら窓埋め（窓と逆に動く）、プラスなら窓の方向に続く。<b>前日の寄り後</b>も同じ。</li>
+        <li>毎朝のダッシュボードには出さない。承認・試用に加える前に、本人の取引成績と合わせて判断する。</li>
+      </ul>
+    </div>
+  </section>
+
 
   <section class="section-box">
     <h2 class="section-title">🔁 米→日セクター連動マッピングの検証</h2>
@@ -660,8 +824,8 @@
               <div class="sector-name"><b>通信（配当ディフェンシブ）</b></div>
               <div class="muted tiny">期待: medium</div>
             </td>
-            <td class="num"><b style="color: var(--accent);">+0.252</b></td>
-            <td class="num"><b style="color: var(--long);">0.009</b></td>
+            <td class="num"><b style="color: var(--accent);">+0.246</b></td>
+            <td class="num"><b style="color: var(--long);">0.011</b></td>
             <td class="num">107</td>
             <td class="num"><span style="color: var(--long);">65.4%</span><span class="muted"> (n=26)</span></td>
             <td class="num"><span style="color: var(--text);">44.0%</span><span class="muted"> (n=25)</span></td>
