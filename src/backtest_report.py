@@ -177,6 +177,89 @@ def render_focus_section(focus_results: list[dict] | None, focus_period: str) ->
 """
 
 
+# ----- 米国株 × 日本株 連動スキャン（研究用） -----
+
+def _q_txt(q: float | None) -> str:
+    if q is None:
+        return "q=—"
+    return "q&lt;0.001" if q < 0.001 else f"q={q:.3f}"
+
+
+def _scan_item(p: dict, kind: str, q_th: float) -> str:
+    r = p[f"{kind}_r"]
+    q = p.get(f"{kind}_q")
+    sig = q is not None and q < q_th
+    mark = "✅" if sig else ""
+    return (f'<li><b>{p["us"]}</b> <span class="muted tiny">{p["us_name"]}</span> '
+            f'{_format_r(r)} <span class="muted tiny">{_q_txt(q)}</span> {mark}</li>')
+
+
+def render_scan_section(scan: dict | None) -> str:
+    if not scan:
+        return """
+  <section class="section-box">
+    <h2 class="section-title">🔬 米国株 × 日本株 連動スキャン（研究用）</h2>
+    <div class="muted" style="padding: 16px;">まだ結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    sm = scan["summary"]
+    if sm["intraday_hits"]:
+        hits = "".join(
+            f'<li><b>{h["jp_name"]}</b> × <b>{h["us"]}</b>（{h["us_name"]}）: '
+            f'寄り後 {_format_r(h["intraday_r"])} {_q_txt(h["intraday_q"])} ／ 窓 {_format_r(h["gap_r"])}'
+            f'{"　<span class=muted>→ 米が上げると寄り後は下げやすい（寄り天型）</span>" if h["intraday_r"] < 0 else ""}</li>'
+            for h in sm["intraday_hits"]
+        )
+        hits_html = f'<ul class="scan-hits">{hits}</ul>'
+    else:
+        hits_html = ('<div class="muted">なし。どの組み合わせも、補正後は寄り後の連動が確認できなかった'
+                     '（＝米国の動きは寄り付きでほぼ織り込まれる）。</div>')
+
+    cards = ""
+    for j in sm["by_jp"]:
+        if not j["top_gap"]:
+            cards += f'<div class="scan-card"><b>{j["name"]}</b> <span class="muted tiny">{j["code"]}</span><div class="muted tiny">データ不足</div></div>'
+            continue
+        gap_li = "".join(_scan_item(p, "gap", sm["q_threshold"]) for p in j["top_gap"])
+        intra_li = "".join(_scan_item(p, "intraday", sm["q_threshold"]) for p in j["top_intraday"])
+        cards += f"""
+        <div class="scan-card">
+          <div><b>{j["name"]}</b> <span class="muted tiny">{j["code"]} ／ n={j["n"]}</span></div>
+          <div class="scan-sub">窓（寄り付き）で連動 トップ3</div>
+          <ul>{gap_li}</ul>
+          <div class="scan-sub">寄り後の相関が大きい順（参考）</div>
+          <ul>{intra_li}</ul>
+        </div>"""
+
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">🔬 米国株 × 日本株 連動スキャン（研究用）</h2>
+    <div class="period-note">
+      検証期間: {scan["period"]}　／　日本株{len(scan["jp_universe"])}銘柄 × 米国株{len(scan["us_universe"])}銘柄 = {sm["n_pairs"]}組
+      ／　窓で有意: {sm["n_gap_significant"]}組　／　寄り後で有意: <b>{sm["n_intraday_significant"]}組</b>
+      （補正前の p&lt;0.05 は {sm["n_intraday_raw_p05"]}組）
+    </div>
+    <div class="scan-highlight">
+      <h3>⭐ 寄り後まで連動する組み合わせ（多重検定補正後 q&lt;{sm["q_threshold"]}）</h3>
+      {hits_html}
+    </div>
+    <div class="scan-grid">{cards}</div>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>r</b>: 米国株の前日騰落率と、翌日の日本株の値動きの相関（1に近いほど同じ向きに動く）。</li>
+        <li><b>q</b>: たくさんの組み合わせを同時に調べたことを補正したp値。<b>q&lt;{sm["q_threshold"]}（✅）だけが「偶然とは言いにくい」</b>。
+          補正前のp&lt;0.05は、数百組調べると偶然でも十数組出る。</li>
+        <li>✅ が付いても、1回の検証だけで信じない。<b>数週間続けて残るか</b>を見てから使う。</li>
+        <li><b>窓</b>: 前日終値→寄り付き。米国の動きはほぼここに出る。デイトレでは取れない。</li>
+        <li><b>寄り後</b>: 寄り付き→引け。デイトレで取れる部分。ここで ✅ が付く組み合わせが見つかれば、使える可能性がある。</li>
+        <li>この結果は毎朝のダッシュボードには出さない（承認銘柄以外を触るきっかけを作らないため）。</li>
+      </ul>
+    </div>
+  </section>
+"""
+
+
 def render_report(
     sector_results: list[PairValidationResult],
     direction_result: DirectionBacktestResult | None,
@@ -185,6 +268,7 @@ def render_report(
     output_json: Path,
     focus_results: list[dict] | None = None,
     focus_period: str = "",
+    scan_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -296,6 +380,7 @@ def render_report(
 """
 
     focus_section = render_focus_section(focus_results, focus_period)
+    scan_section = render_scan_section(scan_result)
 
     # ===== HTML全体 =====
     html = f"""<!DOCTYPE html>
@@ -434,6 +519,14 @@ def render_report(
   .explainer li {{ margin: 4px 0; }}
   .explainer code {{ background: var(--panel-2); padding: 1px 6px; border-radius: 3px; font-size: 12px; }}
 
+  .scan-highlight {{ border: 1px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin: 12px 0; background: rgba(251,191,36,0.06); }}
+  .scan-highlight h3 {{ margin: 0 0 6px 0; font-size: 14px; color: var(--accent); }}
+  .scan-hits {{ margin: 0; padding-left: 20px; }}
+  .scan-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 12px 0; }}
+  .scan-card {{ background: var(--panel-2); border-radius: 8px; padding: 12px 14px; font-size: 13px; }}
+  .scan-card ul {{ margin: 4px 0 8px 0; padding-left: 18px; }}
+  .scan-sub {{ margin-top: 8px; font-size: 11px; color: var(--muted); }}
+
   .footer-note {{
     margin-top: 32px;
     padding: 16px;
@@ -461,6 +554,8 @@ def render_report(
   {direction_section}
 
   {focus_section}
+
+  {scan_section}
 
   <section class="section-box">
     <h2 class="section-title">🔁 米→日セクター連動マッピングの検証</h2>
@@ -549,6 +644,7 @@ def render_report(
         },
         "direction_validation": direction_result.as_dict() if direction_result else None,
         "focus_validation": {"period": focus_period, "results": focus_results} if focus_results else None,
+        "correlation_scan": scan_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -593,6 +689,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Focus stock validation failed: {e}")
 
     print()
+    print(f"🔍 Running US x JP correlation scan for period: {direction_period}")
+    scan_result = None
+    try:
+        from correlation_scan import run_correlation_scan
+        scan_result = run_correlation_scan(period=direction_period)
+    except Exception as e:
+        print(f"⚠️ Correlation scan failed: {e}")
+
+    print()
     render_report(
         sector_results=sector_results,
         direction_result=direction_result,
@@ -601,6 +706,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         output_json=output_dir / "backtest_report.json",
         focus_results=focus_results,
         focus_period=direction_period,
+        scan_result=scan_result,
     )
 
 
