@@ -260,6 +260,57 @@ def render_scan_section(scan: dict | None) -> str:
 """
 
 
+# ----- 想定値幅の検証 -----
+
+def render_range_section(range_results: list[dict] | None, period: str) -> str:
+    if not range_results:
+        return """
+  <section class="section-box">
+    <h2 class="section-title">📏 想定値幅の検証（フジクラ・SBG）</h2>
+    <div class="muted" style="padding: 16px;">まだ検証結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    rows = ""
+    for res in range_results:
+        for v in res.get("by_window", []):
+            if v.get("r") is None:
+                rows += f'<tr><td><b>{res["name"]}</b></td><td class="num">{v["window"]}日</td><td colspan="5" class="muted">データ不足</td></tr>'
+                continue
+            rows += f"""
+          <tr>
+            <td><b>{res["name"]}</b></td>
+            <td class="num">直近{v["window"]}日</td>
+            <td class="num">{_format_r(v["r"])}<br>{_format_p(v["p"])}</td>
+            <td class="num">{v["n"]}</td>
+            <td class="num">{v["within_rate"] * 100:.0f}%</td>
+            <td class="num">{v["median_ratio"]:.2f}倍</td>
+            <td class="num">{v["rough_ratio"]:.2f}倍</td>
+          </tr>"""
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">📏 想定値幅の検証（フジクラ・SBG）</h2>
+    <div class="period-note">検証期間: {period}　／　直近N日の平均値幅（高値−安値）で、翌日の値幅を予測</div>
+    <table class="results">
+      <thead>
+        <tr>
+          <th>銘柄</th><th class="num">予測に使う期間</th><th class="num">r / p</th><th class="num">n</th>
+          <th class="num">予測以内に<br>収まった日</th><th class="num">実際÷予測<br>（中央値）</th><th class="num">実際÷予測<br>（5日に1日）</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>r</b>: 予測した値幅と実際の値幅の相関。大きいほど「最近荒れていれば今日も荒れる」が当たっている。</li>
+        <li><b>実際÷予測（中央値）</b>: 1より小さければ、ふつうの日は予測より小さく収まる。</li>
+        <li><b>実際÷予測（5日に1日）</b>: 荒れた日に予測の何倍まで動くか。毎朝のカードの「荒れた日」の幅に使っている。</li>
+      </ul>
+    </div>
+  </section>
+"""
+
+
 def render_report(
     sector_results: list[PairValidationResult],
     direction_result: DirectionBacktestResult | None,
@@ -269,6 +320,7 @@ def render_report(
     focus_results: list[dict] | None = None,
     focus_period: str = "",
     scan_result: dict | None = None,
+    range_results: list[dict] | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -381,6 +433,7 @@ def render_report(
 
     focus_section = render_focus_section(focus_results, focus_period)
     scan_section = render_scan_section(scan_result)
+    range_section = render_range_section(range_results, focus_period)
 
     # ===== HTML全体 =====
     html = f"""<!DOCTYPE html>
@@ -555,6 +608,8 @@ def render_report(
 
   {focus_section}
 
+  {range_section}
+
   {scan_section}
 
   <section class="section-box">
@@ -645,6 +700,7 @@ def render_report(
         "direction_validation": direction_result.as_dict() if direction_result else None,
         "focus_validation": {"period": focus_period, "results": focus_results} if focus_results else None,
         "correlation_scan": scan_result,
+        "range_validation": {"period": focus_period, "results": range_results} if range_results else None,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -689,6 +745,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Focus stock validation failed: {e}")
 
     print()
+    print(f"🔍 Running expected range validation for period: {direction_period}")
+    range_results = None
+    try:
+        from expected_range import run_range_validation
+        range_results = run_range_validation(period=direction_period)
+    except Exception as e:
+        print(f"⚠️ Range validation failed: {e}")
+
+    print()
     print(f"🔍 Running US x JP correlation scan for period: {direction_period}")
     scan_result = None
     try:
@@ -707,6 +772,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         focus_results=focus_results,
         focus_period=direction_period,
         scan_result=scan_result,
+        range_results=range_results,
     )
 
 

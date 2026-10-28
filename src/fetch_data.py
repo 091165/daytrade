@@ -99,6 +99,30 @@ def fetch_multi_change_pct(tickers: list[str]) -> dict[str, float]:
     return result
 
 
+def fetch_daily_ohlc(tickers: list[str], period: str = "6mo") -> dict:
+    """複数ティッカーの日足OHLCを取得する（想定値幅の計算用）。
+
+    Returns:
+        ティッカー → DataFrame(Open/High/Low/Close)。取れなかったものは含まない
+    """
+    if not tickers:
+        return {}
+    data = yf.download(
+        tickers=" ".join(tickers), period=period, interval="1d",
+        progress=False, group_by="ticker", auto_adjust=True,
+    )
+    out = {}
+    for t in tickers:
+        try:
+            df = data[t][["Open", "High", "Low", "Close"]] if len(tickers) > 1 else data[["Open", "High", "Low", "Close"]]
+        except KeyError:
+            continue
+        df = df.dropna()
+        if not df.empty:
+            out[t] = df
+    return out
+
+
 def _safe_change_pct(ticker: str) -> float:
     try:
         return fetch_change_pct(ticker)
