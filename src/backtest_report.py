@@ -266,7 +266,7 @@ def render_range_section(range_results: list[dict] | None, period: str) -> str:
     if not range_results:
         return """
   <section class="section-box">
-    <h2 class="section-title">📏 想定値幅の検証（フジクラ・SBG）</h2>
+    <h2 class="section-title">📏 想定値幅の検証（承認銘柄・試用銘柄）</h2>
     <div class="muted" style="padding: 16px;">まだ検証結果がありません（データ取得失敗、または未実行）。</div>
   </section>
 """
@@ -288,7 +288,7 @@ def render_range_section(range_results: list[dict] | None, period: str) -> str:
           </tr>"""
     return f"""
   <section class="section-box">
-    <h2 class="section-title">📏 想定値幅の検証（フジクラ・SBG）</h2>
+    <h2 class="section-title">📏 想定値幅の検証（承認銘柄・試用銘柄）</h2>
     <div class="period-note">検証期間: {period}　／　直近N日の平均値幅（高値−安値）で、翌日の値幅を予測</div>
     <table class="results">
       <thead>
@@ -311,6 +311,71 @@ def render_range_section(range_results: list[dict] | None, period: str) -> str:
 """
 
 
+def render_screen_section(screen: dict | None) -> str:
+    """売買代金上位の銘柄スクリーニング（研究用）"""
+    if not screen or not screen.get("results"):
+        return """
+  <section class="section-box">
+    <h2 class="section-title">🔬 売買代金上位の銘柄スクリーニング（研究用）</h2>
+    <div class="muted" style="padding: 16px;">まだ結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    labels = screen.get("predictor_labels", {})
+
+    def cell(p: dict | None) -> str:
+        if not p or p.get("r_conf") is None:
+            return '<td class="muted">—</td>'
+        cls = "verdict-confirmed" if p.get("reliable") else "verdict-neutral"
+        us = f'{p["us"]} ' if p.get("us") else ""
+        hit = f'当たり{p["hit_conf"] * 100:.0f}%' if p.get("hit_conf") is not None else ""
+        edge = f' ／ 1回{p["edge_yen"]:+,.0f}円' if p.get("edge_yen") is not None else ""
+        mark = "✅ " if p.get("reliable") else ""
+        return (f'<td class="tiny"><span class="verdict {cls}">{mark}{us}r={p["r_conf"]:+.2f}</span>'
+                f'<div class="muted">前半 r={p["r_disc"]:+.2f} ／ q={p["q_conf"]:.2f}<br>{hit}{edge}</div></td>')
+
+    rows = ""
+    for r in sorted(screen["results"], key=lambda r: -(r.get("range_r") or 0)):
+        pr = r.get("predictors", {})
+        rng = (f'{r["range_r"]:+.2f}<div class="muted tiny">予測以内 {r["range_within"] * 100:.0f}%</div>'
+               if r.get("range_r") is not None else "—")
+        size = (f'{r["range_pct"]:.1f}%<div class="muted tiny">100株で約{r["range_yen"]:,.0f}円</div>'
+                if r.get("range_pct") and r.get("range_yen") else "—")
+        tv = f'{r["turnover_oku"]:,.0f}億' if r.get("turnover_oku") else "—"
+        rows += f"""
+          <tr>
+            <td><b>{r["name"]}</b><div class="muted tiny">{r["code"]}</div></td>
+            <td class="num">{rng}</td>
+            <td class="num">{size}</td>
+            <td class="num tiny">{tv}</td>
+            {cell(pr.get("us"))}{cell(pr.get("gap"))}{cell(pr.get("prev"))}
+          </tr>"""
+    n_rel = sum(1 for r in screen["results"] for p in r.get("predictors", {}).values() if p.get("reliable"))
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">🔬 売買代金上位の銘柄スクリーニング（研究用）</h2>
+    <div class="period-note">期間: {screen["period"]}（前半で向きを決め、後半だけで検証）　／　寄り後の方向で「信頼できる」: {n_rel}件（q&lt;{screen["q_threshold"]} かつ前半と同じ向き）</div>
+    <table class="results">
+      <thead>
+        <tr>
+          <th>銘柄</th><th class="num">値幅予測<br>r</th><th class="num">1日の値幅<br>（直近60日）</th><th class="num">売買代金<br>（20日平均）</th>
+          <th>寄り後 ←<br>{labels.get("us", "us")}</th><th>寄り後 ←<br>{labels.get("gap", "gap")}</th><th>寄り後 ←<br>{labels.get("prev", "prev")}</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li><b>値幅予測 r</b>: 直近10日の平均値幅で翌日の値幅を予測したときの相関。大きいほど「今日の値幅の目安」が当たる。</li>
+        <li><b>寄り後 ← ◯◯</b>: 寄り付き時点でわかる手がかりで、寄り→引けの方向を当てられるか。後半の期間での相関 r と、前半の向きで寄りに入り引けで出た場合の当たり率・100株あたりの平均損益（手数料なし）。</li>
+        <li><b>窓</b>の r がマイナスなら窓埋め（窓と逆に動く）、プラスなら窓の方向に続く。<b>前日の寄り後</b>も同じ。</li>
+        <li>毎朝のダッシュボードには出さない。承認・試用に加える前に、本人の取引成績と合わせて判断する。</li>
+      </ul>
+    </div>
+  </section>
+"""
+
+
 def render_report(
     sector_results: list[PairValidationResult],
     direction_result: DirectionBacktestResult | None,
@@ -321,6 +386,7 @@ def render_report(
     focus_period: str = "",
     scan_result: dict | None = None,
     range_results: list[dict] | None = None,
+    screen_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -434,6 +500,7 @@ def render_report(
     focus_section = render_focus_section(focus_results, focus_period)
     scan_section = render_scan_section(scan_result)
     range_section = render_range_section(range_results, focus_period)
+    screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
     html = f"""<!DOCTYPE html>
@@ -611,6 +678,7 @@ def render_report(
   {range_section}
 
   {scan_section}
+  {screen_section}
 
   <section class="section-box">
     <h2 class="section-title">🔁 米→日セクター連動マッピングの検証</h2>
@@ -701,6 +769,7 @@ def render_report(
         "focus_validation": {"period": focus_period, "results": focus_results} if focus_results else None,
         "correlation_scan": scan_result,
         "range_validation": {"period": focus_period, "results": range_results} if range_results else None,
+        "stock_screen": screen_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -763,6 +832,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Correlation scan failed: {e}")
 
     print()
+    print("🔍 Running stock screen (top turnover) for period: 2y")
+    screen_result = None
+    try:
+        from stock_screen import run_stock_screen
+        screen_result = run_stock_screen(period="2y")
+    except Exception as e:
+        print(f"⚠️ Stock screen failed: {e}")
+
+    print()
     render_report(
         sector_results=sector_results,
         direction_result=direction_result,
@@ -773,6 +851,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         focus_period=direction_period,
         scan_result=scan_result,
         range_results=range_results,
+        screen_result=screen_result,
     )
 
 
