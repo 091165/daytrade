@@ -1,0 +1,59 @@
+name: Pre-open Kick
+
+# GitHub の定期実行は混雑で数時間遅れたり、飛ばされたりする（2026/10: 6:37〜7:37の予約が動くのは1日1回・9:30〜10:30ごろ）。
+# そこで夜中に動き出して 6:40 JST まで待ち、その時刻に毎朝の判定（daily_signal.yml）を手動実行する。
+# 夜中の予約が数時間遅れても 6:40 には間に合う。公開リポジトリなので待機中の実行時間は無料。
+# 後から来た実行が、待機中の先の実行を取り消して引き継ぐ（1日に1回だけ判定を作る）。
+
+on:
+  schedule:
+    # JST 1:17 / 3:17 / 5:17（= UTC 前日 16:17 / 18:17 / 20:17）、月〜金
+    - cron: "17 16 * * 0-4"
+    - cron: "17 18 * * 0-4"
+    - cron: "17 20 * * 0-4"
+  workflow_dispatch:
+    inputs:
+      at:
+        description: "判定を実行する時刻（JST, HH:MM）"
+        required: false
+        default: "06:40"
+
+permissions:
+  actions: write
+
+concurrency:
+  group: preopen-kick
+  cancel-in-progress: true
+
+jobs:
+  kick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Wait until the target time (JST)
+        env:
+          AT: ${{ github.event.inputs.at || '06:40' }}
+        run: |
+          now=$(date +%s)
+          target=$(TZ=Asia/Tokyo date -d "$AT" +%s)
+          latest=$(TZ=Asia/Tokyo date -d "08:50" +%s)
+          echo "now:    $(TZ=Asia/Tokyo date -d @$now '+%F %T JST')"
+          echo "target: $(TZ=Asia/Tokyo date -d @$target '+%F %T JST')"
+          if [ "$now" -gt "$latest" ]; then
+            echo "寄り前に間に合わないので、今日は実行しない"
+            echo "SKIP=1" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          wait=$((target - now))
+          if [ "$wait" -gt 0 ]; then
+            echo "待機 ${wait} 秒"
+            sleep "$wait"
+          fi
+
+      - name: Dispatch daily signal
+        if: env.SKIP != '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run daily_signal.yml --repo "${{ github.repository }}" --ref main
+          echo "dispatched at $(TZ=Asia/Tokyo date '+%F %T JST')"
