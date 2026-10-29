@@ -42,6 +42,7 @@ jobs:
           python tests/test_morning_range.py
           python tests/test_minutes.py
           python tests/test_checkpoint_study.py
+          python tests/test_fib_study.py
 
       - name: Run backtest and generate report
         run: |

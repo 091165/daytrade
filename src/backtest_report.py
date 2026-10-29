@@ -405,6 +405,58 @@ def render_checkpoint_section(cp: dict | None) -> str:
 """
 
 
+def render_fib_section(fib: dict | None) -> str:
+    """フィボナッチの水準で反発しやすいか"""
+    pats = (fib or {}).get("patterns") or {}
+    if not pats:
+        return """
+  <section class="section-box">
+    <h2 class="section-title">📐 フィボナッチの水準で反発しやすいか</h2>
+    <div class="muted" style="padding: 16px;">まだ結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    titles = {"gap": f"窓の幅に引いた線（窓 ±{fib['min_gap_pct']:.0f}%以上の日・前場）",
+              "swing": "寄り後30分（9:00〜9:30）の値幅に引いた線（9:30以降・前場）"}
+    blocks = ""
+    for key, title in titles.items():
+        s = pats.get(key) or {}
+        if s.get("diff") is None:
+            blocks += f'<h3>{title}</h3><div class="muted">件数不足（{s.get("n", 0)}回）</div>'
+            continue
+        cls = "verdict-confirmed" if s["significant"] else "verdict-neutral"
+        verdict = "✅ フィボの水準の方が反発しやすい" if s["significant"] and s["diff"] > 0 else (
+            "フィボの水準の方が反発しにくい" if s["significant"] else "差は偶然の範囲")
+        cells = "".join(
+            f'<td class="num">{"<b>" if lv["fib"] else ""}{(lv["bounce"] or 0) * 100:.0f}%{"</b>" if lv["fib"] else ""}'
+            f'<div class="muted tiny">{lv["n"]}回</div></td>'
+            for lv in s["levels"]
+        )
+        heads = "".join(f'<th class="num">{"<b>" if lv["fib"] else ""}{lv["level"] * 100:.1f}%{"</b>" if lv["fib"] else ""}</th>'
+                        for lv in s["levels"])
+        blocks += f"""
+      <h3>{title}</h3>
+      <div style="margin: 6px 0 10px;"><span class="verdict {cls}">{verdict}</span>
+        <span class="muted tiny">フィボ {s["fib_bounce"] * 100:.1f}%（{s["n_fib"]}回） vs 比較用 {s["control_bounce"] * 100:.1f}%（{s["n_control"]}回）・
+        差 {s["diff"] * 100:+.1f}pt（95%区間 {s["ci"][0] * 100:+.1f}〜{s["ci"][1] * 100:+.1f}pt）</span></div>
+      <table class="results"><thead><tr><th>水準</th>{heads}</tr></thead><tbody><tr><td>反発率</td>{cells}</tr></tbody></table>"""
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">📐 フィボナッチの水準で反発しやすいか</h2>
+    <div class="period-note">データ: {fib["source"]}　／　太字がフィボの水準、それ以外は比較用</div>
+    <div class="explainer" style="margin-top: 0;">{blocks}</div>
+    <div class="explainer">
+      <h3>📖 読み方</h3>
+      <ul>
+        <li>線に初めて触れたあと、線から幅の{fib["bounce_frac"] * 100:.0f}%だけ元の方向に戻したら「反発」、先に進んだら「抜けた」。反発率 = 反発 ÷（反発＋抜けた）。</li>
+        <li>どんな水準でもある程度は反発するので、フィボの水準の反発率を比較用の水準（30%・45%・55%・70%）と比べる。</li>
+        <li>95%区間が0をまたがなければ、差は偶然ではなさそう（同じ日・同じ銘柄の線どうしの連動を考えて計算）。</li>
+        <li>5分足では1本の中で触れて戻ったか抜けたかが分かりにくい。1分足が40日分たまったら1分足に切り替わる。</li>
+      </ul>
+    </div>
+  </section>
+"""
+
+
 def render_screen_section(screen: dict | None) -> str:
     """売買代金上位の銘柄スクリーニング（研究用）"""
     if not screen or not screen.get("results"):
@@ -483,6 +535,7 @@ def render_report(
     screen_result: dict | None = None,
     morning_result: dict | None = None,
     checkpoint_result: dict | None = None,
+    fib_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -598,6 +651,7 @@ def render_report(
     range_section = render_range_section(range_results, focus_period)
     morning_section = render_morning_section(morning_result)
     checkpoint_section = render_checkpoint_section(checkpoint_result)
+    fib_section = render_fib_section(fib_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -776,6 +830,7 @@ def render_report(
   {range_section}
   {morning_section}
   {checkpoint_section}
+  {fib_section}
 
   {scan_section}
   {screen_section}
@@ -872,6 +927,7 @@ def render_report(
         "stock_screen": screen_result,
         "morning_range": morning_result,
         "checkpoints": checkpoint_result,
+        "fibonacci": fib_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -952,6 +1008,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Checkpoint study failed: {e}")
 
     print()
+    print("🔍 Running Fibonacci level study")
+    fib_result = None
+    try:
+        from fib_study import run_fib_study
+        fib_result = run_fib_study()
+    except Exception as e:
+        print(f"⚠️ Fibonacci study failed: {e}")
+
+    print()
     print("🔍 Running stock screen (top turnover) for period: 2y")
     screen_result = None
     try:
@@ -974,6 +1039,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         screen_result=screen_result,
         morning_result=morning_result,
         checkpoint_result=checkpoint_result,
+        fib_result=fib_result,
     )
 
 
