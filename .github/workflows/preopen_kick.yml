@@ -32,14 +32,14 @@ jobs:
     steps:
       - name: Wait until the target time (JST)
         env:
-          AT: ${{ github.event.inputs.at || '06:40' }}
+          AT: ${{ github.event.inputs.at || '06:40' }}   # 手動実行では 8:50 を過ぎていても実行する（動作確認用）
         run: |
           now=$(date +%s)
           target=$(TZ=Asia/Tokyo date -d "$AT" +%s)
           latest=$(TZ=Asia/Tokyo date -d "08:50" +%s)
           echo "now:    $(TZ=Asia/Tokyo date -d @$now '+%F %T JST')"
           echo "target: $(TZ=Asia/Tokyo date -d @$target '+%F %T JST')"
-          if [ "$now" -gt "$latest" ]; then
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$now" -gt "$latest" ]; then
             echo "寄り前に間に合わないので、今日は実行しない"
             echo "SKIP=1" >> "$GITHUB_ENV"
             exit 0
