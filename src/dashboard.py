@@ -197,7 +197,7 @@ def _focus_validation_foot(v: dict | None) -> str:
         return "検証: まだ（毎週日曜のバックテスト後に、窓・寄り後それぞれの連動の強さを表示）"
     return (
         f"検証（{v.get('n', 0)}日）: 窓 r={_fmt_r(v.get('gap_r'))} {v.get('gap_label', '')}"
-        f" ／ 寄り後 r={_fmt_r(v.get('intraday_r'))} {v.get('intraday_label', '')}"
+        f" ／ 寄り後（〜引け） r={_fmt_r(v.get('intraday_r'))} {v.get('intraday_label', '')}"
     )
 
 
@@ -293,7 +293,7 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
           <div class="focus-us">米関連株の平均 {f["us_avg_change_pct"]:+.2f}%（{f["us_label"]}）</div>
           <div class="focus-chips">{chips}</div>
           <div class="focus-line"><span class="lbl">寄り（窓）</span>{f["gap_text"]}</div>
-          <div class="focus-line"><span class="lbl">寄り後</span>{f["intraday_text"]}</div>
+          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>{f["intraday_text"]}</div>
           {conflict}
           {render_range_block(f.get("range"))}
           <div class="focus-foot">{_focus_validation_foot(f.get("validation"))}</div>
