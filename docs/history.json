@@ -682,13 +682,13 @@
   },
   {
     "date": "2026-10-29",
-    "verdict": "buy_bias",
-    "verdict_label": "買いポジ主体",
-    "confidence": "medium",
-    "futures_diff": 1346.62890625,
-    "nasdaq_pct": -0.021435991620044614,
-    "dow_pct": 0.3057054628434752,
-    "sox_pct": 0.9102506531678545,
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "futures_diff": 263.98046875,
+    "nasdaq_pct": 0.2720807126309177,
+    "dow_pct": 0.1862080455777182,
+    "sox_pct": 1.754844328325711,
     "warnings": []
   }
 ]
