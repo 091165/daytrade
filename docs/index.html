@@ -264,13 +264,13 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-10-29 21:51 JST</div>
+      <div class="timestamp">Updated: 2026-10-30 06:40 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
       <a href="../daytrade-journal/review.html" class="report-link">✅ ルール遵守の振り返り →</a>
     </div>
   </header>
 
-  <section><div class="late-notice">⚠️ この判定は寄り付き後（21:51）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
+  
 
   
     <section>
@@ -293,6 +293,24 @@ section > h2.section-title {
     
 
   
+    <section>
+      <div class="warnings-wrap">
+        
+        <div class="warning-item" style="border-left-color: var(--accent); background: rgba(251, 191, 36, 0.08);">
+          <div style="font-size: 15px; margin-bottom: 4px; color: var(--accent); font-weight: 600;">📅 金曜 × 週足陰線 = ショートカバー買い警戒</div>
+          <div class="warning-message">今週の日経は陰線。金曜のショートカバーで後場上げの可能性。</div>
+          <div class="warning-action">→ 安易な売りポジ持ち越しに注意。後場の買い戻しに巻き込まれる懸念。</div>
+        </div>
+        
+        <div class="warning-item" style="border-left-color: var(--accent); background: rgba(251, 191, 36, 0.08);">
+          <div style="font-size: 15px; margin-bottom: 4px; color: var(--accent); font-weight: 600;">🗓️ 月末 × 月足陰線 = ショートカバー買い警戒</div>
+          <div class="warning-message">今月の日経は陰線。月末にショートカバーの買いが入りやすい。</div>
+          <div class="warning-action">→ ショートポジの翌月持ち越しは注意。月末大引けからの買い戻しで巻き込まれる懸念。</div>
+        </div>
+        
+      </div>
+    </section>
+    
 
   <!-- 本日の日経デイトレ方針 -->
   <section>
@@ -317,32 +335,32 @@ section > h2.section-title {
             
         <div class="us-idx-item">
           <div class="us-idx-name">ナスダック</div>
-          <div class="us-idx-pct" style="color: var(--muted);">+0.27%</div>
+          <div class="us-idx-pct" style="color: var(--short);">-1.38%</div>
         </div>
         
         <div class="us-idx-item">
           <div class="us-idx-name">ダウ</div>
-          <div class="us-idx-pct" style="color: var(--muted);">+0.19%</div>
+          <div class="us-idx-pct" style="color: var(--muted);">-0.25%</div>
         </div>
         
         <div class="us-idx-item">
           <div class="us-idx-name">SOX</div>
-          <div class="us-idx-pct" style="color: var(--long);">+1.75%</div>
+          <div class="us-idx-pct" style="color: var(--short);">-1.42%</div>
         </div>
         
           </div>
         </div>
         <div class="direction-meta-item">
           <div class="direction-meta-label">日経先物 現対</div>
-          <div class="futures-value" style="color: var(--muted);">-54円</div>
+          <div class="futures-value" style="color: var(--muted);">+196円</div>
           <div class="sub" style="font-size: 12px;">
-            先物: ¥64,605 / 現物終値: ¥64,659
+            先物: ¥64,150 / 現物終値: ¥63,954
           </div>
         </div>
       </div>
 
       <div class="reasons-list">
-        <ul><li>米指数に個体差あり（ナスダック=+0.27% / ダウ=+0.19% / SOX+）</li><li>先物の方向性が不明確（現対-54円）</li><li>→ 米指数の個体差が大きく、レンジ・優柔不断相場想定</li></ul>
+        <ul><li>米指数が揃って下げ（ナスダック, SOX）</li><li>先物の方向性が不明確（現対+196円）</li><li>→ 米日非連動のため、方向性読みづらく様子見</li></ul>
       </div>
 
       <div class="time-nodes-note">
@@ -360,22 +378,22 @@ section > h2.section-title {
         <div class="focus-card">
           <div class="focus-head">
             <div class="focus-name">フジクラ<span class="focus-code">5803</span></div>
-            <div class="focus-dir bullish">▲ 買い寄り（強）</div>
+            <div class="focus-dir neutral">― 方向感なし</div>
           </div>
           
-          <div class="focus-us">米関連株の平均 +6.87%（光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ））</div>
-          <div class="focus-chips"><span class="focus-chip">GLW <span style="color: var(--long);">+3.9%</span></span><span class="focus-chip">COHR <span style="color: var(--long);">+1.6%</span></span><span class="focus-chip">LITE <span style="color: var(--long);">+5.5%</span></span><span class="focus-chip">VRT <span style="color: var(--long);">+16.5%</span></span></div>
-          <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは高く始まりやすい（窓の連動：検証済み r=+0.64）</div>
-          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=+0.10）。寄り値で飛びつかない</div>
+          <div class="focus-us">米関連株の平均 -0.23%（光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ））</div>
+          <div class="focus-chips"><span class="focus-chip">GLW <span style="color: var(--short);">-1.8%</span></span><span class="focus-chip">COHR <span style="color: var(--short);">-1.0%</span></span><span class="focus-chip">LITE <span style="color: var(--long);">+0.6%</span></span><span class="focus-chip">VRT <span style="color: var(--long);">+1.2%</span></span></div>
+          <div class="focus-line"><span class="lbl">寄り（窓）</span>米関連株は小動き。寄りの方向感なし</div>
+          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後も手がかりなし</div>
           
           
           <div class="focus-range">
             <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
-            <div class="focus-range-main">約205円<span class="lot">100株で約20,549円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約252円まで（100株で約25,153円）</div>
+            <div class="focus-range-main">約207円<span class="lot">100株で約20,657円</span></div>
+            <div class="focus-range-sub">荒れた日（5日に1日）は約253円まで（100株で約25,285円）</div>
             <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約2割</div>
             <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約12,494円</b>（荒れた日は約15,786円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約9,247円（100株）以上動いたら、9時台は約16,289円まで広がりやすい</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約12,560円</b>（荒れた日は約15,869円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約9,296円（100株）以上動いたら、9時台は約16,375円まで広がりやすい</div>
             <div class="focus-range-sub">次の決算：11/10</div>
             <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.37／予測以内に収まった日 58%</div>
           </div>
@@ -385,22 +403,22 @@ section > h2.section-title {
         <div class="focus-card">
           <div class="focus-head">
             <div class="focus-name">ソフトバンクG<span class="focus-code">9984</span></div>
-            <div class="focus-dir bullish">▲ 買い寄り</div>
+            <div class="focus-dir bearish">▼ 売り寄り</div>
           </div>
           
-          <div class="focus-us">米関連株の平均 +1.18%（Arm・NVIDIA・ナスダック100）</div>
-          <div class="focus-chips"><span class="focus-chip">ARM <span style="color: var(--long);">+4.1%</span></span><span class="focus-chip">NVDA <span style="color: var(--short);">-1.2%</span></span><span class="focus-chip">QQQ <span style="color: var(--long);">+0.6%</span></span></div>
-          <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは高く始まりやすい（窓の連動：検証済み r=+0.71）</div>
+          <div class="focus-us">米関連株の平均 -1.75%（Arm・NVIDIA・ナスダック100）</div>
+          <div class="focus-chips"><span class="focus-chip">ARM <span style="color: var(--short);">-3.0%</span></span><span class="focus-chip">NVDA <span style="color: var(--short);">-0.8%</span></span><span class="focus-chip">QQQ <span style="color: var(--short);">-1.4%</span></span></div>
+          <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.71）</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.09）。寄り値で飛びつかない</div>
           
           
           <div class="focus-range">
             <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
-            <div class="focus-range-main">約246円<span class="lot">100株で約24,630円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約325円まで（100株で約32,473円）</div>
+            <div class="focus-range-main">約257円<span class="lot">100株で約25,676円</span></div>
+            <div class="focus-range-sub">荒れた日（5日に1日）は約339円まで（100株で約33,852円）</div>
             <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約2割</div>
             <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約15,442円</b>（荒れた日は約21,082円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約11,083円（100株）以上動いたら、9時台は約19,524円まで広がりやすい</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約16,097円</b>（荒れた日は約21,978円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約11,554円（100株）以上動いたら、9時台は約20,353円まで広がりやすい</div>
             <div class="focus-range-sub">次の決算：11/10</div>
             <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.24／予測以内に収まった日 56%</div>
           </div>
@@ -410,22 +428,22 @@ section > h2.section-title {
         <div class="focus-card">
           <div class="focus-head">
             <div class="focus-name">村田製作所<span class="focus-code">6981</span><span class="focus-trial">試用</span></div>
-            <div class="focus-dir neutral">― 方向感なし</div>
+            <div class="focus-dir bearish">▼ 売り寄り</div>
           </div>
           <div class="focus-trial-note">🧪 試用銘柄。100株だけ・10時前だけ・-5,000円で即損切り。値動きは承認銘柄の約2倍</div>
-          <div class="focus-us">米関連株の平均 +0.52%（半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品））</div>
-          <div class="focus-chips"><span class="focus-chip">SOXX <span style="color: var(--long);">+2.1%</span></span><span class="focus-chip">QQQ <span style="color: var(--long);">+0.6%</span></span><span class="focus-chip">NVDA <span style="color: var(--short);">-1.2%</span></span></div>
-          <div class="focus-line"><span class="lbl">寄り（窓）</span>米関連株は小動き。寄りの方向感なし</div>
-          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後も手がかりなし</div>
+          <div class="focus-us">米関連株の平均 -1.25%（半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品））</div>
+          <div class="focus-chips"><span class="focus-chip">SOXX <span style="color: var(--short);">-1.5%</span></span><span class="focus-chip">QQQ <span style="color: var(--short);">-1.4%</span></span><span class="focus-chip">NVDA <span style="color: var(--short);">-0.8%</span></span></div>
+          <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.62）</div>
+          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.12）。寄り値で飛びつかない</div>
           
           
           <div class="focus-range">
             <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
-            <div class="focus-range-main">約343円<span class="lot">100株で約34,321円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約447円まで（100株で約44,736円）</div>
+            <div class="focus-range-main">約348円<span class="lot">100株で約34,845円</span></div>
+            <div class="focus-range-sub">荒れた日（5日に1日）は約454円まで（100株で約45,419円）</div>
             <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約1割</div>
             <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約21,677円</b>（荒れた日は約27,539円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約15,444円（100株）以上動いたら、9時台は約27,206円まで広がりやすい</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約22,008円</b>（荒れた日は約27,960円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約15,680円（100株）以上動いたら、9時台は約27,622円まで広がりやすい</div>
             <div class="focus-range-sub">次の決算：10/30</div>
             <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.65／予測以内に収まった日 60%</div>
           </div>
@@ -447,8 +465,8 @@ section > h2.section-title {
             <span class="fx-symbol">USD/JPY</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">157.99</span>
-            <span class="fx-change" style="color: var(--muted);">━ -0.00%</span>
+            <span class="fx-price">157.65</span>
+            <span class="fx-change" style="color: var(--muted);">━ -0.22%</span>
           </div>
           <div class="fx-interpretation">変動なし</div>
         </div>
@@ -459,8 +477,8 @@ section > h2.section-title {
             <span class="fx-symbol">XAU/USD</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$4,034.8</span>
-            <span class="fx-change" style="color: var(--short);">▼ -0.41%</span>
+            <span class="fx-price">$4,033.3</span>
+            <span class="fx-change" style="color: var(--short);">▼ -0.45%</span>
           </div>
           <div class="fx-interpretation">ゴールド小幅下落</div>
         </div>
@@ -471,10 +489,10 @@ section > h2.section-title {
             <span class="fx-symbol">CL</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$101.66</span>
-            <span class="fx-change" style="color: var(--short);">▼ -1.09%</span>
+            <span class="fx-price">$102.86</span>
+            <span class="fx-change" style="color: var(--muted);">━ +0.08%</span>
           </div>
-          <div class="fx-interpretation">原油下落 → エネルギー株に逆風</div>
+          <div class="fx-interpretation">変動なし</div>
         </div>
         
       </div>
@@ -487,26 +505,48 @@ section > h2.section-title {
       <h2 class="section-title">💡 個別銘柄の方向感（指数手出し無用日）</h2>
       <div class="picks-grid">
         
-        <div class="pick-card pick-bullish">
+        <div class="pick-card pick-bearish">
           <div class="pick-header">
             <div class="pick-title">
-              ▲ <b>ストレージ半導体</b>
+              ▼ <b>SaaS・ソフトウェア</b>
             </div>
-            <span class="pick-badge pick-badge-bullish">買い候補</span>
+            <span class="pick-badge pick-badge-bearish">売り（空売り）候補</span>
           </div>
           <ul class="pick-stocks"></ul>
-          <div class="pick-rationale">米サンディスク等ストレージが平均+5.42%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは買い目線で考えやすい。</div>
+          <div class="pick-rationale">米セールスフォース・MSFT等が平均-5.82%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。</div>
+        </div>
+        
+        <div class="pick-card pick-bearish">
+          <div class="pick-header">
+            <div class="pick-title">
+              ▼ <b>電線（CAT連動系）</b>
+            </div>
+            <span class="pick-badge pick-badge-bearish">売り（空売り）候補</span>
+          </div>
+          <ul class="pick-stocks"></ul>
+          <div class="pick-rationale">米キャタピラー・ディアーが平均-3.12%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。</div>
         </div>
         
         <div class="pick-card pick-bullish">
           <div class="pick-header">
             <div class="pick-title">
-              ▲ <b>半導体</b>
+              ▲ <b>生活防衛（配当王）</b>
             </div>
             <span class="pick-badge pick-badge-bullish">買い候補</span>
           </div>
           <ul class="pick-stocks"></ul>
-          <div class="pick-rationale">米SOX指数（半導体）が平均+3.17%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは買い目線で考えやすい。</div>
+          <div class="pick-rationale">米コカコーラ・P&G等が平均+1.75%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは買い目線で考えやすい。</div>
+        </div>
+        
+        <div class="pick-card pick-bearish">
+          <div class="pick-header">
+            <div class="pick-title">
+              ▼ <b>ストレージ半導体</b>
+            </div>
+            <span class="pick-badge pick-badge-bearish">売り（空売り）候補</span>
+          </div>
+          <ul class="pick-stocks"></ul>
+          <div class="pick-rationale">米サンディスク等ストレージが平均-1.74%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。</div>
         </div>
         
       </div>
@@ -526,20 +566,125 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▲ <b>ストレージ半導体</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.42">✓ 検証済</span>
+          ▼ <b>SaaS・ソフトウェア</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.52">✓ 検証済</span>
         </div>
-        <div class="sector-avg dir-bullish">
-          +5.42%
+        <div class="sector-avg dir-bearish">
+          -5.82%
         </div>
       </div>
       <div class="sector-bar-container">
         <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-bullish" style="width: 100%; left: 50%;"></div>
+        <div class="sector-bar bar-bearish" style="width: 100%; left: -50%;"></div>
+      </div>
+      <div class="sector-detail">
+        <div class="sector-us-label">米: セールスフォース・MSFT等</div>
+        <div class="sector-jp-stocks">日: 富士通、NEC、NRI、オービック</div>
+        <div class="sector-action">→ <b class="dir-bearish">売り目線</b></div>
+      </div>
+      <div class="sector-note">「アメリカ下げ戦犯・ソフトウェアSaaS系」として頻出。下げ時の連動が特に強い</div>
+    </div>
+    
+    <div class="sector-card">
+      <div class="sector-header">
+        <div class="sector-title">
+          ▼ <b>建機</b> <span class="vbadge vbadge-weak" title="実測r=+0.37">△ 弱連動</span>
+        </div>
+        <div class="sector-avg dir-bearish">
+          -3.12%
+        </div>
+      </div>
+      <div class="sector-bar-container">
+        <div class="sector-bar-center"></div>
+        <div class="sector-bar bar-bearish" style="width: 100%; left: -50%;"></div>
+      </div>
+      <div class="sector-detail">
+        <div class="sector-us-label">米: キャタピラー・ディアー</div>
+        <div class="sector-jp-stocks">日: コマツ、日立建機、クボタ</div>
+        <div class="sector-action">→ <b class="dir-bearish">売り目線</b></div>
+      </div>
+      <div class="sector-note">CAT・DEの動きから翌朝のコマツ方向が読みやすい</div>
+    </div>
+    
+    <div class="sector-card">
+      <div class="sector-header">
+        <div class="sector-title">
+          ▼ <b>電線（CAT連動系）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.25">✓ 検証済</span>
+        </div>
+        <div class="sector-avg dir-bearish">
+          -3.12%
+        </div>
+      </div>
+      <div class="sector-bar-container">
+        <div class="sector-bar-center"></div>
+        <div class="sector-bar bar-bearish" style="width: 100%; left: -50%;"></div>
+      </div>
+      <div class="sector-detail">
+        <div class="sector-us-label">米: キャタピラー・ディアー</div>
+        <div class="sector-jp-stocks">日: フジクラ、住友電工、古河電工</div>
+        <div class="sector-action">→ <b class="dir-bearish">売り目線</b></div>
+      </div>
+      <div class="sector-note">インフラ投資テーマでCAT・DEと一緒に動く傾向。PDFでは「電線3種」としてコマツとセットで語られる</div>
+    </div>
+    
+    <div class="sector-card">
+      <div class="sector-header">
+        <div class="sector-title">
+          ▲ <b>軍需・防衛</b> <span class="vbadge vbadge-weak" title="実測r=+0.27">△ 弱連動</span>
+        </div>
+        <div class="sector-avg dir-bullish">
+          +2.07%
+        </div>
+      </div>
+      <div class="sector-bar-container">
+        <div class="sector-bar-center"></div>
+        <div class="sector-bar bar-bullish" style="width: 69.07032771247815%; left: 50%;"></div>
+      </div>
+      <div class="sector-detail">
+        <div class="sector-us-label">米: ロッキード・RTX等</div>
+        <div class="sector-jp-stocks">日: 三菱重工業、IHI、川崎重工業</div>
+        <div class="sector-action">→ <b class="dir-bullish">買い目線</b></div>
+      </div>
+      <div class="sector-note">地政学リスク連動。戦争懸念時の強い順張りセクター</div>
+    </div>
+    
+    <div class="sector-card">
+      <div class="sector-header">
+        <div class="sector-title">
+          ▲ <b>生活防衛（配当王）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.28">✓ 検証済</span>
+        </div>
+        <div class="sector-avg dir-bullish">
+          +1.75%
+        </div>
+      </div>
+      <div class="sector-bar-container">
+        <div class="sector-bar-center"></div>
+        <div class="sector-bar bar-bullish" style="width: 58.418886871711514%; left: 50%;"></div>
+      </div>
+      <div class="sector-detail">
+        <div class="sector-us-label">米: コカコーラ・P&G等</div>
+        <div class="sector-jp-stocks">日: 花王、味の素、明治HD、キッコーマン</div>
+        <div class="sector-action">→ <b class="dir-bullish">買い目線</b></div>
+      </div>
+      <div class="sector-note">連動は弱い。配当ディフェンシブ資金フロー時のみ同方向</div>
+    </div>
+    
+    <div class="sector-card">
+      <div class="sector-header">
+        <div class="sector-title">
+          ▼ <b>ストレージ半導体</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.42">✓ 検証済</span>
+        </div>
+        <div class="sector-avg dir-bearish">
+          -1.74%
+        </div>
+      </div>
+      <div class="sector-bar-container">
+        <div class="sector-bar-center"></div>
+        <div class="sector-bar bar-bearish" style="width: 57.95132417318981%; left: -7.9513241731898106%;"></div>
       </div>
       <div class="sector-detail">
         <div class="sector-us-label">米: サンディスク等ストレージ</div>
         <div class="sector-jp-stocks">日: キオクシア</div>
-        <div class="sector-action">→ <b class="dir-bullish">買い目線</b></div>
+        <div class="sector-action">→ <b class="dir-bearish">売り目線</b></div>
       </div>
       <div class="sector-note">キオクシアはサンディスクの動きに強く連動。半導体カルテットとは別扱いが鉄則</div>
     </div>
@@ -550,40 +695,19 @@ section > h2.section-title {
           ▲ <b>半導体</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.51">✓ 検証済</span>
         </div>
         <div class="sector-avg dir-bullish">
-          +3.17%
+          +0.83%
         </div>
       </div>
       <div class="sector-bar-container">
         <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-bullish" style="width: 100%; left: 50%;"></div>
+        <div class="sector-bar bar-bullish" style="width: 27.75314258513784%; left: 50%;"></div>
       </div>
       <div class="sector-detail">
         <div class="sector-us-label">米: SOX指数（半導体）</div>
         <div class="sector-jp-stocks">日: 東京エレクトロン、アドバンテスト、ディスコ、レーザーテック</div>
-        <div class="sector-action">→ <b class="dir-bullish">買い目線</b></div>
-      </div>
-      <div class="sector-note">SOX指数との連動が最も強いグループ（半導体カルテット）</div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-header">
-        <div class="sector-title">
-          ▲ <b>SaaS・ソフトウェア</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.52">✓ 検証済</span>
-        </div>
-        <div class="sector-avg dir-bullish">
-          +1.44%
-        </div>
-      </div>
-      <div class="sector-bar-container">
-        <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-bullish" style="width: 48.10922977289096%; left: 50%;"></div>
-      </div>
-      <div class="sector-detail">
-        <div class="sector-us-label">米: セールスフォース・MSFT等</div>
-        <div class="sector-jp-stocks">日: 富士通、NEC、NRI、オービック</div>
         <div class="sector-action">→ <b class="dir-bullish">やや買い目線</b></div>
       </div>
-      <div class="sector-note">「アメリカ下げ戦犯・ソフトウェアSaaS系」として頻出。下げ時の連動が特に強い</div>
+      <div class="sector-note">SOX指数との連動が最も強いグループ（半導体カルテット）</div>
     </div>
     
     <div class="sector-card">
@@ -597,7 +721,7 @@ section > h2.section-title {
       </div>
       <div class="sector-bar-container">
         <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-bullish" style="width: 26.013969954490346%; left: 50%;"></div>
+        <div class="sector-bar bar-bullish" style="width: 25.938973744083555%; left: 50%;"></div>
       </div>
       <div class="sector-detail">
         <div class="sector-us-label">米: エクソン・シェブロン等</div>
@@ -610,106 +734,22 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▼ <b>通信（配当ディフェンシブ）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.25">✓ 検証済</span>
+          ▲ <b>通信（配当ディフェンシブ）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.25">✓ 検証済</span>
         </div>
-        <div class="sector-avg dir-bearish">
-          -0.67%
+        <div class="sector-avg dir-bullish">
+          +0.55%
         </div>
       </div>
       <div class="sector-bar-container">
         <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-bearish" style="width: 22.24519525492716%; left: 27.75480474507284%;"></div>
+        <div class="sector-bar bar-bullish" style="width: 18.23246765531176%; left: 50%;"></div>
       </div>
       <div class="sector-detail">
         <div class="sector-us-label">米: ベライゾン・AT&T</div>
         <div class="sector-jp-stocks">日: KDDI、NTT、ソフトバンク</div>
-        <div class="sector-action">→ <b class="dir-bearish">やや売り目線</b></div>
+        <div class="sector-action">→ <b class="dir-bullish">やや買い目線</b></div>
       </div>
       <div class="sector-note">ディフェンシブ資金フロー時に連動。日本特有の材料（粉飾等）には非連動</div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-header">
-        <div class="sector-title">
-          ━ <b>軍需・防衛</b> <span class="vbadge vbadge-weak" title="実測r=+0.27">△ 弱連動</span>
-        </div>
-        <div class="sector-avg dir-neutral">
-          +0.32%
-        </div>
-      </div>
-      <div class="sector-bar-container">
-        <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-neutral" style="width: 0%; left: 50%;"></div>
-      </div>
-      <div class="sector-detail">
-        <div class="sector-us-label">米: ロッキード・RTX等</div>
-        <div class="sector-jp-stocks">日: 三菱重工業、IHI、川崎重工業</div>
-        <div class="sector-action">→ <b class="dir-neutral">様子見目線</b></div>
-      </div>
-      <div class="sector-note">地政学リスク連動。戦争懸念時の強い順張りセクター</div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-header">
-        <div class="sector-title">
-          ━ <b>建機</b> <span class="vbadge vbadge-weak" title="実測r=+0.37">△ 弱連動</span>
-        </div>
-        <div class="sector-avg dir-neutral">
-          +0.09%
-        </div>
-      </div>
-      <div class="sector-bar-container">
-        <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-neutral" style="width: 0%; left: 50%;"></div>
-      </div>
-      <div class="sector-detail">
-        <div class="sector-us-label">米: キャタピラー・ディアー</div>
-        <div class="sector-jp-stocks">日: コマツ、日立建機、クボタ</div>
-        <div class="sector-action">→ <b class="dir-neutral">様子見目線</b></div>
-      </div>
-      <div class="sector-note">CAT・DEの動きから翌朝のコマツ方向が読みやすい</div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-header">
-        <div class="sector-title">
-          ━ <b>電線（CAT連動系）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.25">✓ 検証済</span>
-        </div>
-        <div class="sector-avg dir-neutral">
-          +0.09%
-        </div>
-      </div>
-      <div class="sector-bar-container">
-        <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-neutral" style="width: 0%; left: 50%;"></div>
-      </div>
-      <div class="sector-detail">
-        <div class="sector-us-label">米: キャタピラー・ディアー</div>
-        <div class="sector-jp-stocks">日: フジクラ、住友電工、古河電工</div>
-        <div class="sector-action">→ <b class="dir-neutral">様子見目線</b></div>
-      </div>
-      <div class="sector-note">インフラ投資テーマでCAT・DEと一緒に動く傾向。PDFでは「電線3種」としてコマツとセットで語られる</div>
-    </div>
-    
-    <div class="sector-card">
-      <div class="sector-header">
-        <div class="sector-title">
-          ━ <b>生活防衛（配当王）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.28">✓ 検証済</span>
-        </div>
-        <div class="sector-avg dir-neutral">
-          -0.03%
-        </div>
-      </div>
-      <div class="sector-bar-container">
-        <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-neutral" style="width: 0%; left: 50%;"></div>
-      </div>
-      <div class="sector-detail">
-        <div class="sector-us-label">米: コカコーラ・P&G等</div>
-        <div class="sector-jp-stocks">日: 花王、味の素、明治HD、キッコーマン</div>
-        <div class="sector-action">→ <b class="dir-neutral">様子見目線</b></div>
-      </div>
-      <div class="sector-note">連動は弱い。配当ディフェンシブ資金フロー時のみ同方向</div>
     </div>
     
       </div>
@@ -721,20 +761,20 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▼ <b>海運・物流</b> <span class="vbadge vbadge-contradicted" title="実測r=-0.18">✗ 連動低</span>
+          ▲ <b>海運・物流</b> <span class="vbadge vbadge-contradicted" title="実測r=-0.18">✗ 連動低</span>
         </div>
-        <div class="sector-avg dir-bearish">
-          -0.63%
+        <div class="sector-avg dir-bullish">
+          +1.34%
         </div>
       </div>
       <div class="sector-bar-container">
         <div class="sector-bar-center"></div>
-        <div class="sector-bar bar-bearish" style="width: 21.060000185490292%; left: 28.939999814509708%;"></div>
+        <div class="sector-bar bar-bullish" style="width: 44.71295723061079%; left: 50%;"></div>
       </div>
       <div class="sector-detail">
         <div class="sector-us-label">米: UPS・FedEx</div>
         <div class="sector-jp-stocks">日: 日本郵船、商船三井、川崎汽船</div>
-        <div class="sector-action">→ <b class="dir-bearish">やや売り目線</b></div>
+        <div class="sector-action">→ <b class="dir-bullish">やや買い目線</b></div>
       </div>
       <div class="sector-note">連動は弱め。海運は日本独自の材料（海峡・BDI）の影響が大きい</div>
     </div>
@@ -768,6 +808,16 @@ section > h2.section-title {
           </tr>
         </thead>
         <tbody>
+        <tr>
+          <td>10/30(金)</td>
+          <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
+          <td class="num"><span style="color: var(--muted);">低</span></td>
+          <td class="num">-1.38%</td>
+          <td class="num">-0.25%</td>
+          <td class="num">-1.42%</td>
+          <td class="num">+196</td>
+        </tr>
+        
         <tr>
           <td>10/29(木)</td>
           <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
@@ -806,16 +856,6 @@ section > h2.section-title {
           <td class="num">-1.23%</td>
           <td class="num">+0.44%</td>
           <td class="num">+351</td>
-        </tr>
-        
-        <tr>
-          <td>10/23(金)</td>
-          <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
-          <td class="num"><span style="color: var(--muted);">低</span></td>
-          <td class="num">-2.60%</td>
-          <td class="num">+0.02%</td>
-          <td class="num">-6.72%</td>
-          <td class="num">+209</td>
         </tr>
         </tbody>
       </table>
