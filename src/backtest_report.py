@@ -354,50 +354,51 @@ def render_morning_section(morning: dict | None) -> str:
 """
 
 
-def render_drive_section(drive: dict | None) -> str:
-    """寄り直後の動きは10時まで続くか"""
-    if not drive or not drive.get("per_stock"):
+def render_checkpoint_section(cp: dict | None) -> str:
+    """節目ごとの値動きの方向を当てられるか"""
+    if not cp or not cp.get("pooled"):
         return """
   <section class="section-box">
-    <h2 class="section-title">🚀 寄り直後の動きは10時まで続くか</h2>
+    <h2 class="section-title">⏱️ 節目ごとの方向（寄り・9:05・9:15・9:30・10:00）</h2>
     <div class="muted" style="padding: 16px;">まだ結果がありません（データ取得失敗、または未実行）。</div>
   </section>
 """
-    ws = drive["windows"]
+    labels = cp["predictors"]
+    by = {(o["seg"], o["key"]): o for o in cp["pooled"]}
 
-    def cell(v: dict) -> str:
-        if not v or v.get("n", 0) < 20:
+    def cell(o: dict | None) -> str:
+        if not o:
             return '<td class="muted">—</td>'
-        cls = "verdict-confirmed" if v.get("significant") else "verdict-neutral"
-        yen = f' ／ 1回{v["mean_yen"]:+,.0f}円' if v.get("mean_yen") is not None else ""
-        mark = "✅ " if v.get("significant") else ""
-        return (f'<td class="tiny"><span class="verdict {cls}">{mark}続いた {v["follow_rate"] * 100:.0f}%</span>'
-                f'<div class="muted">{v["n"]}日{yen}<br>q={v.get("q", 1):.2f}</div></td>')
+        cls = "verdict-confirmed" if o.get("significant") else "verdict-neutral"
+        mark = "✅ " if o.get("significant") else ""
+        return (f'<td class="tiny"><span class="verdict {cls}">{mark}r={o["r"]:+.2f}</span>'
+                f'<div class="muted">同じ向き {o["same_dir"] * 100:.0f}%<br>q={o["q"]:.2f}</div></td>')
 
     rows = "".join(
-        f'<tr><td><b>{r["name"]}</b><div class="muted tiny">{r["code"]}</div></td>' + "".join(cell(r.get(w)) for w in ws) + "</tr>"
-        for r in sorted(drive["per_stock"], key=lambda r: -(r.get(ws[0], {}).get("follow_rate") or 0))
+        f'<tr><td><b>{seg}</b></td>' + "".join(cell(by.get((seg, k))) for k in labels) + "</tr>"
+        for seg in cp["segments"]
     )
-    pooled = "".join(
-        f'<li>寄り→{w} の向きに乗って {drive["end"]} まで持つと：続いた <b>{p["follow_rate"] * 100:.1f}%</b>'
-        f'（{p["n"]}件・p={p["p"]:.3f}）、平均 {p["mean_pct"]:+.3f}%</li>'
-        for w, p in drive["pooled"].items() if p.get("n")
-    )
+    hits = "".join(
+        f'<li>✅ {s["name"]}：{h["seg"]} ← {labels[h["key"]]}（r={h["r"]:+.2f}・当たり{h["hit"] * 100:.0f}%）</li>'
+        for s in cp["per_stock"] for h in s["hits"]
+    ) or "<li>銘柄ごとでは、補正後も有意なものはなし</li>"
     return f"""
   <section class="section-box">
-    <h2 class="section-title">🚀 寄り直後の動きは10時まで続くか</h2>
-    <div class="period-note">データ: {drive["source"]}　／　寄りから9:10・9:20までに動いた向きに乗り、10:00の直前に出た場合</div>
-    <div class="explainer" style="margin-top: 0;"><h3>全銘柄まとめ</h3><ul>{pooled}</ul></div>
+    <h2 class="section-title">⏱️ 節目ごとの方向（寄り・9:05・9:15・9:30・10:00）</h2>
+    <div class="period-note">データ: {cp["source"]}　／　全銘柄まとめ（日ごとに銘柄平均をとって日数で検定・BH補正）</div>
     <table class="results">
-      <thead><tr><th>銘柄</th>{"".join(f"<th>寄り→{w} の向き</th>" for w in ws)}</tr></thead>
+      <thead><tr><th>区間</th>{"".join(f"<th>← {v}</th>" for v in labels.values())}</tr></thead>
       <tbody>{rows}</tbody>
     </table>
     <div class="explainer">
+      <h3>銘柄ごと（{cp["n_tests"]}通りを BH 補正）</h3>
+      <ul>{hits}</ul>
       <h3>📖 読み方</h3>
       <ul>
-        <li><b>続いた</b>が50%より大きければ「動いた方向に乗る」、小さければ「寄り直後の動きは戻しやすい」。</li>
-        <li>銘柄ごとの結果は全銘柄×区切りで BH 補正し、q&lt;0.05 のものだけ ✅。手数料は含まない。</li>
-        <li>1分足が40日分たまるまでは、Yahoo の5分足（直近60日）での予備検証。Yahoo の分足は 9:00〜9:05 の足が欠ける日が多いため、9:07までに始まる最初の足を「寄り」として扱う（実際の寄りより数分遅い値になる日が多い）。</li>
+        <li><b>r</b>: 手がかりと区間の動きの相関（銘柄ごとに標準化して平均）。＋なら同じ向き、−なら逆向きに動きやすい。</li>
+        <li><b>同じ向き</b>: 手がかりと区間の動きの向きが一致した割合。50%ならコイン投げと同じ。</li>
+        <li><b>寄り→区間の始まりまでの動き</b> が＋なら「動いた方向に乗る」、−なら「寄り直後の動きは戻しやすい」。</li>
+        <li>寄り値は日足の始値、各節目の値段はその時刻に始まる5分足の始値（Yahoo は 9:00〜9:05 の足が欠ける日が多いため）。</li>
       </ul>
     </div>
   </section>
@@ -481,7 +482,7 @@ def render_report(
     range_results: list[dict] | None = None,
     screen_result: dict | None = None,
     morning_result: dict | None = None,
-    drive_result: dict | None = None,
+    checkpoint_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -596,7 +597,7 @@ def render_report(
     scan_section = render_scan_section(scan_result)
     range_section = render_range_section(range_results, focus_period)
     morning_section = render_morning_section(morning_result)
-    drive_section = render_drive_section(drive_result)
+    checkpoint_section = render_checkpoint_section(checkpoint_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -774,7 +775,7 @@ def render_report(
 
   {range_section}
   {morning_section}
-  {drive_section}
+  {checkpoint_section}
 
   {scan_section}
   {screen_section}
@@ -870,7 +871,7 @@ def render_report(
         "range_validation": {"period": focus_period, "results": range_results} if range_results else None,
         "stock_screen": screen_result,
         "morning_range": morning_result,
-        "opening_drive": drive_result,
+        "checkpoints": checkpoint_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -942,13 +943,13 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Morning range validation failed: {e}")
 
     print()
-    print("🔍 Running opening drive study")
-    drive_result = None
+    print("🔍 Running checkpoint study (寄り・9:05・9:15・9:30・10:00)")
+    checkpoint_result = None
     try:
-        from opening_drive import run_opening_drive
-        drive_result = run_opening_drive()
+        from checkpoint_study import run_checkpoint_study
+        checkpoint_result = run_checkpoint_study()
     except Exception as e:
-        print(f"⚠️ Opening drive study failed: {e}")
+        print(f"⚠️ Checkpoint study failed: {e}")
 
     print()
     print("🔍 Running stock screen (top turnover) for period: 2y")
@@ -972,7 +973,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         range_results=range_results,
         screen_result=screen_result,
         morning_result=morning_result,
-        drive_result=drive_result,
+        checkpoint_result=checkpoint_result,
     )
 
 
