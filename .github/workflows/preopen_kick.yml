@@ -4,6 +4,7 @@ name: Pre-open Kick
 # そこで夜中に動き出して 6:40 JST まで待ち、その時刻に毎朝の判定（daily_signal.yml）を手動実行する。
 # 夜中の予約が数時間遅れても 6:40 には間に合う。公開リポジトリなので待機中の実行時間は無料。
 # 後から来た実行が、待機中の先の実行を取り消して引き継ぐ（1日に1回だけ判定を作る）。
+# あわせて 1分足の保存（collect_minutes.yml）も起動する。引け後の予約が飛ばされた日の分も翌朝に保存される。
 
 on:
   schedule:
@@ -57,3 +58,5 @@ jobs:
         run: |
           gh workflow run daily_signal.yml --repo "${{ github.repository }}" --ref main
           echo "dispatched at $(TZ=Asia/Tokyo date '+%F %T JST')"
+          # 1分足の保存も起動する（引け後の予約が飛ばされても、前日までの分を翌朝に保存できる）
+          gh workflow run collect_minutes.yml --repo "${{ github.repository }}" --ref main || echo "collect_minutes の起動に失敗"
