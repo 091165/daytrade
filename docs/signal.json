@@ -1,6 +1,6 @@
 {
   "market": {
-    "timestamp": "2026-10-30T06:40:28.535474+09:00",
+    "timestamp": "2026-10-30T07:43:49.265528+09:00",
     "nikkei": {
       "prev_close": 63954.19140625,
       "change_pct": 1.0839860433323967,
@@ -8,7 +8,7 @@
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 64150.0
+      "price": 63935.0
     },
     "etf_1570": {
       "prev_close": 66080.0
@@ -19,12 +19,12 @@
       "sox_change_pct": -1.4190412636939431
     },
     "fx_commodities": {
-      "usdjpy_price": 157.64999389648438,
-      "usdjpy_change_pct": -0.21709969906982263,
-      "gold_price": 4033.300048828125,
-      "gold_change_pct": -0.45167460724248043,
-      "oil_price": 102.86000061035156,
-      "oil_change_pct": 0.07783793734661426
+      "usdjpy_price": 157.71800231933594,
+      "usdjpy_change_pct": -0.17405448537017865,
+      "gold_price": 4032.10009765625,
+      "gold_change_pct": -0.4812913300915378,
+      "oil_price": 102.87999725341797,
+      "oil_change_pct": 0.0972937101661353
     },
     "us_sector_changes": {
       "ADBE": -0.6566301352170956,
@@ -1988,24 +1988,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 157.64999389648438,
-        "change_pct": -0.21709969906982263,
+        "current": 157.71800231933594,
+        "change_pct": -0.17405448537017865,
         "direction": "flat",
         "interpretation": "変動なし"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4033.300048828125,
-        "change_pct": -0.45167460724248043,
+        "current": 4032.10009765625,
+        "change_pct": -0.4812913300915378,
         "direction": "down",
         "interpretation": "ゴールド小幅下落"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 102.86000061035156,
-        "change_pct": 0.07783793734661426,
+        "current": 102.87999725341797,
+        "change_pct": 0.0972937101661353,
         "direction": "flat",
         "interpretation": "変動なし"
       }
@@ -2034,11 +2034,11 @@
       }
     ],
     "us_consensus_direction": "bearish",
-    "futures_diff": 195.80859375,
+    "futures_diff": -19.19140625,
     "futures_aligned": false,
     "reasons": [
       "米指数が揃って下げ（ナスダック, SOX）",
-      "先物の方向性が不明確（現対+196円）",
+      "先物の方向性が不明確（現対-19円）",
       "→ 米日非連動のため、方向性読みづらく様子見"
     ]
   },
@@ -2055,13 +2055,13 @@
       }
     },
     "sayatori_signal": {
-      "futures_price": 64150.0,
+      "futures_price": 63935.0,
       "spot_price": 63954.19140625,
-      "diff": 195.80859375,
-      "abs_diff": 195.80859375,
+      "diff": -19.19140625,
+      "abs_diff": 19.19140625,
       "direction": "neutral",
       "threshold": 1000,
-      "rationale": "現対+196円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+      "rationale": "現対-19円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
       "current_price": 63954.19140625,
@@ -2263,7 +2263,7 @@
       "verdict": "hands_off",
       "verdict_label": "初心者手出し無用",
       "confidence": "low",
-      "futures_diff": 195.80859375,
+      "futures_diff": -19.19140625,
       "nasdaq_pct": -1.3752431948656718,
       "dow_pct": -0.25258258641411846,
       "sox_pct": -1.4190412636939431,
