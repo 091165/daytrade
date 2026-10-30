@@ -264,28 +264,28 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-10-30 07:43 JST</div>
+      <div class="timestamp">Updated: 2026-10-30 20:02 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
       <a href="../daytrade-journal/review.html" class="report-link">✅ ルール遵守の振り返り →</a>
     </div>
   </header>
 
-  
+  <section><div class="late-notice">⚠️ この判定は寄り付き後（20:02）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
 
   
     <section>
-      <div class="rules-banner tone-caution">
+      <div class="rules-banner tone-danger">
         <div class="rules-kicker">今日のマイルール</div>
-        <div class="rules-headline">⏸️ 方向なしの日：承認銘柄だけ、小さく</div>
-        <div class="rules-subline">指数の方向が読めない日。やるなら最小単位で、取れたらすぐ終える。</div>
+        <div class="rules-headline">📉 トレンド日（下）：全部「売り」で統一する</div>
+        <div class="rules-subline">方向がはっきり出る日は値動きが荒い。過去の記録では、予想が当たった日ほど逆張り・塩持ちで大きく負けている。</div>
         <div class="rules-cols">
           <div class="rules-col day">
             <h3>今日のタイプのルール</h3>
-            <ul><li>フジクラ(5803)・SBG(9984) の100株だけ</li><li>09:05〜09:15 は方向が定まりにくいので様子見</li><li>2回続けて損切りしたら、その日は終了</li><li>判定の確度が低い日。迷ったら見送り</li></ul>
+            <ul><li>買いは入れない（1銘柄だけ逆を張らない）</li><li>落ちている銘柄を拾わない（落ちるナイフを掴まない）</li><li>逆行したら即損切り（-3,000〜5,000円）。粘らない</li></ul>
           </div>
           <div class="rules-col">
             <h3>毎日のルール</h3>
-            <ul><li>10:00前に「取引終了」を宣言する</li><li>1日 -10,000円 でその日は終了</li><li>触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない</li><li>試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り</li><li>注文画面で「日計り」になっているか毎回確認する</li></ul>
+            <ul><li>10:00前に「取引終了」を宣言する</li><li>1日 -10,000円 でその日は終了</li><li>株数は100株まで（200株以上は使わない）</li><li>2回続けて損切りしたら、その日は終了</li><li>触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない</li><li>試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り</li><li>注文画面で「日計り」になっているか毎回確認する</li></ul>
           </div>
         </div>
       </div>
@@ -296,10 +296,10 @@ section > h2.section-title {
     <section>
       <div class="warnings-wrap">
         
-        <div class="warning-item" style="border-left-color: var(--accent); background: rgba(251, 191, 36, 0.08);">
-          <div style="font-size: 15px; margin-bottom: 4px; color: var(--accent); font-weight: 600;">📅 金曜 × 週足陰線 = ショートカバー買い警戒</div>
-          <div class="warning-message">今週の日経は陰線。金曜のショートカバーで後場上げの可能性。</div>
-          <div class="warning-action">→ 安易な売りポジ持ち越しに注意。後場の買い戻しに巻き込まれる懸念。</div>
+        <div class="warning-item" style="border-left-color: var(--short); background: rgba(239, 68, 68, 0.08);">
+          <div style="font-size: 15px; margin-bottom: 4px; color: var(--short); font-weight: 600;">📅 金曜 × 週足陽線 = 手仕舞い売り警戒</div>
+          <div class="warning-message">今週の日経は陽線。金曜のロングカバーで後場は売りに振れやすい。</div>
+          <div class="warning-action">→ 午前に買いポジを持ってる場合、前場のうちに一部利確を検討。デイトレは「前場上げ→後場下げ」のアノマリーを意識。</div>
         </div>
         
         <div class="warning-item" style="border-left-color: var(--accent); background: rgba(251, 191, 36, 0.08);">
@@ -319,11 +319,11 @@ section > h2.section-title {
         本日の日経デイトレ方針
       </h2>
       
-    <div style="background: rgba(107, 114, 128, 0.15); color: var(--neutral); padding: 16px 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 12px;">
-      <div style="font-size: 32px;">⏸️</div>
+    <div style="background: rgba(239, 68, 68, 0.15); color: var(--short); padding: 16px 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 12px;">
+      <div style="font-size: 32px;">📉</div>
       <div>
-        <div style="font-size: 24px; font-weight: 700;">初心者手出し無用</div>
-        <div style="font-size: 12px; opacity: 0.8; margin-top: 2px;">確度:低</div>
+        <div style="font-size: 24px; font-weight: 700;">売りポジ主体</div>
+        <div style="font-size: 12px; opacity: 0.8; margin-top: 2px;">確度:高</div>
       </div>
     </div>
     
@@ -352,15 +352,15 @@ section > h2.section-title {
         </div>
         <div class="direction-meta-item">
           <div class="direction-meta-label">日経先物 現対</div>
-          <div class="futures-value" style="color: var(--muted);">-19円</div>
+          <div class="futures-value" style="color: var(--short);">-270円</div>
           <div class="sub" style="font-size: 12px;">
-            先物: ¥63,935 / 現物終値: ¥63,954
+            先物: ¥63,020 / 現物終値: ¥63,290
           </div>
         </div>
       </div>
 
       <div class="reasons-list">
-        <ul><li>米指数が揃って下げ（ナスダック, SOX）</li><li>先物の方向性が不明確（現対-19円）</li><li>→ 米日非連動のため、方向性読みづらく様子見</li></ul>
+        <ul><li>米指数が揃って下げ（ナスダック, SOX）</li><li>日経先物が米に追随（現対-270円）</li><li>→ 米日連動の下落相場として売り目線</li></ul>
       </div>
 
       <div class="time-nodes-note">
@@ -465,10 +465,10 @@ section > h2.section-title {
             <span class="fx-symbol">USD/JPY</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">157.72</span>
-            <span class="fx-change" style="color: var(--muted);">━ -0.17%</span>
+            <span class="fx-price">157.17</span>
+            <span class="fx-change" style="color: var(--short);">▼ -0.42%</span>
           </div>
-          <div class="fx-interpretation">変動なし</div>
+          <div class="fx-interpretation">円高傾向 → 輸出株にやや逆風</div>
         </div>
         
         <div class="fx-item">
@@ -477,10 +477,10 @@ section > h2.section-title {
             <span class="fx-symbol">XAU/USD</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$4,032.1</span>
-            <span class="fx-change" style="color: var(--short);">▼ -0.48%</span>
+            <span class="fx-price">$3,985.1</span>
+            <span class="fx-change" style="color: var(--short);">▼ -1.15%</span>
           </div>
-          <div class="fx-interpretation">ゴールド小幅下落</div>
+          <div class="fx-interpretation">ゴールド下落 → リスクオン転換の可能性</div>
         </div>
         
         <div class="fx-item">
@@ -489,10 +489,10 @@ section > h2.section-title {
             <span class="fx-symbol">CL</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$102.88</span>
-            <span class="fx-change" style="color: var(--muted);">━ +0.10%</span>
+            <span class="fx-price">$104.28</span>
+            <span class="fx-change" style="color: var(--long);">▲ +2.24%</span>
           </div>
-          <div class="fx-interpretation">変動なし</div>
+          <div class="fx-interpretation">原油急騰 → リスクオフ懸念。エネルギー株（INPEX・ENEOS等）に追い風、他はリスクオフ警戒</div>
         </div>
         
       </div>
@@ -501,62 +501,6 @@ section > h2.section-title {
     
 
   
-    <section>
-      <h2 class="section-title">💡 個別銘柄の方向感（指数手出し無用日）</h2>
-      <div class="picks-grid">
-        
-        <div class="pick-card pick-bearish">
-          <div class="pick-header">
-            <div class="pick-title">
-              ▼ <b>SaaS・ソフトウェア</b>
-            </div>
-            <span class="pick-badge pick-badge-bearish">売り（空売り）候補</span>
-          </div>
-          <ul class="pick-stocks"></ul>
-          <div class="pick-rationale">米セールスフォース・MSFT等が平均-5.82%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。</div>
-        </div>
-        
-        <div class="pick-card pick-bearish">
-          <div class="pick-header">
-            <div class="pick-title">
-              ▼ <b>電線（CAT連動系）</b>
-            </div>
-            <span class="pick-badge pick-badge-bearish">売り（空売り）候補</span>
-          </div>
-          <ul class="pick-stocks"></ul>
-          <div class="pick-rationale">米キャタピラー・ディアーが平均-3.12%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。</div>
-        </div>
-        
-        <div class="pick-card pick-bullish">
-          <div class="pick-header">
-            <div class="pick-title">
-              ▲ <b>生活防衛（配当王）</b>
-            </div>
-            <span class="pick-badge pick-badge-bullish">買い候補</span>
-          </div>
-          <ul class="pick-stocks"></ul>
-          <div class="pick-rationale">米コカコーラ・P&G等が平均+1.75%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは買い目線で考えやすい。</div>
-        </div>
-        
-        <div class="pick-card pick-bearish">
-          <div class="pick-header">
-            <div class="pick-title">
-              ▼ <b>ストレージ半導体</b>
-            </div>
-            <span class="pick-badge pick-badge-bearish">売り（空売り）候補</span>
-          </div>
-          <ul class="pick-stocks"></ul>
-          <div class="pick-rationale">米サンディスク等ストレージが平均-1.74%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。</div>
-        </div>
-        
-      </div>
-      <div class="picks-disclaimer">
-        ⚠️ これは推奨ではなく、過去の連動データに基づく <b>該当銘柄の参考表示</b> です。
-        個別銘柄の決算・材料・需給は別途確認してください。指数全体は方向感がない日のため、
-        ポジションサイズは控えめにし、損切りラインを明確に。
-      </div>
-    </section>
-    
 
   
     <section>
@@ -810,12 +754,12 @@ section > h2.section-title {
         <tbody>
         <tr>
           <td>10/30(金)</td>
-          <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
-          <td class="num"><span style="color: var(--muted);">低</span></td>
+          <td><span class="hist-badge hist-sell">📉 売りポジ主体</span></td>
+          <td class="num"><span style="color: var(--muted);">高</span></td>
           <td class="num">-1.38%</td>
           <td class="num">-0.25%</td>
           <td class="num">-1.42%</td>
-          <td class="num">-19</td>
+          <td class="num">-270</td>
         </tr>
         
         <tr>

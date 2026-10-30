@@ -1,30 +1,30 @@
 {
   "market": {
-    "timestamp": "2026-10-30T07:43:49.265528+09:00",
+    "timestamp": "2026-10-30T20:02:31.785530+09:00",
     "nikkei": {
-      "prev_close": 63954.19140625,
-      "change_pct": 1.0839860433323967,
-      "week_is_positive": false,
+      "prev_close": 63290.109375,
+      "change_pct": -2.1178017720722475,
+      "week_is_positive": true,
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 63935.0
+      "price": 63020.0
     },
     "etf_1570": {
-      "prev_close": 66080.0
+      "prev_close": 62910.0
     },
     "us_markets": {
-      "nasdaq_change_pct": -1.3752431948656718,
+      "nasdaq_change_pct": -1.3752579077550342,
       "dow_change_pct": -0.25258258641411846,
-      "sox_change_pct": -1.4190412636939431
+      "sox_change_pct": -1.419032905576001
     },
     "fx_commodities": {
-      "usdjpy_price": 157.71800231933594,
-      "usdjpy_change_pct": -0.17405448537017865,
-      "gold_price": 4032.10009765625,
-      "gold_change_pct": -0.4812913300915378,
-      "oil_price": 102.87999725341797,
-      "oil_change_pct": 0.0972937101661353
+      "usdjpy_price": 157.16600036621094,
+      "usdjpy_change_pct": -0.42259363945913453,
+      "gold_price": 3985.10009765625,
+      "gold_change_pct": -1.1484795805194792,
+      "oil_price": 104.27999877929688,
+      "oil_change_pct": 2.235292920879295
     },
     "us_sector_changes": {
       "ADBE": -0.6566301352170956,
@@ -70,13 +70,6 @@
     },
     "focus_ohlc": {
       "5803": [
-        {
-          "date": "2026-06-18",
-          "open": 4772.63650531166,
-          "high": 4891.180388453402,
-          "low": 4443.9013671875,
-          "close": 4443.9013671875
-        },
         {
           "date": "2026-06-19",
           "open": 5141.21826171875,
@@ -699,16 +692,16 @@
           "high": 4262.0,
           "low": 4034.0,
           "close": 4195.0
+        },
+        {
+          "date": "2026-10-30",
+          "open": 4010.0,
+          "high": 4048.0,
+          "low": 3866.0,
+          "close": 3918.0
         }
       ],
       "9984": [
-        {
-          "date": "2026-06-18",
-          "open": 7121.721213072924,
-          "high": 7287.574989920582,
-          "low": 7044.789039474914,
-          "close": 7182.66748046875
-        },
         {
           "date": "2026-06-19",
           "open": 7332.535496007506,
@@ -1331,16 +1324,16 @@
           "high": 4802.0,
           "low": 4582.0,
           "close": 4765.0
+        },
+        {
+          "date": "2026-10-30",
+          "open": 4485.0,
+          "high": 4597.0,
+          "low": 4408.0,
+          "close": 4481.0
         }
       ],
       "6981": [
-        {
-          "date": "2026-06-18",
-          "open": 12047.088255640698,
-          "high": 12793.808602064708,
-          "low": 11663.77181114304,
-          "close": 11693.640625
-        },
         {
           "date": "2026-06-19",
           "open": 12291.017301363032,
@@ -1963,6 +1956,13 @@
           "high": 6890.0,
           "low": 6524.0,
           "close": 6890.0
+        },
+        {
+          "date": "2026-10-30",
+          "open": 6490.0,
+          "high": 6669.0,
+          "low": 6013.0,
+          "close": 6358.0
         }
       ]
     }
@@ -1970,10 +1970,10 @@
   "warnings": [
     {
       "type": "friday_closing",
-      "severity": "medium",
-      "label": "📅 金曜 × 週足陰線 = ショートカバー買い警戒",
-      "message": "今週の日経は陰線。金曜のショートカバーで後場上げの可能性。",
-      "action": "安易な売りポジ持ち越しに注意。後場の買い戻しに巻き込まれる懸念。"
+      "severity": "high",
+      "label": "📅 金曜 × 週足陽線 = 手仕舞い売り警戒",
+      "message": "今週の日経は陽線。金曜のロングカバーで後場は売りに振れやすい。",
+      "action": "午前に買いポジを持ってる場合、前場のうちに一部利確を検討。デイトレは「前場上げ→後場下げ」のアノマリーを意識。"
     },
     {
       "type": "month_end",
@@ -1988,38 +1988,38 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 157.71800231933594,
-        "change_pct": -0.17405448537017865,
-        "direction": "flat",
-        "interpretation": "変動なし"
+        "current": 157.16600036621094,
+        "change_pct": -0.42259363945913453,
+        "direction": "down",
+        "interpretation": "円高傾向 → 輸出株にやや逆風"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4032.10009765625,
-        "change_pct": -0.4812913300915378,
+        "current": 3985.10009765625,
+        "change_pct": -1.1484795805194792,
         "direction": "down",
-        "interpretation": "ゴールド小幅下落"
+        "interpretation": "ゴールド下落 → リスクオン転換の可能性"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 102.87999725341797,
-        "change_pct": 0.0972937101661353,
-        "direction": "flat",
-        "interpretation": "変動なし"
+        "current": 104.27999877929688,
+        "change_pct": 2.235292920879295,
+        "direction": "up",
+        "interpretation": "原油急騰 → リスクオフ懸念。エネルギー株（INPEX・ENEOS等）に追い風、他はリスクオフ警戒"
       }
     ],
     "combined_note": null
   },
   "direction": {
-    "verdict": "hands_off",
-    "verdict_label": "初心者手出し無用",
-    "confidence": "low",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
     "us_indices": [
       {
         "name": "ナスダック",
-        "change_pct": -1.3752431948656718,
+        "change_pct": -1.3752579077550342,
         "direction": "bearish"
       },
       {
@@ -2029,42 +2029,42 @@
       },
       {
         "name": "SOX",
-        "change_pct": -1.4190412636939431,
+        "change_pct": -1.419032905576001,
         "direction": "bearish"
       }
     ],
     "us_consensus_direction": "bearish",
-    "futures_diff": -19.19140625,
-    "futures_aligned": false,
+    "futures_diff": -270.109375,
+    "futures_aligned": true,
     "reasons": [
       "米指数が揃って下げ（ナスダック, SOX）",
-      "先物の方向性が不明確（現対-19円）",
-      "→ 米日非連動のため、方向性読みづらく様子見"
+      "日経先物が米に追随（現対-270円）",
+      "→ 米日連動の下落相場として売り目線"
     ]
   },
   "kiriban": {
     "kiriban_bands": {
-      "prev_close": 63954.19140625,
+      "prev_close": 63290.109375,
       "bands": {
-        "-1500": 62454.19140625,
-        "-1000": 62954.19140625,
-        "-500": 63454.19140625,
-        "+500": 64454.19140625,
-        "+1000": 64954.19140625,
-        "+1500": 65454.19140625
+        "-1500": 61790.109375,
+        "-1000": 62290.109375,
+        "-500": 62790.109375,
+        "+500": 63790.109375,
+        "+1000": 64290.109375,
+        "+1500": 64790.109375
       }
     },
     "sayatori_signal": {
-      "futures_price": 63935.0,
-      "spot_price": 63954.19140625,
-      "diff": -19.19140625,
-      "abs_diff": 19.19140625,
+      "futures_price": 63020.0,
+      "spot_price": 63290.109375,
+      "diff": -270.109375,
+      "abs_diff": 270.109375,
       "direction": "neutral",
       "threshold": 1000,
-      "rationale": "現対-19円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+      "rationale": "現対-270円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
-      "current_price": 63954.19140625,
+      "current_price": 63290.109375,
       "resistance": 64000.0,
       "support": 63000.0,
       "step": 1000
@@ -2260,15 +2260,15 @@
   "recent_history": [
     {
       "date": "2026-10-30",
-      "verdict": "hands_off",
-      "verdict_label": "初心者手出し無用",
-      "confidence": "low",
-      "futures_diff": -19.19140625,
-      "nasdaq_pct": -1.3752431948656718,
+      "verdict": "sell_bias",
+      "verdict_label": "売りポジ主体",
+      "confidence": "high",
+      "futures_diff": -270.109375,
+      "nasdaq_pct": -1.3752579077550342,
       "dow_pct": -0.25258258641411846,
-      "sox_pct": -1.4190412636939431,
+      "sox_pct": -1.419032905576001,
       "warnings": [
-        "📅 金曜 × 週足陰線 = ショートカバー買い警戒",
+        "📅 金曜 × 週足陽線 = 手仕舞い売り警戒",
         "🗓️ 月末 × 月足陰線 = ショートカバー買い警戒"
       ]
     },
@@ -2318,73 +2318,25 @@
     }
   ],
   "stock_picks": {
-    "available": true,
-    "reason": "4セクターで強い連動シグナル",
-    "picks": [
-      {
-        "sector_name": "SaaS・ソフトウェア",
-        "direction": "bearish",
-        "direction_label": "売り（空売り）候補",
-        "rationale": "米セールスフォース・MSFT等が平均-5.82%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
-        "stocks": [
-          "富士通",
-          "NEC",
-          "NRI",
-          "オービック"
-        ],
-        "tickers": []
-      },
-      {
-        "sector_name": "電線（CAT連動系）",
-        "direction": "bearish",
-        "direction_label": "売り（空売り）候補",
-        "rationale": "米キャタピラー・ディアーが平均-3.12%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
-        "stocks": [
-          "フジクラ",
-          "住友電工",
-          "古河電工"
-        ],
-        "tickers": []
-      },
-      {
-        "sector_name": "生活防衛（配当王）",
-        "direction": "bullish",
-        "direction_label": "買い候補",
-        "rationale": "米コカコーラ・P&G等が平均+1.75%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは買い目線で考えやすい。",
-        "stocks": [
-          "花王",
-          "味の素",
-          "明治HD",
-          "キッコーマン"
-        ],
-        "tickers": []
-      },
-      {
-        "sector_name": "ストレージ半導体",
-        "direction": "bearish",
-        "direction_label": "売り（空売り）候補",
-        "rationale": "米サンディスク等ストレージが平均-1.74%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
-        "stocks": [
-          "キオクシア"
-        ],
-        "tickers": []
-      }
-    ]
+    "available": false,
+    "reason": "指数判定が出ているため、本機能は表示しません",
+    "picks": []
   },
   "trading_rules": {
-    "day_type": "no_trend",
-    "tone": "caution",
-    "headline": "⏸️ 方向なしの日：承認銘柄だけ、小さく",
-    "subline": "指数の方向が読めない日。やるなら最小単位で、取れたらすぐ終える。",
+    "day_type": "trend_down",
+    "tone": "danger",
+    "headline": "📉 トレンド日（下）：全部「売り」で統一する",
+    "subline": "方向がはっきり出る日は値動きが荒い。過去の記録では、予想が当たった日ほど逆張り・塩持ちで大きく負けている。",
     "day_rules": [
-      "フジクラ(5803)・SBG(9984) の100株だけ",
-      "09:05〜09:15 は方向が定まりにくいので様子見",
-      "2回続けて損切りしたら、その日は終了",
-      "判定の確度が低い日。迷ったら見送り"
+      "買いは入れない（1銘柄だけ逆を張らない）",
+      "落ちている銘柄を拾わない（落ちるナイフを掴まない）",
+      "逆行したら即損切り（-3,000〜5,000円）。粘らない"
     ],
     "always_rules": [
       "10:00前に「取引終了」を宣言する",
       "1日 -10,000円 でその日は終了",
+      "株数は100株まで（200株以上は使わない）",
+      "2回続けて損切りしたら、その日は終了",
       "触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない",
       "試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り",
       "注文画面で「日計り」になっているか毎回確認する"
@@ -2397,13 +2349,10 @@
       "daily_loss_limit_yen": 10000,
       "end_time": "10:00",
       "require_day_trade": true,
-      "direction": null,
-      "per_trade_stop_yen": null,
+      "direction": "sell",
+      "per_trade_stop_yen": 5000,
       "max_qty": 100,
-      "wait_window": [
-        "09:05",
-        "09:15"
-      ],
+      "wait_window": null,
       "max_consecutive_losses": 2,
       "trial": {
         "codes": [
@@ -2419,7 +2368,7 @@
       }
     }
   },
-  "generated_after_open": false,
+  "generated_after_open": true,
   "focus_stocks": [
     {
       "code": "5803",
