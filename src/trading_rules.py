@@ -35,7 +35,7 @@ BANNED_STOCKS: tuple[str, ...] = ("太陽誘電(6976)", "イビデン(4062)", "�
 DAILY_LOSS_LIMIT_YEN = 10_000
 PER_TRADE_STOP_MAX_YEN = 5_000
 PER_TRADE_STOP_YEN = f"3,000〜{PER_TRADE_STOP_MAX_YEN:,}"
-NO_TREND_MAX_QTY = 100
+MAX_QTY = 100               # 毎日：1回の株数の上限（200株以上は使わない）
 MAX_CONSECUTIVE_LOSSES = 2
 END_TIME = "10:00"
 CHOP_WINDOW = "09:05〜09:15"
@@ -44,6 +44,8 @@ CHOP_WINDOW = "09:05〜09:15"
 ALWAYS_RULES: tuple[str, ...] = (
     f"{END_TIME}前に「取引終了」を宣言する",
     f"1日 -{DAILY_LOSS_LIMIT_YEN:,}円 でその日は終了",
+    f"株数は{MAX_QTY}株まで（200株以上は使わない）",
+    f"{MAX_CONSECUTIVE_LOSSES}回続けて損切りしたら、その日は終了",
     f"触るのは {'・'.join(APPROVED_STOCKS)} だけ。{'・'.join(BANNED_STOCKS)} と承認外の銘柄は触らない",
     f"試用：{'・'.join(TRIAL_STOCKS)} は {TRIAL_MAX_QTY}株だけ・{END_TIME}前だけ・-{PER_TRADE_STOP_MAX_YEN:,}円で即損切り",
     "注文画面で「日計り」になっているか毎回確認する",
@@ -71,7 +73,7 @@ class TradingRulesBanner:
 def build_checks(day_type: DayType) -> dict:
     """ルールのうち、約定記録から機械的に判定できるものを数値で返す。
 
-    該当しないルールは None。「ロット半分」は普段の株数がわからないので含めない。
+    該当しないルールは None。株数の上限と連敗で終了は毎日のルール。
     """
     trend = day_type in ("trend_up", "trend_down")
     return {
@@ -81,9 +83,9 @@ def build_checks(day_type: DayType) -> dict:
         "require_day_trade": True,  # 期限が「日計り」であること
         "direction": {"trend_up": "buy", "trend_down": "sell"}.get(day_type),
         "per_trade_stop_yen": PER_TRADE_STOP_MAX_YEN if trend else None,
-        "max_qty": None if trend else NO_TREND_MAX_QTY,
+        "max_qty": MAX_QTY,
         "wait_window": None if trend else CHOP_WINDOW.split("〜"),
-        "max_consecutive_losses": None if trend else MAX_CONSECUTIVE_LOSSES,
+        "max_consecutive_losses": MAX_CONSECUTIVE_LOSSES,
         "trial": {
             "codes": list(TRIAL_CODES),
             "names": [name for name, _ in _TRIAL],
@@ -116,7 +118,6 @@ def build_trading_rules(verdict: str, confidence: str = "medium") -> TradingRule
             day_rules=[
                 "売りは入れない（1銘柄だけ逆を張らない）",
                 "下げている銘柄を拾わない（ナンピン禁止）",
-                "ロットは普段の半分",
                 f"逆行したら即損切り（-{PER_TRADE_STOP_YEN}円）。粘らない",
             ],
         )
@@ -129,7 +130,6 @@ def build_trading_rules(verdict: str, confidence: str = "medium") -> TradingRule
             day_rules=[
                 "買いは入れない（1銘柄だけ逆を張らない）",
                 "落ちている銘柄を拾わない（落ちるナイフを掴まない）",
-                "ロットは普段の半分",
                 f"逆行したら即損切り（-{PER_TRADE_STOP_YEN}円）。粘らない",
             ],
         )
@@ -140,9 +140,8 @@ def build_trading_rules(verdict: str, confidence: str = "medium") -> TradingRule
             headline="⏸️ 方向なしの日：承認銘柄だけ、小さく",
             subline="指数の方向が読めない日。やるなら最小単位で、取れたらすぐ終える。",
             day_rules=[
-                f"{'・'.join(APPROVED_STOCKS)} の{NO_TREND_MAX_QTY}株だけ",
+                f"{'・'.join(APPROVED_STOCKS)} だけ。1回取れたら終える",
                 f"{CHOP_WINDOW} は方向が定まりにくいので様子見",
-                f"{MAX_CONSECUTIVE_LOSSES}回続けて損切りしたら、その日は終了",
             ],
         )
 
