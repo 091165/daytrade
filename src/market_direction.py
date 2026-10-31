@@ -87,8 +87,12 @@ def build_market_direction(
     dow_change_pct: float,
     sox_change_pct: float,
     futures_diff: float,
+    us_closed: bool = False,
 ) -> MarketDirectionSignal:
     """本日のデイトレ方針を判定する。
+
+    us_closed=True（前日の米国が休場）のときは、米国の騰落が休場前の日のものなので
+    連動の材料なしとして「初心者手出し無用」にする。
 
     Args:
         nasdaq_change_pct: 前日ナスダック騰落率(%)
@@ -157,7 +161,12 @@ def build_market_direction(
     us_avg = (nasdaq_change_pct + dow_change_pct + sox_change_pct) / 3
     strong_move = abs(us_avg) >= STRONG_MOVE_THRESHOLD
 
-    if us_direction == "bullish" and futures_aligned:
+    if us_closed:
+        verdict = "hands_off"
+        verdict_label = "初心者手出し無用"
+        confidence = "low"
+        reasons.append("→ 前日の米国は休場。米国の騰落は休場前の日のもので、連動の材料にならない")
+    elif us_direction == "bullish" and futures_aligned:
         verdict = "buy_bias"
         verdict_label = "買いポジ主体"
         confidence = "high" if strong_move else "medium"

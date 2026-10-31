@@ -148,7 +148,15 @@ def test_v2_all_agree_and_fx_or_sp_against():
     print("✅ test_v2_all_agree_and_fx_or_sp_against")
 
 
+def test_us_closed_forces_hands_off():
+    sig = build_market_direction(1.5, 0.8, 2.1, 300.0, us_closed=True)
+    assert sig.verdict == "hands_off" and sig.confidence == "low"
+    assert any("休場" in r for r in sig.reasons)
+    print("✅ test_us_closed_forces_hands_off")
+
+
 if __name__ == "__main__":
+    test_us_closed_forces_hands_off()
     test_v2_all_agree_and_fx_or_sp_against()
     test_classify_move()
     test_buy_bias_all_us_up_futures_aligned()

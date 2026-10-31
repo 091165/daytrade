@@ -240,6 +240,17 @@ def study_weekday(df: pd.DataFrame, extra: dict[str, pd.DataFrame]) -> dict:
     return out
 
 
+def study_after_break(df: pd.DataFrame) -> dict:
+    """連休明け（前営業日から4日以上あいた日）の窓の大きさと値幅を、普段の日と比べる"""
+    brk = df["gap_days"] >= 4
+    out = {}
+    for lab, m in (("連休明け", brk), ("普段の日", ~brk)):
+        out[lab] = {"n": int(m.sum()), "abs_gap": float(df["gap"][m].abs().mean()),
+                    "range_pct": float(df["range_pct"][m].mean())}
+    out["p_gap"] = diff_p(df["gap"][brk].abs().values, df["gap"][~brk].abs().values)
+    return out
+
+
 def kenri_days(trading_days: list[date]) -> tuple[set[date], set[date]]:
     """権利付き最終日（月の最終営業日の2営業日前）と権利落ち日（その翌営業日）。2019/7以降の受渡しルール。"""
     days = sorted(trading_days)
@@ -382,6 +393,7 @@ def run_idea_study() -> dict:
     res["sp05"] = study_sp05(ok, {"日経平均": ok["ret"], **{n: s["ret"] for n, s in stocks.items()}})
     res["closing"] = study_closing(df)
     res["weekday"] = study_weekday(df, stocks)
+    res["after_break"] = study_after_break(df)
     res["kenri"] = study_kenri(df[df.index >= "2019-07-16"])
     res["dev25"] = study_dev25({"日経平均": ohlc["^N225"], **{n: ohlc[t] for t, n in stk_t.items()}})
     # 米国休場の翌朝、現行版がどう判定していたか（古い騰落率をもう一度使っていないか）
@@ -438,6 +450,8 @@ def _print(res: dict) -> None:
         print(f"  乖離 {name}: " + "  ".join(f"{lab} n={s['n']} 上げ{_f(s['up'])} 平均{_f(s['mean'], False)}" for lab, s in r.items()))
     for name, r in res.get("strength", {}).items():
         print(f"  確度 {name}: " + "  ".join(f"{lab} 続く{_f(s['same'])}({s['n']})" for lab, s in r.items()))
+    ab = res["after_break"]
+    print(f"  連休明け: 窓 {ab['連休明け']['abs_gap']:.2f}%（{ab['連休明け']['n']}日） vs 普段 {ab['普段の日']['abs_gap']:.2f}%  値幅 {ab['連休明け']['range_pct']:.2f}% vs {ab['普段の日']['range_pct']:.2f}%  p={ab['p_gap']:.3f}")
     u = res["us_closed"]
     print(f"  米国休場明け: {u['n']}日中 現行版で方向ありの判定 {u['trend_verdicts']}日 的中{_f(u['signed']['hit'])}")
     sig = [t for t in res["tests"] if t["significant"]]

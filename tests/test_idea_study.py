@@ -139,7 +139,29 @@ def test_deviation_uses_previous_close_only():
     print("✅ test_deviation_uses_previous_close_only")
 
 
+def test_report_section_renders_and_json_ok():
+    import json
+    from backtest_report import render_idea_section
+    from idea_study import study_after_break
+    data = _market(400, seed=8)
+    df = add_verdicts(build_day_table(data))
+    stocks = {"X": data["^N225"].assign(ret=df["ret"], trendiness=df["trendiness"], range_pct=df["range_pct"],
+                                         gap_days=df["gap_days"]).dropna()}
+    res = {"period": "a〜b", "n_days": len(df), "v2": study_v2(df), "sp05": study_sp05(df, {"日経平均": df["ret"]}),
+           "closing": study_closing(df), "weekday": study_weekday(df, stocks), "kenri": study_kenri(df),
+           "dev25": study_dev25({"X": data["^N225"]}), "after_break": study_after_break(df), "strength": {},
+           "us_closed": {"n": 3}}
+    ps = collect_pvalues(res)
+    res["tests"] = [{"name": n, "p": p, "q": q, "significant": q < 0.05} for (n, p), q in zip(ps, bh_qvalues([p for _, p in ps]))]
+    json.dumps(res, ensure_ascii=False)
+    html = render_idea_section(res)
+    assert "ドル円" in html and "権利付き最終日" in html and "25日線" in html
+    assert "まだ結果がありません" in render_idea_section(None)
+    print("✅ test_report_section_renders_and_json_ok")
+
+
 if __name__ == "__main__":
+    test_report_section_renders_and_json_ok()
     test_day_table_alignment_and_us_holiday()
     test_sp05_detects_follow_and_v2_runs()
     test_noise_is_mostly_not_significant()
