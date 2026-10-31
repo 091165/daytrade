@@ -79,7 +79,7 @@ GitHub の定期実行は数時間遅れたり飛ばされたりするため、`
 - `trading_rules.checks` に、約定記録と機械的に突き合わせられる形のルールを入れる
   （承認銘柄・1日の損失上限・終了時刻・日計り・方向・1回の損切り幅・株数・様子見の時間帯・連敗で終了）
 - `history.json` にあって記録がない日は、判定ラベルから今のルールで組み立て直して埋める（`reconstructed: true`）
-- [daytrade-journal](https://github.com/okanemochi-banzai/daytrade-journal) の `review.html` がこれを読み、
+- [daytrade-journal](https://github.com/091165/daytrade-journal) の `review.html` がこれを読み、
   その日のルールを守れたかと成績を表示する
 
 ### 7b. 売買代金上位の銘柄スクリーニング（研究用・週次レポートのみ）
