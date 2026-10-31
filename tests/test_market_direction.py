@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from market_direction import build_market_direction, classify_move
+from market_direction import build_market_direction_v2, build_market_direction, classify_move
 
 
 def test_classify_move():
@@ -134,7 +134,22 @@ def test_reasons_contain_narrative():
     print("✅ test_reasons_contain_narrative")
 
 
+def test_v2_all_agree_and_fx_or_sp_against():
+    v = build_market_direction_v2(1.2, 0.8, 2.0, 1.0, 0.5, 300.0)
+    assert v.verdict == "buy_bias" and v.agreement_count == 6
+    fx_against = build_market_direction_v2(1.2, 0.8, 2.0, 1.0, -0.5, 300.0)
+    assert fx_against.verdict == "hands_off" and fx_against.usdjpy_direction == "bearish"
+    sp_against = build_market_direction_v2(1.2, 0.8, 2.0, -0.6, 0.0, 300.0)
+    assert sp_against.verdict == "buy_bias" and sp_against.agreement_count == 4   # 4指数中3つで連動
+    two_only = build_market_direction_v2(1.2, -0.8, 2.0, -0.6, 0.0, 300.0)
+    assert two_only.verdict == "hands_off"                                       # 現行版なら2つでよい
+    down = build_market_direction_v2(-1.2, -0.8, -2.0, -1.0, -0.1, -300.0)
+    assert down.verdict == "sell_bias" and down.agreement_direction == "bearish"
+    print("✅ test_v2_all_agree_and_fx_or_sp_against")
+
+
 if __name__ == "__main__":
+    test_v2_all_agree_and_fx_or_sp_against()
     test_classify_move()
     test_buy_bias_all_us_up_futures_aligned()
     test_sell_bias_all_us_down_futures_aligned()
