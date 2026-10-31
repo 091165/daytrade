@@ -372,7 +372,20 @@ def run_idea_study() -> dict:
     stk_t = {f"{c}.T": n for c, n in STOCKS.items()}
     raw = yf.download(" ".join(idx_t + list(stk_t)), start=START, interval="1d", progress=False,
                       group_by="ticker", auto_adjust=True, threads=True)
-    ohlc = {t: raw[t][["Open", "High", "Low", "Close"]].dropna() for t in idx_t + list(stk_t)}
+    ohlc = {}
+    for t in idx_t + list(stk_t):
+        try:
+            x = raw[t][["Open", "High", "Low", "Close"]].dropna()
+        except KeyError:
+            x = pd.DataFrame()
+        if x.empty:  # まとめて取ると時々空で返るので、1つずつ取り直す
+            x = yf.download(t, start=START, interval="1d", progress=False, auto_adjust=True)
+            if isinstance(x.columns, pd.MultiIndex):
+                x.columns = x.columns.get_level_values(0)
+            x = x[["Open", "High", "Low", "Close"]].dropna() if not x.empty else x
+        if x.empty:
+            raise RuntimeError(f"{t} の日足を取得できませんでした")
+        ohlc[t] = x
     df = add_verdicts(build_day_table(ohlc))
 
     stocks = {}
