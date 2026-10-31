@@ -20,7 +20,7 @@ from zoneinfo import ZoneInfo
 from kiriban import build_daily_signal
 from market_direction import build_market_direction
 from sector_mapping import build_all_sector_signals, get_all_us_tickers
-from warnings_module import get_all_warnings
+from warnings_module import get_all_warnings, us_was_closed
 from market_context import build_market_context
 from archive import backfill_from_history, save_daily_archive, write_archive_index
 from history import append_today_signal, load_history, get_recent_entries
@@ -106,6 +106,19 @@ def _load_morning_validation(docs_dir: Path) -> dict:
         return {}
 
 
+def _load_idea_validation(docs_dir: Path) -> dict:
+    """週次レポートの「記事の考え方の検証」（金曜・月末・権利日の警告に検証結果を添える）"""
+    backtest_path = docs_dir / "backtest_report.json"
+    if not backtest_path.exists():
+        return {}
+    try:
+        with backtest_path.open("r", encoding="utf-8") as f:
+            return json.load(f).get("ideas") or {}
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"⚠️ Failed to load idea validation: {e}")
+        return {}
+
+
 def _fetch_focus_ohlc(use_stub: bool) -> dict[str, list[dict]]:
     """承認銘柄の日足を取得してJSON用の形で返す。失敗してもページ生成は続ける。"""
     if use_stub:
@@ -155,11 +168,14 @@ def main() -> int:
     today = generated_at.date()
     notice = late_notice(generated_at)
 
-    # 警告
+    # 警告（時間外の動きは今朝の現対で見る）
+    futures_diff = market["nikkei_futures"]["price"] - market["nikkei"]["prev_close"]
     warnings = get_all_warnings(
         today=today,
         nikkei_week_is_positive=market["nikkei"].get("week_is_positive"),
         nikkei_month_is_positive=market["nikkei"].get("month_is_positive"),
+        overnight_diff=futures_diff,
+        validation=_load_idea_validation(output_dir),
     )
 
     # 為替・コモディティ
@@ -174,12 +190,12 @@ def main() -> int:
     )
 
     # 日経方針
-    futures_diff = market["nikkei_futures"]["price"] - market["nikkei"]["prev_close"]
     direction_signal = build_market_direction(
         nasdaq_change_pct=market["us_markets"]["nasdaq_change_pct"],
         dow_change_pct=market["us_markets"]["dow_change_pct"],
         sox_change_pct=market["us_markets"]["sox_change_pct"],
         futures_diff=futures_diff,
+        us_closed=us_was_closed(today),
     )
 
     # キリバン（参考用にJSONには保存するが、ダッシュボードには表示しない）

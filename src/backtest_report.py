@@ -457,6 +457,103 @@ def render_fib_section(fib: dict | None) -> str:
 """
 
 
+def _pc(x: float | None) -> str:
+    return "—" if x is None else f"{x * 100:.0f}%"
+
+
+def _sg(x: float | None) -> str:
+    return "—" if x is None else f"{x:+.2f}%"
+
+
+def render_idea_section(ideas: dict | None) -> str:
+    """メンサロ記事の考え方の検証"""
+    title = "🧪 記事の考え方の検証（ドル円・S&amp;P500・金曜／月末・曜日・権利日・25日線）"
+    if not ideas or not ideas.get("v2"):
+        return f"""
+  <section class="section-box">
+    <h2 class="section-title">{title}</h2>
+    <div class="muted" style="padding: 16px;">まだ結果がありません（データ取得失敗、または未実行）。</div>
+  </section>
+"""
+    sig = {t["name"] for t in ideas.get("tests", []) if t["significant"]}
+    qmap = {t["name"]: t["q"] for t in ideas.get("tests", [])}
+
+    def mark(name: str) -> str:
+        q = qmap.get(name)
+        if q is None:
+            return ""
+        return f' <b style="color: var(--long);">q={q:.3f} ✅</b>' if name in sig else f' <span class="muted tiny">q={q:.2f}</span>'
+
+    v = ideas["v2"]
+    rows = "".join(
+        f'<tr><td>{lab}</td><td class="num">{v[k]["n"]}</td><td class="num">{_pc(v[k]["hit"])}{mark(f"v2比較:{k} 的中")}</td>'
+        f'<td class="num">{_sg(v[k]["mean"])}</td><td class="num">{_pc(v[k]["hands_off_share"])}</td></tr>'
+        for k, lab in (("v1", "今の判定（米3指数＋現対）"), ("v2", "ドル円・S&amp;P500 入り"))
+    )
+    agree = "　".join(f'{a["agree"]}つ：{_pc(a["hit"])}（{a["n"]}日）' for a in v["by_agree"])
+    sp_rows = ""
+    for name, r in ideas["sp05"].items():
+        cells = ""
+        for lab in ("up", "down"):
+            x = r[lab]
+            cells += (f'<td class="num">{_pc(x["hit"])}（{x["n"]}）{mark(f"S&P±0.5%:{name}:{lab}")}</td>'
+                      f'<td class="num">{_sg(x["mean"])}<div class="muted tiny">外れ値除く {_sg(x["mean_trim"])}</div></td>')
+        sp_rows += f"<tr><td>{name}</td>{cells}</tr>"
+    labs = {"all": "全部", "gap_same": "時間外も同じ向き", "gap_opposite": "時間外が逆向き", "gap_small": "時間外は小さい"}
+    cl_rows = ""
+    for kind, kl in (("friday", "金曜（今週の向きと逆）"), ("month_end", "月末（今月の向きと逆）"), ("both", "金曜×月末")):
+        r = ideas["closing"][kind]
+        cl_rows += f"<tr><td>{kl}</td>" + "".join(
+            f'<td class="num">{_pc(r[k]["hit"])}（{r[k]["n"]}）<div class="muted tiny">{_sg(r[k]["mean"])}</div>{mark(f"手仕舞い:{kind}:{k}")}</td>'
+            for k in labs) + "</tr>"
+    wd_rows = ""
+    for name, r in ideas["weekday"].items():
+        wd_rows += f"<tr><td>{name}</td>" + "".join(
+            f'<td class="num">{r[k]["trendiness"]:.2f}<div class="muted tiny">値幅 {r[k]["range_pct"]:.2f}%</div>{mark(f"曜日:{name}:{k}") if k != "火〜木" else ""}</td>'
+            for k in ("週明け", "金曜", "火〜木")) + "</tr>"
+    kn_rows = "".join(
+        f'<tr><td>{lab}</td><td class="num">{_pc(r["last_day_buy"]["hit"])}（{r["last_day_buy"]["n"]}）</td>'
+        f'<td class="num">{_sg(r["last_day_buy"]["mean"])}</td><td class="num">{_sg(r["ex_day_gap_mean"])}（{r["ex_day_n"]}）</td></tr>'
+        for lab, r in ideas["kenri"].items())
+    dv_rows = ""
+    for name, r in ideas["dev25"].items():
+        dv_rows += f"<tr><td>{name}</td>" + "".join(
+            f'<td class="num">{_pc(x["up"])}（{x["n"]}）<div class="muted tiny">{_sg(x["mean"])}</div>{mark(f"乖離:{name}:{k}") if k != "その間" else ""}</td>'
+            for k, x in r.items()) + "</tr>"
+    st_rows = "".join(
+        f"<tr><td>{name}</td>" + "".join(f'<td class="num">{_pc(r[k]["same"])}（{r[k]["n"]}）</td>' for k in ("high", "medium", "low")) + "</tr>"
+        for name, r in (ideas.get("strength") or {}).items())
+    ab = ideas.get("after_break") or {}
+    ab_txt = (f'連休明け（{ab["連休明け"]["n"]}日）の窓 平均 {ab["連休明け"]["abs_gap"]:.2f}%・値幅 {ab["連休明け"]["range_pct"]:.2f}%'
+              f' ／ 普段の日 {ab["普段の日"]["abs_gap"]:.2f}%・{ab["普段の日"]["range_pct"]:.2f}%（p={ab["p_gap"]:.3f}）') if ab else ""
+    uc = ideas.get("us_closed") or {}
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">{title}</h2>
+    <div class="period-note">日経平均・承認／試用銘柄の日足 {ideas["period"]}（{ideas["n_days"]}日）。成績はすべて寄り→引け。✅ は補正後（BH法 q&lt;0.05）でも偶然とは言いにくいもの</div>
+    <div class="explainer" style="margin-top: 0;">
+      <h3>判定材料にドル円・S&amp;P500 を足す（後半 {v["split"]}〜 だけで比較）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">方向ありの日</th><th class="num">的中</th><th class="num">平均</th><th class="num">手出し無用の割合</th></tr></thead><tbody>{rows}</tbody></table>
+      <div class="muted tiny">6材料（米4指数・ドル円・現対）のうちそろった数ごとの的中（今の判定で方向ありの日）：{agree}</div>
+      <h3>S&amp;P500 ±0.5% の翌日に、寄りで同じ向きに入って引けで手仕舞う</h3>
+      <table class="results"><thead><tr><th></th><th class="num">+0.5%以上→買い 的中</th><th class="num">平均</th><th class="num">-0.5%以下→売り 的中</th><th class="num">平均</th></tr></thead><tbody>{sp_rows}</tbody></table>
+      <h3>金曜・月末は今の向きと逆に動くか（時間外 = 前日引け→寄りの窓 ±0.2%）</h3>
+      <table class="results"><thead><tr><th></th>{"".join(f'<th class="num">{x}</th>' for x in labs.values())}</tr></thead><tbody>{cl_rows}</tbody></table>
+      <h3>曜日の型：トレンドらしさ（|引け−寄り| ÷ 値幅。大きいほど一方向）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">週明け（月曜・連休明け）</th><th class="num">金曜</th><th class="num">火〜木</th></tr></thead><tbody>{wd_rows}</tbody></table>
+      <div class="muted tiny">{ab_txt}</div>
+      <h3>権利付き最終日（買い）・権利落ち日（窓）　※件数が少ないので参考</h3>
+      <table class="results"><thead><tr><th></th><th class="num">付き最終日 上げ</th><th class="num">平均</th><th class="num">落ち日の窓</th></tr></thead><tbody>{kn_rows}</tbody></table>
+      <h3>25日線からの乖離（その銘柄自身の過去250日の ±2σ）と、その日の上げやすさ</h3>
+      <table class="results"><thead><tr><th></th>{"".join(f'<th class="num">{k}</th>' for k in next(iter(ideas["dev25"].values())))}</tr></thead><tbody>{dv_rows}</tbody></table>
+      <h3>判定の確度ごとに、寄り→10:00 の向きが 10:00→引け も続いた割合（1時間足）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">確度 高</th><th class="num">中</th><th class="num">方向なしの日</th></tr></thead><tbody>{st_rows}</tbody></table>
+      <div class="muted tiny">米国休場明けの朝：{uc.get("n", 0)}日（今の判定はこの日を「手出し無用」にする）</div>
+    </div>
+  </section>
+"""
+
+
 def render_screen_section(screen: dict | None) -> str:
     """売買代金上位の銘柄スクリーニング（研究用）"""
     if not screen or not screen.get("results"):
@@ -536,6 +633,7 @@ def render_report(
     morning_result: dict | None = None,
     checkpoint_result: dict | None = None,
     fib_result: dict | None = None,
+    idea_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -652,6 +750,7 @@ def render_report(
     morning_section = render_morning_section(morning_result)
     checkpoint_section = render_checkpoint_section(checkpoint_result)
     fib_section = render_fib_section(fib_result)
+    idea_section = render_idea_section(idea_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -831,6 +930,7 @@ def render_report(
   {morning_section}
   {checkpoint_section}
   {fib_section}
+  {idea_section}
 
   {scan_section}
   {screen_section}
@@ -928,6 +1028,7 @@ def render_report(
         "morning_range": morning_result,
         "checkpoints": checkpoint_result,
         "fibonacci": fib_result,
+        "ideas": idea_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -1017,6 +1118,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Fibonacci study failed: {e}")
 
     print()
+    print("🔍 Running idea study (メンサロ記事の考え方)")
+    idea_result = None
+    try:
+        from idea_study import run_idea_study
+        idea_result = run_idea_study()
+    except Exception as e:
+        print(f"⚠️ Idea study failed: {e}")
+
+    print()
     print("🔍 Running stock screen (top turnover) for period: 2y")
     screen_result = None
     try:
@@ -1040,6 +1150,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         morning_result=morning_result,
         checkpoint_result=checkpoint_result,
         fib_result=fib_result,
+        idea_result=idea_result,
     )
 
 

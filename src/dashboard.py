@@ -14,6 +14,8 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
+from trading_rules import REWARD_RISK_RATIO
+
 
 def format_jpy(n: float) -> str:
     return f"¥{n:,.0f}"
@@ -90,6 +92,7 @@ def render_warnings_banner(warnings: list[dict]) -> str:
           <div style="font-size: 15px; margin-bottom: 4px; color: {badge_color}; font-weight: 600;">{w['label']}</div>
           <div class="warning-message">{w['message']}</div>
           <div class="warning-action">→ {w['action']}</div>
+          {f'<div class="warning-evidence">{w["evidence"]}</div>' if w.get("evidence") else ""}
         </div>
         """
     return f"""
@@ -243,6 +246,16 @@ def render_range_block(rg: dict | None) -> str:
         earn = f'<div class="focus-range-sub high">⚠️ 決算明け：今日の値幅は{times}になりやすい。ロットを抑える</div>'
     elif mo.get("next_earnings"):
         earn = f'<div class="focus-range-sub">次の決算：{mo["next_earnings"][5:].replace("-", "/")}</div>'
+    take = ""
+    if rg.get("stop_yen") and rg.get("stop_width"):
+        tp_yen, tp_width = rg["stop_yen"] * REWARD_RISK_RATIO, rg["stop_width"] * REWARD_RISK_RATIO
+        reach = ""
+        if mo.get("available") and mo.get("morning_lot_yen"):
+            frac = tp_yen / mo["morning_lot_yen"]
+            reach = ("。9時台の目安より大きい＝10時までに届きにくい" if frac > 1
+                     else f"。9時台の目安の約{frac * 10:.0f}割")
+        take = (f'<div class="focus-range-sub">利確の目安（損切りの{REWARD_RISK_RATIO}倍）：'
+                f'+{tp_yen:,.0f}円（{tp_width:.0f}円幅）{reach}</div>')
     v = rg.get("validation")
     if v and v.get("r") is not None:
         foot = (f'検証（{v["n"]}日）: 直近{v["window"]}日の平均で翌日の値幅を予測 r={v["r"]:+.2f}'
@@ -255,6 +268,7 @@ def render_range_block(rg: dict | None) -> str:
             <div class="focus-range-main">約{rg["pred_yen"]:,.0f}円<span class="lot">100株で約{rg["lot_yen"]:,.0f}円</span></div>
             {rough}
             <div class="focus-range-sub">損切り-{rg["stop_yen"]:,}円（{rg["stop_width"]:.0f}円幅）は{_frac_text(rg.get("stop_frac"))}</div>
+            {take}
             {level}
             {morning}
             {earn}
@@ -723,6 +737,7 @@ def render_dashboard(
   padding: 12px 16px;
 }}
 .warning-message {{ font-size: 13px; color: var(--text); margin: 4px 0; }}
+.warning-evidence {{ font-size: 11px; color: var(--muted); margin-top: 6px; border-top: 1px dashed var(--border); padding-top: 4px; }}
 .warning-action {{ font-size: 12px; color: var(--muted); margin-top: 6px; }}
 
 /* 日経方針 */

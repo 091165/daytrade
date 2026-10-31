@@ -37,6 +37,7 @@ PER_TRADE_STOP_MAX_YEN = 5_000
 PER_TRADE_STOP_YEN = f"3,000〜{PER_TRADE_STOP_MAX_YEN:,}"
 MAX_QTY = 100               # 毎日：1回の株数の上限（200株以上は使わない）
 MAX_CONSECUTIVE_LOSSES = 2
+REWARD_RISK_RATIO = 3        # 利確の目安 = 損切り幅 × 3（表示だけ。判定には使わない）
 END_TIME = "10:00"
 CHOP_WINDOW = "09:05〜09:15"
 

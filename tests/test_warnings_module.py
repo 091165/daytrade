@@ -192,9 +192,70 @@ def test_month_end_suppresses_pre_holiday():
         nikkei_month_is_positive=True,
     )
     types = [w.type for w in warnings]
-    assert "month_end" in types
+    assert "friday_month_end" in types                      # 金曜×月末は1枚にまとめる
+    assert "friday_closing" not in types and "month_end" not in types
     assert "pre_holiday" not in types
     print("✅ test_month_end_suppresses_pre_holiday")
+
+
+_CLOSING = {"all": {"n": 390, "hit": 0.51, "mean": -0.04},
+            "gap_same": {"n": 151, "hit": 0.44, "mean": -0.34},
+            "gap_opposite": {"n": 163, "hit": 0.55, "mean": 0.15},
+            "gap_small": {"n": 76, "hit": 0.57, "mean": 0.14}}
+
+
+def test_friday_overnight_patterns():
+    fri = date(2026, 11, 6)
+    same = check_friday_warning(fri, True, overnight_diff=300, validation=_CLOSING)
+    assert "151回" in same.evidence and "44%" in same.evidence
+    assert "そのまま続いた日" in same.message                  # 記事と逆の結果ならそれを書く
+    opp = check_friday_warning(fri, True, overnight_diff=-300, validation=_CLOSING)
+    assert "163回" in opp.evidence and "逆" in opp.message
+    down_same = check_friday_warning(fri, False, overnight_diff=-300, validation=_CLOSING)
+    assert "151回" in down_same.evidence
+    small = check_friday_warning(fri, False, overnight_diff=50, validation=_CLOSING)
+    assert "76回" in small.evidence
+    assert check_friday_warning(fri, True).evidence == "未検証"
+    assert check_month_end_warning(date(2026, 11, 30), True, 300, _CLOSING).evidence.startswith("検証")
+    print("✅ test_friday_overnight_patterns")
+
+
+def test_friday_month_end_merged_uses_both_stats():
+    v = {"closing": {"friday": _CLOSING, "month_end": _CLOSING,
+                     "both": {"all": {"n": 45, "hit": 0.5, "mean": 0.1}, "gap_same": {"n": 16, "hit": 0.31, "mean": -0.58}}}}
+    ws = get_all_warnings(date(2026, 1, 30), True, True, overnight_diff=300, validation=v)
+    m = [w for w in ws if w.type == "friday_month_end"][0]
+    assert "週末×月末" in m.label and "16回" in m.evidence
+    print("✅ test_friday_month_end_merged_uses_both_stats")
+
+
+def test_us_holiday_detection():
+    from warnings_module import nyse_holidays, us_was_closed
+    h = nyse_holidays(2026)
+    assert date(2026, 11, 26) in h and date(2026, 7, 3) in h and date(2026, 4, 3) in h   # 感謝祭・独立記念日(振替)・聖金曜日
+    assert us_was_closed(date(2026, 11, 27))       # 感謝祭の翌朝
+    assert us_was_closed(date(2026, 1, 20))        # キング牧師記念日の翌朝（火曜）
+    assert us_was_closed(date(2026, 4, 6))         # 聖金曜日 → 月曜の朝
+    assert not us_was_closed(date(2026, 11, 2))    # 普通の月曜（米国の金曜は開いている）
+    ws = get_all_warnings(date(2026, 11, 27))
+    assert any(w.type == "us_holiday" and w.severity == "high" for w in ws)
+    print("✅ test_us_holiday_detection")
+
+
+def test_after_break_and_dividend_days():
+    from warnings_module import check_after_break_warning, dividend_days, check_dividend_record_warning
+    assert check_after_break_warning(date(2026, 1, 5)) is not None     # 年末年始明け
+    assert check_after_break_warning(date(2026, 11, 2)) is None         # 普通の週明けは出さない
+    assert dividend_days(2026, 3) == (date(2026, 3, 27), date(2026, 3, 30))   # 3/31(火) の2営業日前
+    assert dividend_days(2025, 8) == (date(2025, 8, 27), date(2025, 8, 28))   # 月末が日曜
+    assert dividend_days(2026, 9) == (date(2026, 9, 28), date(2026, 9, 29))   # 9/30(水)
+    k = {"3月・9月": {"last_day_buy": {"n": 15, "hit": 0.67, "mean": 0.3}, "ex_day_n": 15, "ex_day_gap_mean": -0.76}}
+    w = check_dividend_record_warning(date(2026, 3, 27), k)
+    assert w.type == "dividend_last" and w.severity == "high" and "15回" in w.evidence
+    assert check_dividend_record_warning(date(2026, 3, 30), k).type == "dividend_ex"
+    assert check_dividend_record_warning(date(2026, 6, 26)).severity == "medium"
+    assert check_dividend_record_warning(date(2026, 5, 27)) is None
+    print("✅ test_after_break_and_dividend_days")
 
 
 if __name__ == "__main__":
@@ -215,4 +276,8 @@ if __name__ == "__main__":
     test_get_all_warnings_empty()
     test_friday_suppresses_pre_holiday()
     test_month_end_suppresses_pre_holiday()
+    test_friday_overnight_patterns()
+    test_friday_month_end_merged_uses_both_stats()
+    test_us_holiday_detection()
+    test_after_break_and_dividend_days()
     print("\n🎉 All warnings tests passed!")

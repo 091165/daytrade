@@ -87,8 +87,12 @@ def build_market_direction(
     dow_change_pct: float,
     sox_change_pct: float,
     futures_diff: float,
+    us_closed: bool = False,
 ) -> MarketDirectionSignal:
     """本日のデイトレ方針を判定する。
+
+    us_closed=True（前日の米国が休場）のときは、米国の騰落が休場前の日のものなので
+    連動の材料なしとして「初心者手出し無用」にする。
 
     Args:
         nasdaq_change_pct: 前日ナスダック騰落率(%)
@@ -157,7 +161,12 @@ def build_market_direction(
     us_avg = (nasdaq_change_pct + dow_change_pct + sox_change_pct) / 3
     strong_move = abs(us_avg) >= STRONG_MOVE_THRESHOLD
 
-    if us_direction == "bullish" and futures_aligned:
+    if us_closed:
+        verdict = "hands_off"
+        verdict_label = "初心者手出し無用"
+        confidence = "low"
+        reasons.append("→ 前日の米国は休場。米国の騰落は休場前の日のもので、連動の材料にならない")
+    elif us_direction == "bullish" and futures_aligned:
         verdict = "buy_bias"
         verdict_label = "買いポジ主体"
         confidence = "high" if strong_move else "medium"
@@ -191,3 +200,52 @@ def build_market_direction(
         futures_aligned=futures_aligned,
         reasons=reasons,
     )
+
+
+# ========== 拡張版（ドル円・S&P500 入り）: 検証用。毎朝の判定はまだ現行版 ==========
+
+USDJPY_THRESHOLD = 0.3          # ドル円 ±0.3% 以上で向きありとみなす（円安＝日本株に追い風）
+CONSENSUS_REQUIRED_V2 = 3       # 米4指数中3つ以上が同方向で連動判定
+
+
+@dataclass
+class MarketDirectionV2:
+    verdict: Literal["buy_bias", "sell_bias", "hands_off"]
+    us_direction: Direction       # 米4指数（ナス・ダウ・SOX・S&P500）の多数決
+    usdjpy_direction: Direction
+    agreement_count: int          # 6材料（米4指数・ドル円・現対）のうち、多い側の向きにそろった数
+    agreement_direction: Direction
+
+    def as_dict(self) -> dict:
+        return asdict(self)
+
+
+def build_market_direction_v2(
+    nasdaq_change_pct: float,
+    dow_change_pct: float,
+    sox_change_pct: float,
+    sp500_change_pct: float,
+    usdjpy_change_pct: float,
+    futures_diff: float,
+) -> MarketDirectionV2:
+    """米4指数の3つ以上がそろい、現対が追随し、ドル円が逆を向いていなければ方向あり。"""
+    us = [classify_move(x) for x in (nasdaq_change_pct, dow_change_pct, sox_change_pct, sp500_change_pct)]
+    if us.count("bullish") >= CONSENSUS_REQUIRED_V2:
+        us_dir: Direction = "bullish"
+    elif us.count("bearish") >= CONSENSUS_REQUIRED_V2:
+        us_dir = "bearish"
+    else:
+        us_dir = "neutral"
+    fx: Direction = ("bullish" if usdjpy_change_pct >= USDJPY_THRESHOLD
+                     else "bearish" if usdjpy_change_pct <= -USDJPY_THRESHOLD else "neutral")
+    fut: Direction = ("bullish" if futures_diff >= FUTURES_ALIGNMENT_THRESHOLD
+                      else "bearish" if futures_diff <= -FUTURES_ALIGNMENT_THRESHOLD else "neutral")
+    materials = us + [fx, fut]
+    bull, bear = materials.count("bullish"), materials.count("bearish")
+    agree_dir: Direction = "bullish" if bull > bear else "bearish" if bear > bull else "neutral"
+    opposite = {"bullish": "bearish", "bearish": "bullish"}
+    if us_dir != "neutral" and fut == us_dir and fx != opposite[us_dir]:
+        verdict = "buy_bias" if us_dir == "bullish" else "sell_bias"
+    else:
+        verdict = "hands_off"
+    return MarketDirectionV2(verdict, us_dir, fx, max(bull, bear), agree_dir)
