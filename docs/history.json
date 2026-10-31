@@ -1,16 +1,5 @@
 [
   {
-    "date": "2026-08-10",
-    "verdict": "buy_bias",
-    "verdict_label": "買いポジ主体",
-    "confidence": "high",
-    "futures_diff": 693.2890625,
-    "nasdaq_pct": 1.2990169643422922,
-    "dow_pct": 0.28176271473461245,
-    "sox_pct": 2.5571211342259703,
-    "warnings": []
-  },
-  {
     "date": "2026-08-11",
     "verdict": "hands_off",
     "verdict_label": "初心者手出し無用",
@@ -691,5 +680,16 @@
       "📅 金曜 × 週足陽線 = 手仕舞い売り警戒",
       "🗓️ 月末 × 月足陰線 = ショートカバー買い警戒"
     ]
+  },
+  {
+    "date": "2026-11-01",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "futures_diff": -655.109375,
+    "nasdaq_pct": -2.8555611175022477,
+    "dow_pct": -1.0932786156699792,
+    "sox_pct": -7.200781168593828,
+    "warnings": []
   }
 ]

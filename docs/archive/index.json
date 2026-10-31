@@ -494,5 +494,13 @@
     "confidence": "low",
     "reconstructed": false,
     "generated_after_open": false
+  },
+  {
+    "date": "2026-11-01",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "reconstructed": false,
+    "generated_after_open": false
   }
 ]
