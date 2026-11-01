@@ -22,8 +22,8 @@ from dashboard import (
     render_warnings_banner,
 )
 
-CHART_DAYS = 15
-W, H = 400, 400                 # 図1の大きさ（viewBox）。スマホ幅で縮んでも文字が読める大きさに
+CHART_DAYS = 10
+W, H = 430, 400                 # 図1の大きさ（viewBox）。スマホ幅で縮んでも文字が読める大きさに
 PLOT_L, PLOT_R = 6, 236         # ローソク足の範囲（x）
 BAND_L, BAND_R = 242, 270       # 「今日」の帯
 LABEL_X = 276                   # 水準の名前
@@ -62,6 +62,9 @@ def chart_svg(records: list[dict] | None, plan: dict | None, rng: dict | None) -
     # 縦の範囲は「前日終値の上下・目安の線・今日の帯」が見える幅に合わせる（はみ出したローソク足は切る）
     reach = max([abs(x["price"] - pc) for x in levels] + [half, (rng or {}).get("pred_yen") or 0, pc * 0.01])
     lo, hi = pc - reach * 1.12, pc + reach * 1.12
+    # 直近5日の足は切らずに全部見えるようにする
+    lo = min([lo] + [r["low"] for r in bars[-5:]])
+    hi = max([hi] + [r["high"] for r in bars[-5:]])
 
     def y(p: float) -> float:
         return PLOT_T + (hi - p) / (hi - lo) * (PLOT_B - PLOT_T)
@@ -179,8 +182,8 @@ _PAGE_CSS = """
 .chart .r-take { stroke: var(--long); stroke-width: 10; }
 .chart .r-entry { fill: var(--text); }
 .chart .r-stop-t { fill: var(--short); } .chart .r-take-t { fill: var(--long); }
-table.lv { width: 100%; border-collapse: collapse; font-size: 13px; }
-table.lv td, table.lv th { padding: 4px 6px; border-bottom: 1px solid var(--border); text-align: left; }
+table.lv { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.lv td, table.lv th { padding: 4px 4px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
 table.lv .num { text-align: right; }
 .lv-up-t { color: #f87171; } .lv-down-t { color: #34d399; }
 .muted { color: var(--muted); }
@@ -254,7 +257,7 @@ def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warn
     <h2>📈 上値・下値の目安（直近{CHART_DAYS}日の日足）</h2>
     {chart_svg(records, plan, f.get("range"))}
     <div class="note muted">黄色の帯＝今日の9時台にふつう動く幅を、前日終値の上下に置いたもの。赤い点線＝上値の目安、緑の点線＝下値の目安。</div>
-    <table class="lv"><thead><tr><th></th><th>水準</th><th class="num">値段</th><th class="num">前日終値から</th><th class="num">100株で</th></tr></thead>
+    <table class="lv"><thead><tr><th></th><th>水準</th><th class="num">値段</th><th class="num">終値から</th><th class="num">100株で</th></tr></thead>
       <tbody>{_level_rows(plan)}</tbody></table>
     <div class="note muted">{escape(plan.get("level_evidence", ""))}</div>
   </div>

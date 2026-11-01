@@ -29,7 +29,7 @@ def _records():
 def test_chart_and_ruler():
     svg = chart_svg(_records(), _plan(), {"as_of": "2026-10-30", "pred_yen": 198})
     assert svg.startswith("<svg") and "4,000 キリ（大）" in svg and "前日終値" in svg and "clip-path" in svg
-    assert svg.count('class="c-up"') + svg.count('class="c-down"') == 15
+    assert svg.count('class="c-up"') + svg.count('class="c-down"') == 10
     assert "データ" in chart_svg(None, _plan(), None)
     r = ruler_svg(_plan(), "buy")
     assert "損切り -40円" in r and "利確 +120円" in r and "売りで入った" not in r
