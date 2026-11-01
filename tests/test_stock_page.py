@@ -46,6 +46,7 @@ def test_render_page():
          "conflict_with_market": False}
     html = render_stock_page(f, _records(), {"verdict": "sell_bias", "verdict_label": "売りポジ主体"}, [],
                              {"day_rules": ["売りで統一"], "always_rules": ["10:00前に終了"]}, "2026-11-02 06:40 JST")
+    assert "場中モード" in html and '"stop":40' in html and '"take":120' in html and '"maxLosses":2' in html
     assert "フジクラ" in html and "../index.html" in html and "売りで入ったとき" in html and "10:00前に終了" in html
     print("✅ test_render_page")
 

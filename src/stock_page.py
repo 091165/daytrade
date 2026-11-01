@@ -13,6 +13,7 @@ from __future__ import annotations
 from html import escape
 from pathlib import Path
 
+from trading_rules import DAILY_LOSS_LIMIT_YEN, END_TIME, MAX_CONSECUTIVE_LOSSES, MAX_QTY
 from dashboard import (
     _COMMON_CSS,
     _RULES_FOCUS_CSS,
@@ -146,6 +147,121 @@ def ruler_svg(plan: dict | None, side_hint: str) -> str:
     return f'<svg viewBox="0 0 {Wd} {h}" class="chart ruler" role="img" aria-label="損切り・利確の物差し">' + "".join(rows) + "</svg>"
 
 
+def render_live_box(f: dict, side_hint: str) -> str:
+    """場中モード：入った値段から損切り・利確の値段を出し、その日の成績とルールの残りを表示する。
+
+    記録はこの端末のブラウザ（localStorage）にだけ残す。日付ごとに分け、全銘柄のページで共有する。
+    """
+    b = (f.get("plan") or {}).get("bracket")
+    if not b:
+        return ""
+    pc = (f.get("plan") or {}).get("prev_close") or 0
+    default_side = "sell" if side_hint == "sell" else "buy"
+    cfg = (f'{{"code":"{f["code"]}","name":"{escape(f["name"])}","stop":{b["stop_width"]:.0f},"take":{b["target_width"]:.0f},'
+           f'"qty":{MAX_QTY},"lossLimit":{DAILY_LOSS_LIMIT_YEN},"maxLosses":{MAX_CONSECUTIVE_LOSSES},"endTime":"{END_TIME}"}}')
+    return f"""
+  <div class="box live" id="live">
+    <h2>⏱️ 場中モード（入ったらここに入力）</h2>
+    <div class="live-status" id="lv-status"></div>
+    <div class="live-row">
+      <label>入った値段<input id="lv-entry" type="number" inputmode="decimal" step="1" value="{pc:.0f}"></label>
+      <div class="seg" role="group" aria-label="売買">
+        <button type="button" id="lv-buy" class="{'on' if default_side == 'buy' else ''}">買い</button>
+        <button type="button" id="lv-sell" class="{'on' if default_side == 'sell' else ''}">売り</button>
+      </div>
+    </div>
+    <div class="live-prices">
+      <div class="lp stop"><div class="k">損切り（逆指値）</div><div class="v" id="lv-stop">—</div><div class="s" id="lv-stop-s"></div></div>
+      <div class="lp take"><div class="k">利確（指値）</div><div class="v" id="lv-take">—</div><div class="s" id="lv-take-s"></div></div>
+    </div>
+    <div class="note muted">{MAX_QTY}株・損切り {b["stop_width"]:.0f}円幅・利確 {b["target_width"]:.0f}円幅。証券アプリには、この2つの値段をそのまま入れる。</div>
+
+    <h3 class="live-h">今日の記録（この端末だけに保存）</h3>
+    <div class="live-row">
+      <label>損益（円）<input id="lv-pnl" type="number" inputmode="numeric" step="100" placeholder="例 -4000"></label>
+      <div class="seg">
+        <button type="button" id="lv-add-loss" class="loss">損切りした</button>
+        <button type="button" id="lv-add-win" class="win">利確した</button>
+      </div>
+    </div>
+    <div class="note muted">損益を空のまま押すと、損切りは -{b["stop_width"] * MAX_QTY:,.0f}円、利確は +{b["target_width"] * MAX_QTY:,.0f}円 として記録する。</div>
+    <ol class="live-log" id="lv-log"></ol>
+    <button type="button" id="lv-undo" class="undo">最後の記録を消す</button>
+  </div>
+<script>
+(function () {{
+  var C = {cfg};
+  var $ = function (id) {{ return document.getElementById(id); }};
+  var side = "{default_side}";
+  function today() {{ var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }}
+  var KEY = "daytrade-log-" + today();
+  function load() {{ try {{ return JSON.parse(localStorage.getItem(KEY) || "[]"); }} catch (e) {{ return []; }} }}
+  function save(x) {{ try {{ localStorage.setItem(KEY, JSON.stringify(x)); }} catch (e) {{}} }}
+  function yen(n) {{ return (n > 0 ? "+" : "") + Math.round(n).toLocaleString() + "円"; }}
+  function hhmm() {{ var d = new Date(); return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }}
+  function prices() {{
+    var e = parseFloat($("lv-entry").value);
+    if (!isFinite(e) || e <= 0) {{ $("lv-stop").textContent = "—"; $("lv-take").textContent = "—"; return; }}
+    var sg = side === "buy" ? 1 : -1;
+    $("lv-stop").textContent = Math.round(e - sg * C.stop).toLocaleString() + "円";
+    $("lv-take").textContent = Math.round(e + sg * C.take).toLocaleString() + "円";
+    $("lv-stop-s").textContent = (side === "buy" ? "この値段以下で売る" : "この値段以上で買い戻す") + "（" + yen(-C.stop * C.qty) + "）";
+    $("lv-take-s").textContent = (side === "buy" ? "この値段で売る" : "この値段で買い戻す") + "（" + yen(C.take * C.qty) + "）";
+  }}
+  function streak(log) {{ var n = 0; for (var i = log.length - 1; i >= 0 && log[i].pnl < 0; i--) n++; return n; }}
+  function render() {{
+    var log = load();
+    var total = log.reduce(function (a, x) {{ return a + x.pnl; }}, 0);
+    var losses = streak(log);
+    var left = C.lossLimit + Math.min(0, total);
+    var stop = [];
+    if (losses >= C.maxLosses) stop.push(C.maxLosses + "連敗");
+    if (total <= -C.lossLimit) stop.push("1日 -" + C.lossLimit.toLocaleString() + "円に到達");
+    if (hhmm() >= C.endTime) stop.push(C.endTime + "を過ぎた");
+    var st = $("lv-status");
+    var wins = log.filter(function (x) {{ return x.pnl > 0; }}).length;
+    var head = "今日 " + log.length + "回（" + wins + "勝" + (log.length - wins) + "敗）・" + yen(total);
+    if (stop.length) {{
+      st.className = "live-status over";
+      st.innerHTML = "<b>🛑 今日は終了（" + stop.join("・") + "）</b><div>" + head + "。これ以上は入らない。</div>";
+      document.getElementById("live").classList.add("over");
+    }} else {{
+      st.className = "live-status";
+      var next = losses === C.maxLosses - 1 ? "あと1回負けたら終了" : "連敗 " + losses + "回";
+      st.innerHTML = "<b>" + head + "</b><div>" + next + "・1日の上限まで残り " + Math.round(left).toLocaleString() + "円・" + C.endTime + "で終了</div>";
+      document.getElementById("live").classList.remove("over");
+    }}
+    $("lv-log").innerHTML = log.map(function (x) {{
+      return "<li><span>" + x.t + " " + x.name + "（" + (x.side === "buy" ? "買い" : "売り") + "）</span><b class='" + (x.pnl < 0 ? "neg" : "pos") + "'>" + yen(x.pnl) + "</b></li>";
+    }}).join("");
+  }}
+  function add(isWin) {{
+    var v = parseFloat($("lv-pnl").value);
+    var pnl = isFinite(v) && v !== 0 ? v : (isWin ? C.take * C.qty : -C.stop * C.qty);
+    if (isWin && pnl < 0) pnl = -pnl;
+    if (!isWin && pnl > 0) pnl = -pnl;
+    var log = load();
+    log.push({{ t: hhmm(), code: C.code, name: C.name, side: side, pnl: pnl }});
+    save(log); $("lv-pnl").value = ""; render();
+  }}
+  var EKEY = "daytrade-entry-" + today() + "-" + C.code;
+  function keep() {{ try {{ localStorage.setItem(EKEY, JSON.stringify({{ e: $("lv-entry").value, s: side }})); }} catch (e) {{}} }}
+  function setSide(s) {{ side = s; $("lv-buy").className = s === "buy" ? "on" : ""; $("lv-sell").className = s === "sell" ? "on" : ""; prices(); keep(); }}
+  try {{ var kept = JSON.parse(localStorage.getItem(EKEY) || "null"); if (kept) {{ $("lv-entry").value = kept.e; side = kept.s || side; }} }} catch (e) {{}}
+  setSide(side);
+  $("lv-entry").addEventListener("input", function () {{ prices(); keep(); }});
+  $("lv-buy").addEventListener("click", function () {{ setSide("buy"); }});
+  $("lv-sell").addEventListener("click", function () {{ setSide("sell"); }});
+  $("lv-add-loss").addEventListener("click", function () {{ add(false); }});
+  $("lv-add-win").addEventListener("click", function () {{ add(true); }});
+  $("lv-undo").addEventListener("click", function () {{ var l = load(); l.pop(); save(l); render(); }});
+  prices(); render();
+  setInterval(render, 60000);
+}})();
+</script>
+"""
+
+
 def _us_range_note(u: dict | None) -> str:
     """米関連株の動きの大きさと、翌日の値幅の関係（週次の検証）"""
     if not u:
@@ -196,10 +312,56 @@ table.lv td, table.lv th { padding: 4px 4px; border-bottom: 1px solid var(--bord
 table.lv .num { text-align: right; }
 .lv-up-t { color: #f87171; } .lv-down-t { color: #34d399; }
 .muted { color: var(--muted); }
+.live { border-color: var(--accent); }
+.live.over { border-color: var(--short); background: rgba(239, 68, 68, 0.08); }
+.live-status { font-size: 14px; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); margin-bottom: 10px; }
+.live-status.over { background: rgba(239, 68, 68, 0.2); color: #fecaca; font-size: 15px; }
+.live-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin: 8px 0; }
+.live-row label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); flex: 1; min-width: 140px; }
+.live-row input { font-size: 20px; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); width: 100%; }
+.seg { display: flex; gap: 6px; }
+.seg button, .undo { font-size: 15px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); }
+.seg button.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.seg button.loss { border-color: var(--short); color: var(--short); }
+.seg button.win { border-color: var(--long); color: var(--long); }
+.undo { font-size: 12px; padding: 6px 10px; color: var(--muted); }
+.live-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+.lp { border-radius: 8px; padding: 10px; background: var(--panel-2); }
+.lp .k { font-size: 12px; color: var(--muted); }
+.lp .v { font-size: 24px; font-weight: 800; }
+.lp .s { font-size: 11px; color: var(--muted); }
+.lp.stop .v { color: var(--short); } .lp.take .v { color: var(--long); }
+.live-h { font-size: 13px; margin: 14px 0 4px; color: var(--text); }
+.live-log { margin: 6px 0; padding-left: 20px; font-size: 13px; }
+.live-log li span { margin-right: 8px; }
+.live-log .neg { color: var(--short); } .live-log .pos { color: var(--long); }
 .big { font-size: 18px; font-weight: 700; }
 .big .stop { color: var(--short); } .big .take { color: var(--long); }
 .note { font-size: 13px; margin-top: 6px; }
 .note.muted { color: var(--muted); }
+.live { border-color: var(--accent); }
+.live.over { border-color: var(--short); background: rgba(239, 68, 68, 0.08); }
+.live-status { font-size: 14px; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); margin-bottom: 10px; }
+.live-status.over { background: rgba(239, 68, 68, 0.2); color: #fecaca; font-size: 15px; }
+.live-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin: 8px 0; }
+.live-row label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); flex: 1; min-width: 140px; }
+.live-row input { font-size: 20px; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); width: 100%; }
+.seg { display: flex; gap: 6px; }
+.seg button, .undo { font-size: 15px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); }
+.seg button.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.seg button.loss { border-color: var(--short); color: var(--short); }
+.seg button.win { border-color: var(--long); color: var(--long); }
+.undo { font-size: 12px; padding: 6px 10px; color: var(--muted); }
+.live-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+.lp { border-radius: 8px; padding: 10px; background: var(--panel-2); }
+.lp .k { font-size: 12px; color: var(--muted); }
+.lp .v { font-size: 24px; font-weight: 800; }
+.lp .s { font-size: 11px; color: var(--muted); }
+.lp.stop .v { color: var(--short); } .lp.take .v { color: var(--long); }
+.live-h { font-size: 13px; margin: 14px 0 4px; color: var(--text); }
+.live-log { margin: 6px 0; padding-left: 20px; font-size: 13px; }
+.live-log li span { margin-right: 8px; }
+.live-log .neg { color: var(--short); } .live-log .pos { color: var(--long); }
 .dir { font-weight: 700; }
 .dir.bullish { color: var(--long); } .dir.bearish { color: var(--short); } .dir.neutral { color: var(--muted); }
 """
@@ -261,6 +423,7 @@ def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warn
     <div class="note muted">{side_txt}。入った値段（寄り値など）を0として見る。</div>
     {ruler_svg(plan, side_hint)}
   </div>
+{render_live_box(f, side_hint)}
 
   <div class="box">
     <h2>📈 上値・下値の目安（直近{CHART_DAYS}日の日足）</h2>
