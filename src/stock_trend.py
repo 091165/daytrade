@@ -14,6 +14,8 @@ import pandas as pd
 
 MA_DAYS = 25
 SIGMA_LOOKBACK = 250
+HIGH_WINDOW = 250           # 52週 ≒ 250営業日
+HIGH_RECENT = 5             # 直近5営業日のうちに高値を更新していれば「更新中」
 
 
 def completed(ohlc: pd.DataFrame, today: date) -> pd.DataFrame:
@@ -38,6 +40,35 @@ def deviation_sigma(closes: pd.Series, lookback_days: int = SIGMA_LOOKBACK) -> t
         return None
     mu, sd = float(hist.mean()), float(hist.std())
     return mu, mu - 2 * sd, mu + 2 * sd
+
+
+def at_high(closes: pd.Series, highs: pd.Series | None = None, older_high: float | None = None,
+            window: int = HIGH_WINDOW, recent: int = HIGH_RECENT) -> str | None:
+    """最高値を更新中か（前日までの確定足を渡す）。
+
+    直近 recent 日の高値が、それより前の 52週（window 日）の高値以上なら「52週高値更新中」。
+    さらに older_high（日足より前の期間の最高値。月足などで別に取る）以上なら「上場来高値更新中」。
+    older_high を渡さないときは上場来の判定はしない。highs がなければ終値で判定する。
+    """
+    h = (highs if highs is not None else closes).dropna()
+    if len(h) < window:
+        return None
+    recent_high = float(h.iloc[-recent:].max())
+    prior = h.iloc[-window:-recent]
+    if prior.empty or recent_high < float(prior.max()):
+        return None
+    if older_high is not None and recent_high >= float(older_high) and recent_high >= float(h.iloc[:-recent].max()):
+        return "上場来高値更新中"
+    return "52週高値更新中"
+
+
+def at_high_flags(highs: pd.Series, window: int = HIGH_WINDOW, recent: int = HIGH_RECENT) -> pd.Series:
+    """日ごとに「その日の前日までで 52週高値を更新中だったか」（検証用。at_high と同じ決め方）"""
+    h = highs.dropna()
+    rec = h.rolling(recent).max()
+    prior = h.shift(recent).rolling(window - recent).max()
+    flag = (rec >= prior) & prior.notna()
+    return flag.shift(1).fillna(False).astype(bool)
 
 
 def bar_streak(ohlc: pd.DataFrame, freq: str, today: date) -> tuple[str, int] | None:

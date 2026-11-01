@@ -340,6 +340,11 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
             chips = '<span class="focus-chip">データなし</span>'
         is_conflict = bool(f.get("conflict_with_market"))
         conflict = f'<div class="focus-conflict">⚠️ {f["conflict_text"]}</div>' if is_conflict else ""
+        # 最高値を更新中（L7-2）。売り判定の日は「売りは見送り候補」を赤で
+        for n in f.get("notes") or []:
+            if n.get("kind") == "high":
+                conflict += (f'<div class="focus-conflict">⚠️ {n["text"]}</div>' if n.get("level") == "high"
+                             else f'<div class="focus-range-sub">📈 {n["text"]}</div>')
         card_class = "focus-card conflict" if is_conflict else "focus-card"
         trial_badge = '<span class="focus-trial">試用</span>' if f.get("trial") else ""
         trial_note = f'<div class="focus-trial-note">🧪 {f["note"]}</div>' if f.get("trial") else ""

@@ -181,9 +181,35 @@ def _fetch_focus_ohlc(use_stub: bool) -> dict[str, list[dict]]:
     try:
         from fetch_data import fetch_daily_ohlc
         raw = fetch_daily_ohlc([s.ticker for s in FOCUS_STOCKS], period="2y")
-        return {s.code: ohlc_to_records(raw[s.ticker]) for s in FOCUS_STOCKS if s.ticker in raw}
+        # 2年分すべて残す（25日線乖離のσ・52週高値に使う）
+        return {s.code: ohlc_to_records(raw[s.ticker], n=600) for s in FOCUS_STOCKS if s.ticker in raw}
     except Exception as e:
         print(f"⚠️ Failed to fetch focus OHLC (想定値幅はスキップ): {e}")
+        return {}
+
+
+def _fetch_older_highs(focus_ohlc_full: dict[str, list[dict]], use_stub: bool) -> dict[str, float]:
+    """日足（2年分）より前の期間の最高値（月足・上場来）。上場来高値の判定に使う。取れなければ空"""
+    if use_stub or not focus_ohlc_full:
+        return {}
+    try:
+        import pandas as pd
+        import yfinance as yf
+        out = {}
+        for s in FOCUS_STOCKS:
+            recs = focus_ohlc_full.get(s.code)
+            if not recs:
+                continue
+            m = yf.download(s.ticker, period="max", interval="1mo", progress=False, auto_adjust=True)
+            if isinstance(m.columns, pd.MultiIndex):
+                m.columns = m.columns.get_level_values(0)
+            first = pd.Timestamp(recs[0]["date"]).to_period("M")
+            older = m[m.index.to_period("M") < first]["High"].dropna()
+            if len(older):
+                out[s.code] = float(older.max())
+        return out
+    except Exception as e:
+        print(f"⚠️ Failed to fetch all-time highs (上場来高値の判定はスキップ): {e}")
         return {}
 
 
@@ -362,6 +388,7 @@ def main() -> int:
 
     # カードの注意書き（25日線乖離・月足、金曜・月末の週足、権利落ち日の配当、SOX優先、決算月）
     by_code = {s.code: s for s in FOCUS_STOCKS}
+    older_highs = _fetch_older_highs(focus_ohlc_full, use_stub)
     for f in focus_signals_dict:
         st = by_code[f["code"]]
         f["notes"] = build_card_notes(
@@ -371,6 +398,8 @@ def main() -> int:
             nikkei_week_positive=market["nikkei"].get("week_is_positive"),
             nikkei_month_positive=market["nikkei"].get("month_is_positive"),
             dividend=None if use_stub else _fetch_dividend(st.ticker, today),
+            verdict=direction_signal.verdict, older_high=older_highs.get(f["code"]),
+            high_evidence=(f.get("validation") or {}).get("at_high"),
         )
 
     # JSON

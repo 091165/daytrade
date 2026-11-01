@@ -18,7 +18,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from focus_stocks import FOCUS_STOCKS, FocusStock, classify_link
+from focus_stocks import FOCUS_STOCKS, SIGNIFICANT_P, FocusStock, classify_link
+from stock_trend import at_high_flags
 
 BIG_MOVE_PCT = 1.0   # 米関連株の平均が ±1%以上の日を「大きく動いた日」とする
 MIN_SAMPLES = 20
@@ -180,6 +181,46 @@ def validate_focus_stock(stock: FocusStock, data: pd.DataFrame) -> dict:
     }
 
 
+def _rate_ci(k: int, n: int, z: float = 1.96) -> list[float] | None:
+    if n == 0:
+        return None
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return [float(max(0.0, c - h)), float(min(1.0, c + h))]
+
+
+def high_day_study(ohlc: pd.DataFrame) -> dict:
+    """52週高値を更新中の日（前日まで）と、そうでない日の寄り後（寄り→引け）の向きを比べる（純粋関数）"""
+    d = ohlc.dropna(subset=["Open", "High", "Close"]).copy()
+    d.index = pd.to_datetime(d.index)
+    if getattr(d.index, "tz", None) is not None:
+        d.index = d.index.tz_localize(None)
+    flag = at_high_flags(d["High"])
+    intra = (d["Close"] / d["Open"] - 1) * 100
+    valid = d["High"].shift(1).rolling(250).count() >= 250        # 判定できる日（前日までに250本）
+    out = {}
+    for key, mask in (("high", flag & valid), ("other", ~flag & valid)):
+        x = intra[mask].dropna()
+        k = int((x > 0).sum())
+        out[key] = {"n": int(len(x)), "up_rate": k / len(x) if len(x) else None, "up_ci": _rate_ci(k, len(x)),
+                    "mean": float(x.mean()) if len(x) else None}
+    a, b = intra[flag & valid].dropna(), intra[~flag & valid].dropna()
+    if len(a) >= MIN_SAMPLES and len(b) >= MIN_SAMPLES:
+        t = stats.ttest_ind(a, b, equal_var=False)
+        k1, k2 = int((a > 0).sum()), int((b > 0).sum())
+        p1, p2 = k1 / len(a), k2 / len(b)
+        pp = (k1 + k2) / (len(a) + len(b))
+        se = np.sqrt(pp * (1 - pp) * (1 / len(a) + 1 / len(b)))
+        zp = float(2 * stats.norm.sf(abs((p1 - p2) / se))) if se > 0 else None
+        out.update(p_mean=float(t.pvalue), p_rate=zp, significant=bool(zp is not None and zp < SIGNIFICANT_P))
+    else:
+        out.update(p_mean=None, p_rate=None, significant=False)
+    out["period"] = f"{d.index[0].date()}〜{d.index[-1].date()}" if len(d) else ""
+    return out
+
+
 def validate_all_focus_stocks(period: str = "1y") -> list[dict]:
     tickers: set[str] = set()
     for s in FOCUS_STOCKS:
@@ -195,4 +236,19 @@ def validate_all_focus_stocks(period: str = "1y") -> list[dict]:
         fmt = lambda v: "  -  " if v is None else f"{v:+.3f}"
         print(f"  {s.name:8s} n={r['n']:3d} 窓 r={fmt(r['gap_r'])} {r['gap_label']} / "
               f"寄り後 r={fmt(r['intraday_r'])} {r['intraday_label']}")
+
+    # 52週高値を更新中の日とそうでない日の寄り後（5年分）
+    try:
+        long = _fetch_ohlc([s.ticker for s in FOCUS_STOCKS], "5y")
+        for s, r in zip(FOCUS_STOCKS, results):
+            try:
+                h = high_day_study(long[s.ticker])
+            except KeyError:
+                continue
+            r["at_high"] = h
+            pc = lambda x: "  -  " if x is None else f"{x * 100:.0f}%"
+            print(f"  {s.name:8s} 高値更新中 上げ {pc(h['high']['up_rate'])}（{h['high']['n']}日）"
+                  f" / そうでない日 {pc(h['other']['up_rate'])}（{h['other']['n']}日） p={h.get('p_rate')}")
+    except Exception as e:
+        print(f"  ⚠️ 高値更新中の検証に失敗: {e}")
     return results

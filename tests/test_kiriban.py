@@ -103,7 +103,17 @@ def test_build_daily_signal_end_to_end():
     print("✅ test_build_daily_signal_end_to_end")
 
 
+def test_kiriban_day_hint():
+    from kiriban import kiriban_day_hint
+    assert "サポート" in kiriban_day_hint("buy_bias") and "逆張り" not in kiriban_day_hint("buy_bias")
+    assert "レジスタンス" in kiriban_day_hint("sell_bias") and "逆張り" not in kiriban_day_hint("sell_bias")
+    assert "逆張り" in kiriban_day_hint("hands_off")
+    assert kiriban_day_hint("unknown") == ""
+    print("✅ test_kiriban_day_hint")
+
+
 if __name__ == "__main__":
+    test_kiriban_day_hint()
     test_kiriban_bands_from_pdf_example()
     test_sayatori_long_signal()
     test_sayatori_short_signal()

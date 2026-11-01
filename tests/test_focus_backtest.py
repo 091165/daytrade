@@ -12,7 +12,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from focus_backtest import align_focus_returns, compute_focus_stats, validate_focus_stock
+from focus_backtest import align_focus_returns, high_day_study, compute_focus_stats, validate_focus_stock
 from focus_stocks import FOCUS_STOCKS
 
 
@@ -156,7 +156,22 @@ def test_validate_focus_stock_missing_jp_data():
     print("✅ test_validate_focus_stock_missing_jp_data")
 
 
+def test_high_day_study():
+    rng = np.random.default_rng(3)
+    idx = _bdays(900)
+    close = 100 * np.exp(np.cumsum(rng.normal(0.001, 0.02, len(idx))))
+    open_ = close * np.exp(rng.normal(0, 0.005, len(idx)))
+    d = pd.DataFrame({"Open": open_, "High": np.maximum(open_, close) * 1.01, "Low": np.minimum(open_, close) * 0.99,
+                      "Close": close}, index=idx)
+    r = high_day_study(d)
+    assert r["high"]["n"] + r["other"]["n"] == len(idx) - 250
+    assert r["high"]["n"] > 0 and r["other"]["n"] > 0
+    assert 0 <= r["high"]["up_rate"] <= 1 and r["p_rate"] is not None
+    print("✅ test_high_day_study")
+
+
 if __name__ == "__main__":
+    test_high_day_study()
     test_alignment_uses_previous_us_day()
     test_us_holiday_is_skipped()
     test_timezone_aware_index_is_ok()

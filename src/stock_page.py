@@ -339,6 +339,7 @@ table.lv .num { text-align: right; }
 .big .stop { color: var(--short); } .big .take { color: var(--long); }
 .note { font-size: 13px; margin-top: 6px; }
 .note.muted { color: var(--muted); }
+.note.high { color: var(--short); font-weight: 600; }
 .live { border-color: var(--accent); }
 .live.over { border-color: var(--short); background: rgba(239, 68, 68, 0.08); }
 .live-status { font-size: 14px; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); margin-bottom: 10px; }

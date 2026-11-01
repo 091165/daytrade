@@ -172,3 +172,18 @@ def build_daily_signal(
         "high_volatility": hivol,
         "kiriban_effective": hivol,  # ハイボラ時のみキリバン値幅が機能
     }
+
+
+# ----- 節目の使い方を、その日の判定で分ける（過去ログ7・L7-3。L6-2 の節目欄の見出しに出す） -----
+
+KIRIBAN_DAY_HINTS = {
+    "buy_bias": "今日はサポート（下の節目）の買いが中心。上の節目での売りは控えめに",
+    "sell_bias": "今日はレジスタンス（上の節目）の売りが中心。下の節目での買いは控えめに",
+    "hands_off": "レンジになりやすい日：上下の節目で逆張り",
+}
+
+
+def kiriban_day_hint(verdict: str) -> str:
+    """節目欄の見出しに添える1行。トレンド日は判定方向と同じ向きの売買だけ（押し目買い・戻り売り）を出し、
+    逆張りの文は手出し無用の日だけ（トレンド日の「逆張り禁止」と矛盾させない）"""
+    return KIRIBAN_DAY_HINTS.get(verdict, "")

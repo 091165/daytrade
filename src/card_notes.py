@@ -6,6 +6,7 @@
   - 金曜・月末：その銘柄の今週（今月）の足の向き、値幅の小さい週、日経と向きが逆の週
   - 権利落ち日：1株配当と、前日終値に対する割合
   - SOX を関連に持つ銘柄で、SOX の向きと金曜・月末の警告の向きが逆の日
+  - 52週高値・上場来高値を更新中（売り判定の日は「売りは見送り候補」。買いを勧める表示にはしない）
 
 週次レポートの結果（backtest_report.json の ideas）を validation として受け取り、
 効いていない目安は「検証：関係なし」と添える。
@@ -17,7 +18,7 @@ from datetime import date
 
 import pandas as pd
 
-from stock_trend import completed, this_week_bar, trend_summary
+from stock_trend import at_high, completed, this_week_bar, trend_summary
 from warnings_module import dividend_days, is_last_trading_day_of_month
 
 SHORT_NAME = {"5803": "フジクラ", "9984": "SBG", "6981": "村田"}
@@ -100,6 +101,26 @@ def sox_priority_note(us_proxies: tuple[str, ...], sox_change_pct: float | None,
             "level": "info"}
 
 
+def high_notes(ohlc: pd.DataFrame | None, today: date, verdict: str | None = None,
+               older_high: float | None = None, evidence: dict | None = None) -> list[dict]:
+    """最高値を更新中なら1行。指数が売り判定なら「売りは見送り候補」も（kind="high"）"""
+    if ohlc is None or ohlc.empty:
+        return []
+    d = completed(ohlc, today)
+    label = at_high(d["Close"], d["High"], older_high)
+    if not label:
+        return []
+    ev = ""
+    if evidence and evidence.get("high", {}).get("n"):
+        h, o = evidence["high"], evidence["other"]
+        ev = (f"（検証：寄り後に上げた日 {_pct(h['up_rate'])}・{h['n']}日／そうでない日 {_pct(o['up_rate'])}"
+              f"{'・差あり' if evidence.get('significant') else '・差ははっきりしない'}）")
+    notes = [{"text": f"{label.replace('更新中', '')}を更新中（買いの順張りが入りやすい）{ev}", "level": "info", "kind": "high"}]
+    if verdict == "sell_bias":
+        notes.append({"text": "指数は売り判定だが、この銘柄は高値更新中：売りは見送り候補", "level": "high", "kind": "high"})
+    return notes
+
+
 def closing_reversal_dir(today: date, week_positive: bool | None, month_positive: bool | None) -> int:
     """金曜・月末の手仕舞いで記事が予想する向き（+1=上げ / -1=下げ / 0=なし）"""
     if is_last_trading_day_of_month(today) and month_positive is not None:
@@ -112,12 +133,14 @@ def closing_reversal_dir(today: date, week_positive: bool | None, month_positive
 def build_card_notes(*, code: str, ohlc: pd.DataFrame | None, today: date, validation: dict | None,
                      fiscal_month: int | None, us_proxies: tuple[str, ...], sox_change_pct: float | None,
                      nikkei_week_positive: bool | None, nikkei_month_positive: bool | None,
-                     dividend: float | None = None) -> list[dict]:
+                     dividend: float | None = None, verdict: str | None = None,
+                     older_high: float | None = None, high_evidence: dict | None = None) -> list[dict]:
     prev_close = None
     if ohlc is not None and not ohlc.empty:
         done = completed(ohlc, today)
         prev_close = float(done["Close"].iloc[-1]) if not done.empty else None
     notes = [
+        *high_notes(ohlc, today, verdict, older_high, high_evidence),
         trend_note(ohlc, today, code, validation),
         closing_note(ohlc, today, code, nikkei_week_positive, validation),
         sox_priority_note(us_proxies, sox_change_pct, closing_reversal_dir(today, nikkei_week_positive, nikkei_month_positive)),

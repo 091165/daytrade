@@ -143,6 +143,25 @@ def render_focus_section(focus_results: list[dict] | None, focus_period: str) ->
             <td class="tiny muted">{proxies}</td>
           </tr>
         """
+    hi_rows = ""
+    pc = lambda x: "—" if x is None else f"{x * 100:.0f}%"
+    for r in focus_results:
+        h = r.get("at_high")
+        if not h or not h.get("high", {}).get("n"):
+            continue
+        cell = lambda b: (f'{pc(b["up_rate"])}（{b["n"]}日）'
+                          + (f'<div class="muted tiny">{b["up_ci"][0] * 100:.0f}〜{b["up_ci"][1] * 100:.0f}%・平均 {b["mean"]:+.2f}%</div>' if b.get("up_ci") else ""))
+        p = f'{h["p_rate"]:.3f}' if h.get("p_rate") is not None else "件数不足"
+        hi_rows += (f'<tr><td>{r["name"]}</td><td class="num">{cell(h["high"])}</td><td class="num">{cell(h["other"])}</td>'
+                    f'<td class="num">{p}{" ✅" if h.get("significant") else ""}</td></tr>')
+    hi_html = f"""
+    <div class="explainer">
+      <h3>📈 52週高値を更新中の日の寄り後（{next((r["at_high"]["period"] for r in focus_results if r.get("at_high")), "")}）</h3>
+      <table class="results"><thead><tr><th>銘柄</th><th class="num">高値更新中の日：寄り後に上げた割合</th>
+        <th class="num">そうでない日</th><th class="num">差の p</th></tr></thead><tbody>{hi_rows}</tbody></table>
+      <div class="muted tiny">前日までの直近5日で、それより前の52週（250営業日）の高値を超えた日を「更新中」とする（カードの表示と同じ決め方）。
+        記事では「最高値を更新中の銘柄は買いが入りやすい」。✅ は割合の差が p&lt;0.05。</div>
+    </div>""" if hi_rows else ""
     return f"""
   <section class="section-box">
     <h2 class="section-title">🎯 承認銘柄・試用銘柄の個別予測の検証</h2>
@@ -173,6 +192,7 @@ def render_focus_section(focus_results: list[dict] | None, focus_period: str) ->
         <li><b>逆に動きやすい</b>: 米が上げた翌日、寄り後は下げやすい（寄り天型）。寄りで飛びつかない根拠になる。</li>
       </ul>
     </div>
+    {hi_html}
   </section>
 """
 
@@ -709,6 +729,105 @@ def render_us_range_section(r: dict | None) -> str:
 """
 
 
+def _yen(x: float | None, sign: bool = True) -> str:
+    if x is None:
+        return "—"
+    return f"{x:+,.0f}円" if sign else f"{x:,.0f}円"
+
+
+def _exit_rows(groups: list[tuple[str, dict]]) -> str:
+    """決済方法の比較の表の行（グループ × (a)(b)(c)）"""
+    labels = {"a": "(a) 10時終了", "b": "(b) 時間方式", "c": "(c) 1：3"}
+    rows = ""
+    for title, g in groups:
+        if not g or not g.get("a", {}).get("n"):
+            continue
+        for i, m in enumerate(("a", "b", "c")):
+            s = g[m]
+            ci = f'<div class="muted tiny">95%区間 {_yen(s["mean_ci"][0])}〜{_yen(s["mean_ci"][1])}</div>' if s.get("mean_ci") else ""
+            wci = f'<div class="muted tiny">{s["win_ci"][0] * 100:.0f}〜{s["win_ci"][1] * 100:.0f}%</div>' if s.get("win_ci") else ""
+            diff = ""
+            if m != "a" and g.get(f"{m}_minus_a"):
+                d = g[f"{m}_minus_a"]
+                dci = f'（{_yen(d["ci"][0])}〜{_yen(d["ci"][1])}）' if d.get("ci") else ""
+                sig = " ✅" if d.get("ci") and (d["ci"][0] > 0 or d["ci"][1] < 0) else ""
+                diff = f'{_yen(d["mean"])}<div class="muted tiny">{dci}{sig}</div>'
+            head = f'<td rowspan="3"><b>{title}</b><div class="muted tiny">{s["n"]}回・{s["n_days"]}日</div></td>' if i == 0 else ""
+            rows += (f'<tr>{head}<td>{labels[m]}</td><td class="num">{_yen(s["mean"])}{ci}</td>'
+                     f'<td class="num">{_yen(s["median"])}</td><td class="num">{s["win_rate"] * 100:.0f}%{wci}</td>'
+                     f'<td class="num">{s["max_consec_losses"]}</td><td class="num">{_yen(s["max_drawdown"], False)}</td>'
+                     f'<td class="num">{s["loss_limit_days"]}日</td><td class="num">{_yen(s["total"])}</td>'
+                     f'<td class="num">{diff or "—"}</td></tr>')
+    return rows
+
+
+def render_exit_section(ex: dict | None) -> str:
+    """決済方法の比較（10時終了／時間方式／1：3）。L7-1。毎朝の画面とマイルールは変えない"""
+    title = "🕙 決済方法の比較（10時終了／時間方式／1：3）"
+    if not ex or not ex.get("all", {}).get("a", {}).get("n"):
+        return f"""
+  <section class="section-box">
+    <h2 class="section-title">{title}</h2>
+    <div class="muted">まだ結果がありません（判定が買い・売りの日の5分足がたまると出ます）</div>
+  </section>
+"""
+    vl = {"buy_bias": "買いポジ主体", "sell_bias": "売りポジ主体"}
+    cl = {"high": "確度 高", "medium": "確度 中", "low": "確度 低"}
+    names = ex.get("names") or {}
+    groups = [("全体（判定どおり）", ex["all"])]
+    groups += [(vl.get(k, k), v) for k, v in ex.get("by_verdict", {}).items()]
+    groups += [(cl.get(k, k), v) for k, v in ex.get("by_confidence", {}).items()]
+    groups += [(names.get(k, k), v) for k, v in ex.get("by_code", {}).items()]
+    if ex.get("hands_off_reference"):
+        groups.append(("参考：手出し無用の日（寄り→9:05 の向き）", ex["hands_off_reference"]))
+    rows = _exit_rows(groups)
+    reasons = ex.get("exit_reasons") or {}
+    rs = "／".join(f'{m}: ' + "・".join(f"{k} {v}" for k, v in reasons.get(m, {}).items()) for m in ("a", "b", "c") if reasons.get(m))
+
+    act = ex.get("actual") or {}
+    if act.get("n"):
+        arows = ""
+        for r in act["rows"]:
+            side = lambda s: "買い" if s > 0 else "売り"
+            slip = f'{r["entry_slip"]:+,.0f}円' if r.get("entry_slip") is not None else "—"
+            arows += (f'<tr><td>{r["date"]}</td><td>{r["name"]}</td>'
+                      f'<td>{side(r["actual_side"])} {r["actual_open"] or ""}→{r["actual_close"] or ""}</td>'
+                      f'<td class="num">{_yen(r["actual_pnl100"])}</td>'
+                      f'<td>{side(r["sim_side"])} 09:05→{r["sim_time"]}</td><td class="num">{_yen(r["sim_pnl"])}</td>'
+                      f'<td class="num">{slip}</td><td class="num">{_yen(r["pnl_diff"])}</td></tr>')
+        slip_txt = f'・入った値段の差の平均 {act["mean_entry_slip"]:+,.1f}円（プラスは実際のほうが不利）' if act.get("mean_entry_slip") is not None else ""
+        actual = f"""
+      <h3>実際の約定との差（daytrade-journal・{act["n"]}件、向きが同じ {act["same_side"]}件）</h3>
+      <div class="period-note">その日その銘柄で 10:00 までに建てた最初の取引を100株あたりに直して、(a) と並べる。平均：実績 {_yen(act["mean_actual"])} ／ (a) {_yen(act["mean_sim"])}{slip_txt}</div>
+      <table class="results"><thead><tr><th>日付</th><th>銘柄</th><th>実際</th><th class="num">実績（100株）</th>
+        <th>(a)</th><th class="num">(a) の損益</th><th class="num">入値の差</th><th class="num">実績 − (a)</th></tr></thead><tbody>{arows}</tbody></table>"""
+    else:
+        actual = '<div class="muted tiny">実際の約定との差：同じ日・同じ銘柄の約定記録（振り返りメモの時刻つき）がまだありません</div>'
+
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">{title}</h2>
+    <div class="period-note">{ex.get("period", "")}・承認・試用銘柄の5分足（Yahoo・取れる範囲の60営業日）・100株・損切り -{ex["stop_yen"]:,}円・
+      判定が手出し無用の日（{ex.get("n_hands_off_days", 0)}日／{ex.get("n_market_days", 0)}日）は見送り</div>
+    <table class="results"><thead><tr><th></th><th>決済方法</th><th class="num">1回の平均</th><th class="num">中央値</th>
+      <th class="num">勝率</th><th class="num">最大連敗</th><th class="num">最大DD</th><th class="num">-1万円の日</th>
+      <th class="num">合計</th><th class="num">(a) との差</th></tr></thead><tbody>{rows}</tbody></table>
+    <div class="explainer">
+      <ul>
+        <li>(a) 9:05 に判定の向きで入り、-{ex["stop_yen"]:,}円に触れたら決済、触れなければ 10:00 の値段で決済（今のルール）。</li>
+        <li>(b) 10:00 までは (a) と同じ。10:00 に含み益なら、10:00 の値段から損切り幅ぶん不利な位置に逆指値を置き直し、15:25 までに触れたら決済、触れなければ引けで決済。</li>
+        <li>(c) -{ex["stop_yen"]:,}円／+{ex["target_yen"]:,}円 の OCO。どちらにも触れなければ引けで決済。</li>
+        <li>5分足の高値・安値で判定するため、同じ足で損切りと利確の両方に触れたら損切りが先とみなす（不利側）。手数料・スリッページは入れていない。</li>
+        <li>件数が少ないので、平均と勝率には95%区間を付けた（平均は日を単位に選び直すブートストラップ）。「(a) との差」の ✅ は区間が0をまたがないもの。</li>
+        <li>この結果を見て、利確の目安（損切り×3）の表示やマイルールをどうするかはユーザーが決める。この節は検証だけで、毎朝の画面とルールは変えない。</li>
+      </ul>
+      <div class="muted tiny">決済の内訳 {rs}</div>
+      {actual}
+    </div>
+  </section>
+"""
+
+
 def render_screen_section(screen: dict | None) -> str:
     """売買代金上位の銘柄スクリーニング（研究用）"""
     if not screen or not screen.get("results"):
@@ -791,6 +910,7 @@ def render_report(
     idea_result: dict | None = None,
     level_result: dict | None = None,
     us_range_result: dict | None = None,
+    exit_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -910,6 +1030,7 @@ def render_report(
     idea_section = render_idea_section(idea_result)
     level_section = render_level_section(level_result, screen_result, morning_result)
     us_range_section = render_us_range_section(us_range_result)
+    exit_section = render_exit_section(exit_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -1090,6 +1211,7 @@ def render_report(
   {checkpoint_section}
   {fib_section}
   {level_section}
+  {exit_section}
   {us_range_section}
   {idea_section}
 
@@ -1192,6 +1314,7 @@ def render_report(
         "ideas": idea_result,
         "levels": level_result,
         "us_range": us_range_result,
+        "exit_study": exit_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -1299,6 +1422,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Level study failed: {e}")
 
     print()
+    print("🔍 Running exit study (10時終了／時間方式／1：3)")
+    exit_result = None
+    try:
+        from exit_study import run_exit_study
+        exit_result = run_exit_study()
+    except Exception as e:
+        print(f"⚠️ Exit study failed: {e}")
+
+    print()
     print("🔍 Running idea study (メンサロ記事の考え方)")
     idea_result = None
     try:
@@ -1334,6 +1466,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         idea_result=idea_result,
         level_result=level_result,
         us_range_result=us_range_result,
+        exit_result=exit_result,
     )
 
 

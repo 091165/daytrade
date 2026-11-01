@@ -46,6 +46,7 @@ jobs:
           python tests/test_idea_study.py
           python tests/test_idea_study2.py
           python tests/test_trade_plan.py
+          python tests/test_exit_study.py
 
       - name: Run backtest and generate report
         run: |

@@ -13,7 +13,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from stock_trend import bar_streak, bias_hint, deviation_25ma, deviation_sigma, this_week_bar, trend_summary
+from stock_trend import at_high, at_high_flags, bar_streak, bias_hint, deviation_25ma, deviation_sigma, this_week_bar, trend_summary
 
 
 def _ohlc(n=300, seed=0, start="2025-06-02"):
@@ -72,7 +72,31 @@ def test_bias_hint():
     print("✅ test_bias_hint")
 
 
+def test_at_high():
+    idx = pd.bdate_range("2025-01-01", periods=300)
+    base = pd.Series(np.r_[np.linspace(100, 120, 200), np.linspace(120, 110, 97), [118, 121, 119]], index=idx)
+    # 直近5日に 121 > それより前の52週の高値 120 → 52週高値更新中
+    assert at_high(base, base) == "52週高値更新中"
+    # 日足より前の最高値 150 を超えていないので上場来ではない／130 なら上場来
+    assert at_high(base, base, older_high=150) == "52週高値更新中"
+    assert at_high(base, base, older_high=119) == "上場来高値更新中"
+    # 6日前に付けた高値は「更新中」に入らない
+    old = base.copy()
+    old.iloc[-6] = 125
+    assert at_high(old, old) is None
+    # データが250本に足りなければ判定しない
+    assert at_high(base.iloc[-200:], base.iloc[-200:]) is None
+    # 検証用の日ごとの判定は、前日までで at_high と同じ
+    flags = at_high_flags(base)
+    nxt = idx[-1] + pd.offsets.BDay(1)
+    ext = pd.concat([base, pd.Series([90.0], index=[nxt])])
+    assert bool(at_high_flags(ext).iloc[-1]) == (at_high(base, base) is not None)
+    assert not flags.iloc[:250].any()
+    print("✅ test_at_high")
+
+
 if __name__ == "__main__":
+    test_at_high()
     test_deviation_and_sigma()
     test_today_bar_not_used()
     test_monthly_streak_excludes_current_month()

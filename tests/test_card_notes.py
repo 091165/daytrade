@@ -67,7 +67,31 @@ def test_closing_and_sox_notes():
     print("✅ test_closing_and_sox_notes")
 
 
+def test_high_notes():
+    from card_notes import high_notes
+    idx = pd.bdate_range("2025-06-02", periods=300)
+    close = np.r_[np.linspace(100, 120, 296), [121, 122, 123, 124]]
+    d = pd.DataFrame({"Open": close, "High": close + 1, "Low": close - 1, "Close": close}, index=idx)
+    today = (idx[-1] + pd.offsets.BDay(1)).date()
+    n = high_notes(d, today, "buy_bias")
+    assert len(n) == 1 and "52週高値を更新中（買いの順張りが入りやすい）" in n[0]["text"]
+    n = high_notes(d, today, "sell_bias")
+    assert len(n) == 2 and n[1]["level"] == "high" and "売りは見送り候補" in n[1]["text"]
+    assert "買い" not in n[1]["text"].replace("買いの", "")          # 買いを勧める文にはしない
+    assert "上場来高値を更新中" in high_notes(d, today, None, older_high=110)[0]["text"]
+    # 今日の足（未確定）で高値を付けても使わない
+    falling = d.copy()
+    falling.iloc[-5:, :] = 100
+    assert high_notes(falling, today) == []
+    notes = build_card_notes(code="5803", ohlc=d, today=today, validation=None, fiscal_month=3, us_proxies=("GLW",),
+                             sox_change_pct=None, nikkei_week_positive=None, nikkei_month_positive=None,
+                             verdict="sell_bias")
+    assert sum(1 for x in notes if x.get("kind") == "high") == 2
+    print("✅ test_high_notes")
+
+
 if __name__ == "__main__":
+    test_high_notes()
     test_trend_note_depends_on_validation()
     test_fiscal_and_dividend_notes()
     test_closing_and_sox_notes()
