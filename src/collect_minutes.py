@@ -23,6 +23,8 @@ KEEP_FROM, KEEP_TO = time(9, 0), time(10, 29)
 MARKET_CLOSE = time(15, 30)
 MINUTES_DIR = Path(__file__).resolve().parent.parent / "data" / "minutes"
 COLUMNS = ["code", "time", "open", "high", "low", "close", "volume"]
+# 売買代金上位のほかに集める指数・ETF（大台の初回タッチの検証用。1570 は売買代金上位に入っている）
+EXTRA_MINUTES: list[tuple[str, str]] = [("N225", "^N225"), ("1357", "1357.T")]
 
 
 def minute_rows(df: pd.DataFrame, code: str) -> dict[date, list[list]]:
@@ -60,6 +62,18 @@ def write_day(path: Path, rows: list[list]) -> None:
         w.writerows(sorted(rows, key=lambda r: (r[0], r[1])))
 
 
+def add_missing_codes(path: Path, rows: list[list]) -> list[str]:
+    """保存済みのファイルにない銘柄の行だけを足して書き直す。足した銘柄コードを返す"""
+    with path.open(encoding="utf-8") as f:
+        old = list(csv.reader(f))[1:]
+    have = {r[0] for r in old}
+    new = [r for r in rows if r[0] not in have]
+    if not new:
+        return []
+    write_day(path, old + new)
+    return sorted({r[0] for r in new})
+
+
 def load_minutes(minutes_dir: Path = MINUTES_DIR) -> pd.DataFrame:
     """保存した1分足を全部読み込む（index なし、date 列つき）。"""
     frames = []
@@ -76,7 +90,7 @@ def collect(now: datetime | None = None) -> int:
 
     now = now or datetime.now(JST)
     by_day: dict[date, list[list]] = {}
-    for code, t, _ in SCREEN_JP:
+    for code, t in [(c, t) for c, t, _ in SCREEN_JP] + EXTRA_MINUTES:
         df = fetch_intraday(t, "1m", days=29, chunk_days=7)     # 直近29日分（初回はさかのぼって保存できる）
         if df.empty:
             print(f"⚠️ no data: {t}")
@@ -90,6 +104,12 @@ def collect(now: datetime | None = None) -> int:
         codes = {r[0] for r in by_day[d]}
         opened = {r[0] for r in by_day[d] if r[1] == "09:00"}
         print(f"✅ data/minutes/{d.isoformat()}.csv  {len(codes)}銘柄 {len(by_day[d])}行（9:00の足あり {len(opened)}銘柄）")
+    # 保存済みの日に、あとから集め始めた銘柄（指数・ETF など）がなければ足す
+    for d in sorted(existing & set(by_day)):
+        path = MINUTES_DIR / f"{d.isoformat()}.csv"
+        added = add_missing_codes(path, by_day[d])
+        if added:
+            print(f"➕ data/minutes/{d.isoformat()}.csv に {'・'.join(added)} を追加")
     print(f"保存 {len(saved)}日 ／ これまでの合計 {len(existing) + len(saved)}日")
     return len(saved)
 

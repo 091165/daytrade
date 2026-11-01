@@ -308,6 +308,18 @@ def main() -> int:
         nikkei_futures=market["nikkei_futures"]["price"],
     )
 
+    # 節目（大台）：日経・1570・1357 と、その日の判定に合わせた使い方（L6-2・L7-3）
+    from kiriban import build_big_levels, kiriban_day_hint
+    from round_study import levels_evidence
+    round_val = _load_report_key(output_dir, "round_study")
+    levels = {
+        "rows": build_big_levels(market["nikkei"].get("prev_close"), (market.get("etf_1570") or {}).get("prev_close"),
+                                 (market.get("etf_1357") or {}).get("prev_close")),
+        "hint": kiriban_day_hint(direction_signal.verdict),
+        "evidence": levels_evidence(round_val, direction_signal.verdict),
+    }
+    kiriban_signal["big_levels"] = levels
+
     # セクター
     sector_signals = build_all_sector_signals(market.get("us_sector_changes", {}))
     sector_signals_dict = [s.as_dict() for s in sector_signals]
@@ -401,9 +413,34 @@ def main() -> int:
             verdict=direction_signal.verdict, older_high=older_highs.get(f["code"]),
             high_evidence=(f.get("validation") or {}).get("at_high"),
         )
+        # 節目を少し割ったところの反発（L6-3）：検証で有意なときだけ
+        from round_study import big_number_note, dip_card_note
+        recs = [r for r in (focus_ohlc_full.get(f["code"]) or []) if r["date"] < today.isoformat()]
+        last_close = recs[-1]["close"] if recs else None
+        dip = dip_card_note(round_val.get("dip"), last_close)
+        # 株価の大台の手前（L6-4・手法10）
+        big = big_number_note(last_close, (round_val.get("big_number") or {}).get("all"))
+        f["notes"] = [n for n in (big,) if n] + f["notes"] + [n for n in (dip,) if n]
+
+    # レンジ型の日（L6-5）：手出し無用の日だけ。承認・試用銘柄が決算明けなら出さない
+    from market_direction import build_range_day
+    us = market["us_markets"]
+    rd_val = (_load_report_key(output_dir, "checkpoints") or {}).get("range_day") or {}
+    rd_ev = ""
+    if rd_val.get("n_range") and rd_val.get("significant"):
+        rd_ev = (f'検証（直近60日・{rd_val["n_range"]}日）：寄り→10:00 が上げた日 {rd_val["up_range"] * 100:.0f}%'
+                 f'（ほかの日 {rd_val["up_other"] * 100:.0f}%）')
+    range_day = build_range_day(
+        direction_signal.verdict,
+        [us.get("nasdaq_change_pct"), us.get("dow_change_pct"), us.get("sox_change_pct")],
+        direction_signal.futures_diff,
+        earnings_names=[f["name"] for f in focus_signals_dict if ((f.get("range") or {}).get("morning") or {}).get("earnings_today")],
+        evidence=rd_ev,
+    )
 
     # JSON
     signal = {
+        "range_day": range_day,
         "market": market,
         "warnings": warnings_dict,
         "market_context": market_ctx.as_dict(),
@@ -445,6 +482,8 @@ def main() -> int:
         focus_signals=focus_signals_dict,
         late_notice=notice,
         direction_v2=direction_v2,
+        levels=levels,
+        range_day=range_day,
     )
 
     # 銘柄ごとのページ（図と作戦）
@@ -500,6 +539,7 @@ def _build_stub_data() -> dict:
         },
         "nikkei_futures": {"price": 37400.0},
         "etf_1570": {"prev_close": 26000.0},
+        "etf_1357": {"prev_close": 9850.0},
         "us_markets": {
             "nasdaq_change_pct": -1.2,
             "dow_change_pct": -0.8,

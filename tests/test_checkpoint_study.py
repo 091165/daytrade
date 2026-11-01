@@ -107,7 +107,29 @@ def test_noise_is_not_significant():
     print("✅ test_noise_is_not_significant")
 
 
+def test_range_day_study():
+    from checkpoint_study import range_day_frame, study_range_day
+    idx = pd.date_range("2026-10-01 09:00", "2026-10-01 10:25", freq="5min")
+    px = np.r_[np.linspace(1000, 980, 3), np.linspace(985, 1010, len(idx) - 3)]
+    m5 = pd.DataFrame({"Open": px, "Low": px - 2, "High": px + 2, "Close": px}, index=idx)
+    daily = pd.DataFrame({"Open": [1000.0], "Close": [1010.0]}, index=pd.to_datetime(["2026-10-01"]))
+    f = range_day_frame(m5, daily)
+    hm = idx.strftime("%H:%M")
+    low = min(px[hm < "09:15"].min() - 2, 1000)
+    p10 = px[list(hm).index("10:00")]
+    assert abs(f["rebound"].iloc[0] - (p10 / low - 1) * 100) < 1e-9 and bool(f["up"].iloc[0]) == (p10 > 1000)
+
+    rng = np.random.default_rng(0)
+    days = pd.bdate_range("2026-01-01", periods=120)
+    flags = pd.Series(rng.random(120) < 0.4, index=days)
+    fr = pd.DataFrame({"rebound": rng.random(120), "up": np.where(flags, rng.random(120) < 0.8, rng.random(120) < 0.5)}, index=days)
+    r = study_range_day({"A": fr}, flags)
+    assert r["n_range"] == int(flags.sum()) and r["up_range"] > r["up_other"] and r["p_up"] < 0.05
+    print("✅ test_range_day_study")
+
+
 if __name__ == "__main__":
+    test_range_day_study()
     test_prices_use_daily_open_and_bar_opens()
     test_segment_frame_columns()
     test_detects_follow_through_and_us_link()

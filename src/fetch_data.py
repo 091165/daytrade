@@ -15,6 +15,7 @@ JST = ZoneInfo("Asia/Tokyo")
 TICKER_NIKKEI_SPOT = "^N225"
 TICKER_NIKKEI_FUT = "NKD=F"
 TICKER_NIKKEI_LEV_ETF = "1570.T"
+TICKER_NIKKEI_DOUBLE_INV = "1357.T"   # 日経ダブルインバース（大台の表示用）
 TICKER_NASDAQ = "^IXIC"
 TICKER_DOW = "^DJI"
 TICKER_SOX = "^SOX"
@@ -200,6 +201,11 @@ def fetch_all_market_data(us_sector_tickers: list[str] | None = None) -> dict:
     nikkei_prev_close = fetch_prev_close(TICKER_NIKKEI_SPOT)
     nikkei_futures = fetch_nikkei_futures_jpy()
     etf_1570_prev_close = fetch_prev_close(TICKER_NIKKEI_LEV_ETF)
+    try:
+        etf_1357_prev_close = fetch_prev_close(TICKER_NIKKEI_DOUBLE_INV)
+    except Exception as e:  # 表示だけなので、取れなくても続ける
+        print(f"⚠️ Failed to fetch 1357: {e}")
+        etf_1357_prev_close = None
 
     nasdaq_change = fetch_change_pct(TICKER_NASDAQ)
     dow_change = fetch_change_pct(TICKER_DOW)
@@ -235,6 +241,9 @@ def fetch_all_market_data(us_sector_tickers: list[str] | None = None) -> dict:
         },
         "etf_1570": {
             "prev_close": etf_1570_prev_close,
+        },
+        "etf_1357": {
+            "prev_close": etf_1357_prev_close,
         },
         "us_markets": {
             "nasdaq_change_pct": nasdaq_change,

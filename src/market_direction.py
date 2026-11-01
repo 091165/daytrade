@@ -250,3 +250,35 @@ def build_market_direction_v2(
     else:
         verdict = "hands_off"
     return MarketDirectionV2(verdict, us_dir, fx, max(bull, bear), agree_dir)
+
+
+# ----- レンジ型の日（過去ログ6 L6-5）-----
+
+RANGE_US_MAX = 0.5          # 米指数がすべて ±0.5% 未満
+RANGE_FUTURES_MAX = 100     # 現対 ±100円以内
+RANGE_DAY_TEXT = "レンジ型の日：急落・急騰への逆張りが中心。10時までは買いが有利になりやすい"
+
+
+def is_range_day(us_changes: list[float | None], futures_diff: float | None) -> bool:
+    """米指数がすべて ±0.5% 未満で、現対が ±100円以内なら True（どれか欠けていれば False）"""
+    if futures_diff is None or not us_changes or any(x is None for x in us_changes):
+        return False
+    return all(abs(x) < RANGE_US_MAX for x in us_changes) and abs(futures_diff) <= RANGE_FUTURES_MAX
+
+
+def build_range_day(verdict: str, us_changes: list[float | None], futures_diff: float | None,
+                    earnings_names: list[str] | None = None, evidence: str = "") -> dict:
+    """マイルール欄の下に出す「レンジ型の日」。逆張りの表示なので、トレンド日（買い・売りポジ主体）には出さない。
+    承認・試用銘柄が決算明けの日も出さない（材料で一方向に動く日は、この逆張りは使わない）"""
+    rd = is_range_day(us_changes, futures_diff)
+    out = {"range_day": rd, "show": False, "text": "", "why": "", "evidence": evidence}
+    if not rd or verdict != "hands_off":
+        return out
+    if earnings_names:
+        out["why"] = f"{'・'.join(earnings_names)} が決算明けのため、レンジ型の日の表示は出さない"
+        return out
+    out["show"] = True
+    out["text"] = RANGE_DAY_TEXT + ("" if evidence else "（未検証）")
+    out["why"] = (f"米指数がすべて ±{RANGE_US_MAX}% 未満・現対 {futures_diff:+,.0f}円（±{RANGE_FUTURES_MAX}円以内）。"
+                  "決算・セクターの材料で一方向に動いている銘柄には使わない。ルール（承認銘柄だけ・100株・10時前終了・2連敗で終了）はそのまま")
+    return out

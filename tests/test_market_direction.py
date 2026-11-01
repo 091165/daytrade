@@ -155,7 +155,26 @@ def test_us_closed_forces_hands_off():
     print("✅ test_us_closed_forces_hands_off")
 
 
+def test_range_day():
+    from market_direction import build_range_day, is_range_day
+    assert is_range_day([0.2, -0.4, 0.49], 80)
+    assert not is_range_day([0.2, -0.5, 0.1], 80)            # 0.5% ちょうどは外
+    assert not is_range_day([0.2, 0.1, 0.1], -150)
+    assert not is_range_day([0.2, None, 0.1], 0)
+    r = build_range_day("hands_off", [0.1, 0.1, 0.1], 50)
+    assert r["show"] and "逆張り" in r["text"] and "未検証" in r["text"]
+    # トレンド日には絶対に出さない
+    assert not build_range_day("buy_bias", [0.1, 0.1, 0.1], 50)["show"]
+    assert not build_range_day("sell_bias", [0.1, 0.1, 0.1], 50)["show"]
+    # 承認銘柄が決算明けなら出さない
+    e = build_range_day("hands_off", [0.1, 0.1, 0.1], 50, earnings_names=["村田"])
+    assert not e["show"] and e["range_day"] and "決算明け" in e["why"]
+    assert "未検証" not in build_range_day("hands_off", [0.1, 0.1, 0.1], 50, evidence="検証：…")["text"]
+    print("✅ test_range_day")
+
+
 if __name__ == "__main__":
+    test_range_day()
     test_us_closed_forces_hands_off()
     test_v2_all_agree_and_fx_or_sp_against()
     test_classify_move()

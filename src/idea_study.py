@@ -116,6 +116,7 @@ def build_day_table(ohlc: dict[str, pd.DataFrame]) -> pd.DataFrame:
     n = {k: _norm(ohlc["^N225"][k]) for k in ("Open", "High", "Low", "Close")}
     days = n["Close"].index
     us_pct = {t: _norm(ohlc[t]["Close"]).pct_change() * 100 for t in ("^IXIC", "^DJI", "^SOX", "^GSPC", "JPY=X")}
+    gold = _norm(ohlc["GC=F"]["Close"]).pct_change() * 100 if "GC=F" in ohlc else None
     us_days = set(_norm(ohlc["^GSPC"]["Close"]).index)
     nkd = _norm(ohlc["NKD=F"]["Close"])
     rows = []
@@ -135,6 +136,7 @@ def build_day_table(ohlc: dict[str, pd.DataFrame]) -> pd.DataFrame:
             "prev_close": n["Close"][tp],
             "nas": vals["^IXIC"], "dow": vals["^DJI"], "sox": vals["^SOX"], "sp": vals["^GSPC"],
             "usdjpy": vals["JPY=X"], "futures_diff": float(fut - n["Close"][tp]),
+            "gold": float(gold.asof(before)) if gold is not None and len(gold) else np.nan,
             "us_closed": us_session not in us_days,
             "gap_days": (t - tp).days,
         })
@@ -147,7 +149,7 @@ def build_day_table(ohlc: dict[str, pd.DataFrame]) -> pd.DataFrame:
 
 
 def add_verdicts(df: pd.DataFrame) -> pd.DataFrame:
-    v1, conf, v2, agree = [], [], [], []
+    v1, conf, v2, agree, agree_dir = [], [], [], [], []
     for r in df.itertuples():
         a = build_market_direction(r.nas, r.dow, r.sox, r.futures_diff)
         b = build_market_direction_v2(r.nas, r.dow, r.sox, r.sp, r.usdjpy, r.futures_diff)
@@ -155,9 +157,11 @@ def add_verdicts(df: pd.DataFrame) -> pd.DataFrame:
         conf.append(a.confidence)
         v2.append(b.verdict)
         agree.append(b.agreement_count)
+        agree_dir.append(b.agreement_direction)
     side = {"buy_bias": 1, "sell_bias": -1, "hands_off": 0}
     out = df.copy()
     out["v1"], out["conf"], out["v2"], out["agree"] = v1, conf, v2, agree
+    out["agree_dir"] = agree_dir
     out["side_v1"] = out["v1"].map(side)
     out["side_v2"] = out["v2"].map(side)
     return out
@@ -380,7 +384,7 @@ def collect_pvalues(res: dict) -> list[tuple[str, float]]:
 def run_idea_study() -> dict:
     import yfinance as yf
 
-    idx_t = ["^N225", "^IXIC", "^DJI", "^SOX", "^GSPC", "JPY=X", "NKD=F"]
+    idx_t = ["^N225", "^IXIC", "^DJI", "^SOX", "^GSPC", "JPY=X", "NKD=F", "GC=F"]
     stk_t = {f"{c}.T": n for c, n in STOCKS.items()}
     raw = yf.download(" ".join(idx_t + list(stk_t)), start=START, interval="1d", progress=False,
                       group_by="ticker", auto_adjust=True, threads=True)
@@ -396,6 +400,9 @@ def run_idea_study() -> dict:
                 x.columns = x.columns.get_level_values(0)
             x = x[["Open", "High", "Low", "Close"]].dropna() if not x.empty else x
         if x.empty:
+            if t == "GC=F":     # ゴールドは検証の追加分だけなので、取れなくても他は続ける
+                print("  ⚠️ GC=F の日足を取得できませんでした（ゴールドの検証はスキップ）")
+                continue
             raise RuntimeError(f"{t} の日足を取得できませんでした")
         ohlc[t] = x
     df = add_verdicts(build_day_table(ohlc))
@@ -415,6 +422,8 @@ def run_idea_study() -> dict:
            "us_closed_days": int(df["us_closed"].sum())}
     ok = df[~df["us_closed"]]
     res["v2"] = study_v2(ok)
+    from gold_study import study_gold
+    res["gold"] = study_gold(ok) if ok["gold"].notna().sum() > 100 else None
     res["sp05"] = study_sp05(ok, {"日経平均": ok["ret"], **{n: s["ret"] for n, s in stocks.items()}})
     res["closing"] = study_closing(df)
     res["weekday"] = study_weekday(df, stocks)
@@ -444,7 +453,8 @@ def run_idea_study() -> dict:
     from idea_study2 import collect_pvalues2, run_part2
     res["extra"] = run_part2(df, ohlc, stk_t, hourly, START)
 
-    ps = collect_pvalues(res) + collect_pvalues2(res["extra"])
+    from gold_study import collect_gold_pvalues
+    ps = collect_pvalues(res) + collect_pvalues2(res["extra"]) + collect_gold_pvalues(res.get("gold"))
     qs = bh_qvalues([p for _, p in ps])
     res["tests"] = [{"name": n, "p": p, "q": q, "significant": q < Q_TH} for (n, p), q in zip(ps, qs)]
     _print(res)

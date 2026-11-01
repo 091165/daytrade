@@ -64,7 +64,22 @@ def test_chart_to_frame():
     print("✅ test_chart_to_frame")
 
 
+def test_add_missing_codes():
+    import tempfile
+    from collect_minutes import add_missing_codes, load_minutes, write_day
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "2026-10-30.csv"
+        write_day(path, [["1570", "09:05", 1, 2, 0.5, 1.5, 10]])
+        added = add_missing_codes(path, [["1570", "09:05", 9, 9, 9, 9, 9], ["N225", "09:05", 50000, 50100, 49900, 50050, 0]])
+        assert added == ["N225"]
+        df = load_minutes(Path(tmp))
+        assert sorted(df["code"]) == ["1570", "N225"] and float(df[df["code"] == "1570"]["open"].iloc[0]) == 1
+        assert add_missing_codes(path, [["N225", "09:06", 1, 1, 1, 1, 0]]) == []
+    print("✅ test_add_missing_codes")
+
+
 if __name__ == "__main__":
+    test_add_missing_codes()
     test_minute_rows_keeps_morning_only()
     test_days_to_save_skips_existing_and_unfinished_today()
     test_write_and_load_roundtrip()

@@ -9,6 +9,7 @@ Reference:
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, asdict
 from typing import Literal
 
@@ -187,3 +188,49 @@ def kiriban_day_hint(verdict: str) -> str:
     """節目欄の見出しに添える1行。トレンド日は判定方向と同じ向きの売買だけ（押し目買い・戻り売り）を出し、
     逆張りの文は手出し無用の日だけ（トレンド日の「逆張り禁止」と矛盾させない）"""
     return KIRIBAN_DAY_HINTS.get(verdict, "")
+
+
+# ----- 日経・日経レバ（1570）・ダブルインバース（1357）の大台（過去ログ6・L6-2） -----
+
+BIG_LEVEL_STEP = 1000           # 3つとも 1,000円単位
+NIKKEI_MAJOR_STEP = 10000       # 10,000円単位は「大台」として目立たせる
+
+
+def nearest_round(prev_close: float, step: float) -> tuple[float, float]:
+    """前日終値のすぐ上（より大きい）とすぐ下（以下）の step の倍数"""
+    down = math.floor(prev_close / step) * step
+    up = down + step
+    return float(up), float(down)
+
+
+def big_levels(name: str, prev_close: float | None, step: float = BIG_LEVEL_STEP,
+               major_step: float | None = None) -> dict | None:
+    """1銘柄分の、前日終値の上下でいちばん近い大台と、前日終値からの距離（円）"""
+    if not prev_close or prev_close <= 0:
+        return None
+    up, down = nearest_round(prev_close, step)
+    out = {"name": name, "prev_close": float(prev_close),
+           "up": up, "up_dist": up - prev_close, "down": down, "down_dist": down - prev_close,
+           "up_major": bool(major_step and up % major_step == 0),
+           "down_major": bool(major_step and down % major_step == 0)}
+    if major_step:
+        mu, md = nearest_round(prev_close, major_step)
+        out["major_up"], out["major_down"] = mu, md
+    return out
+
+
+def build_big_levels(nikkei: float | None, etf_1570: float | None, etf_1357: float | None) -> list[dict]:
+    """節目欄に出す3つ（取れなかったものは出さない）"""
+    rows = [big_levels("日経", nikkei, major_step=NIKKEI_MAJOR_STEP),
+            big_levels("日経レバ(1570)", etf_1570, major_step=NIKKEI_MAJOR_STEP),
+            big_levels("Wインバース(1357)", etf_1357, major_step=NIKKEI_MAJOR_STEP)]
+    return [r for r in rows if r]
+
+
+def big_level_text(r: dict) -> str:
+    """「日経 40,000（大台）まで +350円 ／ 39,000 まで -650円」"""
+    def one(price, dist, major):
+        if abs(dist) < 0.5:
+            return f'{price:,.0f}{"（大台）" if major else ""} ちょうど'
+        return f'{price:,.0f}{"（大台）" if major else ""} まで {dist:+,.0f}円'
+    return f'{r["name"]} {one(r["up"], r["up_dist"], r["up_major"])} ／ {one(r["down"], r["down_dist"], r["down_major"])}'

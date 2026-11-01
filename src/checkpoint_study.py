@@ -170,6 +170,70 @@ def pooled_stats(all_frames: dict[str, dict[tuple[str, str], pd.DataFrame]]) -> 
     return out
 
 
+# ========== レンジ型の日（過去ログ6 L6-5） ==========
+
+def range_day_frame(m5: pd.DataFrame, daily: pd.DataFrame) -> pd.DataFrame:
+    """日ごとに「寄り→9:15 の最安値から 10:00 までの戻り（%）」と「寄り→10:00 が上げたか」（純粋関数）"""
+    if m5 is None or daily is None or m5.empty or daily.empty:
+        return pd.DataFrame()
+    x = m5.dropna(subset=["Open", "Low"])
+    if getattr(x.index, "tz", None) is not None:
+        x = x.tz_convert("Asia/Tokyo")
+    o = _norm(daily["Open"])
+    rows = []
+    for day, g in x.groupby(x.index.date):
+        ts = pd.Timestamp(day)
+        hm = g.index.strftime("%H:%M")
+        early, at10 = g[hm < "09:15"], g[hm == "10:00"]
+        if ts not in o.index or early.empty or at10.empty:
+            continue
+        low = min(float(early["Low"].min()), float(o[ts]))
+        p10 = float(at10["Open"].iloc[0])
+        rows.append({"date": ts, "rebound": (p10 / low - 1) * 100, "up": p10 > float(o[ts])})
+    return pd.DataFrame(rows).set_index("date") if rows else pd.DataFrame()
+
+
+def range_day_flags(day_table: pd.DataFrame) -> pd.Series:
+    """idea_study.build_day_table の表から、日ごとの range_day（米3指数 ±0.5%未満・現対 ±100円以内）"""
+    from market_direction import is_range_day
+    return pd.Series([is_range_day([r.nas, r.dow, r.sox], r.futures_diff) and not r.us_closed
+                      for r in day_table.itertuples()], index=day_table.index)
+
+
+def study_range_day(frames: dict[str, pd.DataFrame], flags: pd.Series) -> dict:
+    """全銘柄まとめ：日ごとに銘柄平均をとってから、range_day の日とそうでない日を比べる（純粋関数）"""
+    from scipy import stats as st
+    allf = [f for f in frames.values() if not f.empty]
+    if not allf:
+        return {"n_range": 0}
+    df = pd.concat(allf).groupby(level=0).agg(rebound=("rebound", "mean"), up=("up", "mean"))
+    df = df.join(flags.rename("range"), how="inner")
+    a, b = df[df["range"]], df[~df["range"]]
+    out = {"n_range": int(len(a)), "n_other": int(len(b)),
+           "rebound_range": float(a["rebound"].mean()) if len(a) else None,
+           "rebound_other": float(b["rebound"].mean()) if len(b) else None,
+           "up_range": float((a["up"] > 0.5).mean()) if len(a) else None,
+           "up_other": float((b["up"] > 0.5).mean()) if len(b) else None,
+           "p_rebound": None, "p_up": None, "significant": False}
+    if len(a) >= 5 and len(b) >= 5:
+        out["p_rebound"] = float(st.ttest_ind(a["rebound"], b["rebound"], equal_var=False).pvalue)
+    if len(a) >= 5:
+        k = int((a["up"] > 0.5).sum())
+        out["p_up"] = float(st.binomtest(k, len(a), 0.5).pvalue)
+    out["significant"] = bool(len(a) >= MIN_DAYS and out["p_up"] is not None and out["p_up"] < 0.05
+                              and (out["up_range"] or 0) > 0.5)
+    return out
+
+
+def _range_day_table(start: str = "2025-01-01") -> pd.DataFrame:
+    import yfinance as yf
+    from idea_study import build_day_table
+    t = ["^N225", "^IXIC", "^DJI", "^SOX", "^GSPC", "JPY=X", "NKD=F"]
+    raw = yf.download(" ".join(t), start=start, interval="1d", progress=False, group_by="ticker",
+                      auto_adjust=True, threads=True)
+    return build_day_table({k: raw[k][["Open", "High", "Low", "Close"]].dropna() for k in t})
+
+
 def run_checkpoint_study() -> dict:
     import yfinance as yf
     from focus_stocks import FOCUS_STOCKS
@@ -221,7 +285,21 @@ def run_checkpoint_study() -> dict:
         for v in s["stats"].values():
             if v["significant"]:
                 print(f"    ✅ {s['name']} {v['seg']} ← {PREDICTORS[v['key']]} r={v['r']:+.2f} 当たり{v['hit'] * 100:.0f}%")
-    return {"source": "Yahoo 5分足・直近60日（寄り値は日足の始値）", "segments": [seg_label(s) for s in SEGMENTS],
+    range_day = {}
+    try:
+        flags = range_day_flags(_range_day_table())
+        rframes = {}
+        for t, (code, _) in jp.items():
+            try:
+                rframes[code] = range_day_frame(m5[t], d1[t])
+            except KeyError:
+                continue
+        range_day = study_range_day(rframes, flags)
+        print(f"  レンジ型の日 {range_day.get('n_range', 0)}日：寄り→10:00 上げ {range_day.get('up_range')} ／ ほかの日 {range_day.get('up_other')}")
+    except Exception as e:
+        print(f"  ⚠️ レンジ型の日の検証に失敗: {e}")
+    return {"range_day": range_day,
+            "source": "Yahoo 5分足・直近60日（寄り値は日足の始値）", "segments": [seg_label(s) for s in SEGMENTS],
             "predictors": PREDICTORS, "pooled": pooled,
             "per_stock": [{"code": s["code"], "name": s["name"], "days": s["days"],
                            "hits": [v for v in s["stats"].values() if v["significant"]]} for s in per_stock],

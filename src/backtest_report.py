@@ -18,6 +18,7 @@ from direction_backtest import DirectionBacktestResult
 
 
 JST = ZoneInfo("Asia/Tokyo")
+MIN_RANGE_DAYS = 30          # checkpoint_study.MIN_DAYS と同じ
 
 
 # ----- セクター検証セクション用ヘルパー -----
@@ -402,6 +403,16 @@ def render_checkpoint_section(cp: dict | None) -> str:
         f'<li>✅ {s["name"]}：{h["seg"]} ← {labels[h["key"]]}（r={h["r"]:+.2f}・当たり{h["hit"] * 100:.0f}%）</li>'
         for s in cp["per_stock"] for h in s["hits"]
     ) or "<li>銘柄ごとでは、補正後も有意なものはなし</li>"
+    rd = cp.get("range_day") or {}
+    pc = lambda x: "—" if x is None else f"{x * 100:.0f}%"
+    sg = lambda x: "—" if x is None else f"{x:.2f}%"
+    rd_html = (f"""
+      <h3>🔁 レンジ型の日（米3指数がすべて ±0.5% 未満・現対 ±100円以内）：{rd["n_range"]}日 ／ ほかの日 {rd["n_other"]}日</h3>
+      <ul>
+        <li>寄り→9:15 の最安値から 10:00 までの戻り（銘柄平均）：{sg(rd["rebound_range"])} ／ ほかの日 {sg(rd["rebound_other"])}（p={rd["p_rebound"] if rd["p_rebound"] is None else f'{rd["p_rebound"]:.3f}'}）</li>
+        <li>寄り→10:00 が上げた日の割合：{pc(rd["up_range"])} ／ ほかの日 {pc(rd["up_other"])}（50%との差 p={rd["p_up"] if rd["p_up"] is None else f'{rd["p_up"]:.3f}'}）{" ✅" if rd.get("significant") else ""}</li>
+        <li>✅（{MIN_RANGE_DAYS}日以上・上げた割合が50%より多く p&lt;0.05）になるまで、毎朝の「レンジ型の日」の表示は「未検証」のまま。</li>
+      </ul>""" if rd.get("n_range") else "")
     return f"""
   <section class="section-box">
     <h2 class="section-title">⏱️ 節目ごとの方向（寄り・9:05・9:15・9:30・10:00）</h2>
@@ -413,6 +424,7 @@ def render_checkpoint_section(cp: dict | None) -> str:
     <div class="explainer">
       <h3>銘柄ごと（{cp["n_tests"]}通りを BH 補正）</h3>
       <ul>{hits}</ul>
+      {rd_html}
       <h3>📖 読み方</h3>
       <ul>
         <li><b>r</b>: 手がかりと区間の動きの相関（銘柄ごとに標準化して平均）。＋なら同じ向き、−なら逆向きに動きやすい。</li>
@@ -547,6 +559,7 @@ def render_idea_section(ideas: dict | None) -> str:
     ab_txt = (f'連休明け（{ab["連休明け"]["n"]}日）の窓 平均 {ab["連休明け"]["abs_gap"]:.2f}%・値幅 {ab["連休明け"]["range_pct"]:.2f}%'
               f' ／ 普段の日 {ab["普段の日"]["abs_gap"]:.2f}%・{ab["普段の日"]["range_pct"]:.2f}%（p={ab["p_gap"]:.3f}）') if ab else ""
     uc = ideas.get("us_closed") or {}
+    gold_html = render_gold_block(ideas.get("gold"), mark)
     return f"""
   <section class="section-box">
     <h2 class="section-title">{title}</h2>
@@ -555,6 +568,7 @@ def render_idea_section(ideas: dict | None) -> str:
       <h3>判定材料にドル円・S&amp;P500 を足す（後半 {v["split"]}〜 だけで比較）</h3>
       <table class="results"><thead><tr><th></th><th class="num">方向ありの日</th><th class="num">的中</th><th class="num">平均</th><th class="num">手出し無用の割合</th></tr></thead><tbody>{rows}</tbody></table>
       <div class="muted tiny">6材料（米4指数・ドル円・現対）のうちそろった数ごとの的中（今の判定で方向ありの日）：{agree}</div>
+      {gold_html}
       <h3>S&amp;P500 ±0.5% の翌日に、寄りで同じ向きに入って引けで手仕舞う</h3>
       <table class="results"><thead><tr><th></th><th class="num">+0.5%以上→買い 的中</th><th class="num">平均</th><th class="num">-0.5%以下→売り 的中</th><th class="num">平均</th></tr></thead><tbody>{sp_rows}</tbody></table>
       <h3>金曜・月末は今の向きと逆に動くか（時間外 = 前日引け→寄りの窓 ±0.2%）</h3>
@@ -573,6 +587,34 @@ def render_idea_section(ideas: dict | None) -> str:
     </div>
   </section>
 """
+
+
+def render_gold_block(g: dict | None, mark) -> str:
+    """ゴールドを材料に入れる（L6-1：固定の符号／L7-4：直近60日の相関の符号）"""
+    if not g:
+        return '<div class="muted tiny">ゴールド：まだ結果がありません</div>'
+    labs = {"fixed": "固定（ゴールド下げ＝上げ材料）", "corr": "直近60日の相関の符号（|r|&lt;0.1 は使わない）"}
+    rows = ""
+    for k, lab in labs.items():
+        r = g.get(k)
+        if not r:
+            continue
+        a, v, vg = r["alone"], r["v2"], r["v2_gold"]
+        agree = "　".join(f'{x["agree"]}つ：{_pc(x["hit"])}（{x["n"]}）' for x in r["by_agree"])
+        rows += (f'<tr><td>{lab}</td><td class="num">{_pc(a["hit"])}（{a["n"]}日）{mark(f"ゴールド:{k}:単独")}</td>'
+                 f'<td class="num">{_pc(v["hit"])}（{v["n"]}日）</td>'
+                 f'<td class="num">{_pc(vg["hit"])}（{vg["n"]}日）{mark(f"ゴールド:{k}:v2追加")}<div class="muted tiny">平均 {_sg(vg["mean"])}・手出し無用 {_pc(vg["hands_off_share"])}</div></td>'
+                 f'<td class="tiny">{agree}</td></tr>')
+    c = g.get("corr") or {}
+    note = ""
+    if c.get("last_r") is not None:
+        note = (f'直近60日の相関 r={c["last_r"]:+.2f}（記事の「ゴールド下げ＝上げ材料」は r がマイナスの関係）・'
+                f'相関がマイナスだった期間 {_pc(c.get("share_negative"))}・材料に使えた日 {_pc(c.get("share_used"))}')
+    return f"""
+      <h3>ゴールドを材料に入れる（前日のゴールド先物 GC=F の騰落 ±0.3%。v2 との比較は後半 {g["split"]}〜）</h3>
+      <table class="results"><thead><tr><th>数え方</th><th class="num">ゴールドだけで入る 的中</th><th class="num">v2</th>
+        <th class="num">v2 ＋ゴールドが逆なら見送り</th><th>7材料の一致数ごとの的中（v2 で方向ありの日）</th></tr></thead><tbody>{rows}</tbody></table>
+      <div class="muted tiny">{note}。効いていなければ判定には入れない（毎朝の判定は変えていない）。</div>"""
 
 
 def render_idea_extra(x: dict, mark) -> str:
@@ -828,6 +870,72 @@ def render_exit_section(ex: dict | None) -> str:
 """
 
 
+def render_round_section(r: dict | None) -> str:
+    """大台の初回タッチ（L6-2・L7-3）と、節目を少し割ったところ（L6-3）"""
+    title = "📏 大台・節目は止まりやすいか（初回タッチ・節目を少し割ったところ）"
+    if not r:
+        return f"""
+  <section class="section-box"><h2 class="section-title">{title}</h2><div class="muted">まだ結果がありません</div></section>
+"""
+    pc = lambda g: "—" if not g or g.get("rate") is None else f'{g["rate"] * 100:.0f}%（{g["n"]}）'
+
+    def diff_txt(d: dict) -> str:
+        if not d or d.get("diff") is None:
+            return "件数不足"
+        return (f'{d["diff"] * 100:+.0f}pt（95%区間 {d["ci"][0] * 100:+.0f}〜{d["ci"][1] * 100:+.0f}）'
+                + (" ✅" if d.get("significant") else ""))
+    t = r.get("touch") or {}
+    g = t.get("groups") or {}
+    names = r.get("names") or {}
+    vl = {"buy_bias": "買いポジ主体", "sell_bias": "売りポジ主体", "hands_off": "手出し無用", "不明": "判定不明"}
+    use = {"buy_bias": "support", "sell_bias": "resistance"}
+    vrows = ""
+    for v, x in (t.get("by_verdict") or {}).items():
+        sup, res = x.get("support", {}), x.get("resistance", {})
+        star = lambda ap: " ◀" if use.get(v) == ap or v == "hands_off" else ""
+        vrows += (f'<tr><td>{vl.get(v, v)}</td><td class="num">{pc(sup.get("first"))}{star("support")}<div class="muted tiny">全部 {pc(sup.get("all"))}</div></td>'
+                  f'<td class="num">{pc(res.get("first"))}{star("resistance")}<div class="muted tiny">全部 {pc(res.get("all"))}</div></td></tr>')
+    crows = "".join(f'<tr><td>{names.get(c, c)}</td><td class="num">{pc(x)}</td></tr>' for c, x in (t.get("by_code") or {}).items())
+    d = r.get("dip") or {}
+    dcode = "　".join(f'{names.get(c, c)} {pc(x)}' for c, x in (d.get("by_code") or {}).items())
+    bn = r.get("big_number") or {}
+    big_html = ""
+    if (bn.get("all") or {}).get("n"):
+        brow = ""
+        for k, lab in (("focus", "承認・試用銘柄"), ("all", "＋日経225の値嵩株")):
+            x = bn.get(k) or {}
+            if not x.get("n"):
+                continue
+            brow += (f'<tr><td>{lab}</td><td class="num">{pc(x["round"])}<div class="muted tiny">押し戻された {pc(x["pushed_round"])}</div></td>'
+                     f'<td class="num">{pc(x["control"])}<div class="muted tiny">押し戻された {pc(x["pushed_control"])}</div></td>'
+                     f'<td class="num">{diff_txt(x)}</td></tr>')
+        big_html = f"""
+      <h3>株価の大台（1,000円・10,000円・5,000円の倍数）の手前 {bn.get("near_pct", 0) * 100:.0f}% に来たあと、{bn.get("horizon")}日以内に終値で抜けた割合（{bn.get("period", "")}）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">大台</th><th class="num">比較用（±7%ずらした値段）</th><th class="num">差</th></tr></thead><tbody>{brow}</tbody></table>
+      <div class="muted tiny">記事（手法10）は「大台の手前ではいったん止まりやすい」。大台のほうが抜けた割合が低ければ、その通り。カードの「大台の手前」の1行に、この数字を添える。</div>"""
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">{title}</h2>
+    <div class="period-note">{r.get("source", "")}・止まった／抜けた は水準の {r.get("step_pct", 0) * 100:.2f}% 戻したか進んだか</div>
+    <div class="explainer" style="margin-top: 0;">
+      <h3>日経平均・1570・1357 の 1,000円の大台（比較用は 500円ずらした値段）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">初めて触れた</th><th class="num">2回目以降</th></tr></thead><tbody>
+        <tr><td>大台</td><td class="num">{pc(g.get("big_first"))}</td><td class="num">{pc(g.get("big_later"))}</td></tr>
+        <tr><td>比較用</td><td class="num">{pc(g.get("ctl_first"))}</td><td class="num">{pc(g.get("ctl_later"))}</td></tr>
+      </tbody></table>
+      <div class="muted tiny">大台の初回 − 比較用の初回：{diff_txt(t.get("first_vs_control"))} ／ 大台の初回 − 2回目以降：{diff_txt(t.get("first_vs_later"))}</div>
+      <h3>その日の判定ごと（大台に触れたとき止まった割合。◀ は毎朝の節目欄で使うと出している側）</h3>
+      <table class="results"><thead><tr><th>判定</th><th class="num">サポート（上から触れた）初回</th><th class="num">レジスタンス（下から触れた）初回</th></tr></thead><tbody>{vrows}</tbody></table>
+      <table class="results"><thead><tr><th>銘柄</th><th class="num">大台の初回</th></tr></thead><tbody>{crows}</tbody></table>
+      <h3>承認・試用銘柄：1,000円の節目を割ったあと、{r.get("dip_pct", 0) * 100:.1f}% より下に行かずに戻った割合</h3>
+      <div>節目 {pc(d.get("round"))} ／ 比較用（節目 ±1.5% の値段）{pc(d.get("control"))}：差 {diff_txt(d)}</div>
+      <div class="muted tiny">{dcode}。✅ になったら、カードに「急落時の反発候補：節目と その少し下」を出す（それまでは出さない）。</div>
+      {big_html}
+    </div>
+  </section>
+"""
+
+
 def render_screen_section(screen: dict | None) -> str:
     """売買代金上位の銘柄スクリーニング（研究用）"""
     if not screen or not screen.get("results"):
@@ -911,6 +1019,7 @@ def render_report(
     level_result: dict | None = None,
     us_range_result: dict | None = None,
     exit_result: dict | None = None,
+    round_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -1031,6 +1140,7 @@ def render_report(
     level_section = render_level_section(level_result, screen_result, morning_result)
     us_range_section = render_us_range_section(us_range_result)
     exit_section = render_exit_section(exit_result)
+    round_section = render_round_section(round_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -1212,6 +1322,7 @@ def render_report(
   {fib_section}
   {level_section}
   {exit_section}
+  {round_section}
   {us_range_section}
   {idea_section}
 
@@ -1315,6 +1426,7 @@ def render_report(
         "levels": level_result,
         "us_range": us_range_result,
         "exit_study": exit_result,
+        "round_study": round_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -1431,6 +1543,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Exit study failed: {e}")
 
     print()
+    print("🔍 Running round-number study (大台の初回タッチ・節目割れ)")
+    round_result = None
+    try:
+        from round_study import run_round_study
+        round_result = run_round_study()
+    except Exception as e:
+        print(f"⚠️ Round study failed: {e}")
+
+    print()
     print("🔍 Running idea study (メンサロ記事の考え方)")
     idea_result = None
     try:
@@ -1467,6 +1588,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         level_result=level_result,
         us_range_result=us_range_result,
         exit_result=exit_result,
+        round_result=round_result,
     )
 
 

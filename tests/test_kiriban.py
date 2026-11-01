@@ -112,7 +112,21 @@ def test_kiriban_day_hint():
     print("✅ test_kiriban_day_hint")
 
 
+def test_big_levels():
+    from kiriban import big_level_text, big_levels, build_big_levels
+    r = big_levels("日経", 39650, major_step=10000)
+    assert r["up"] == 40000 and r["up_dist"] == 350 and r["up_major"] and r["down"] == 39000 and not r["down_major"]
+    assert big_level_text(r) == "日経 40,000（大台） まで +350円 ／ 39,000 まで -650円"
+    r = big_levels("1570", 26820)
+    assert r["up"] == 27000 and abs(r["up_dist"] - 180) < 1e-9 and not r["up_major"]
+    r = big_levels("x", 30000)
+    assert r["down"] == 30000 and r["up"] == 31000                  # ちょうどなら下側に入れる
+    assert len(build_big_levels(50100, None, 9500)) == 2
+    print("✅ test_big_levels")
+
+
 if __name__ == "__main__":
+    test_big_levels()
     test_kiriban_day_hint()
     test_kiriban_bands_from_pdf_example()
     test_sayatori_long_signal()

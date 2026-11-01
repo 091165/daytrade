@@ -52,6 +52,10 @@ h1 { margin: 0; font-size: 20px; font-weight: 600; }
 .report-link:hover { text-decoration: underline; }
 
 section { margin-bottom: 28px; }
+.levels-box { border: 1px solid var(--border, #333); border-radius: 10px; padding: 12px 14px; }
+.levels-hint { font-weight: 600; margin-bottom: 8px; }
+.levels-row { font-size: 14px; margin: 4px 0; }
+.levels-ev { font-size: 12px; color: var(--muted); margin-top: 8px; }
 section > h2.section-title {
   font-size: 16px; font-weight: 600; color: var(--accent);
   margin: 0 0 14px 0; padding-bottom: 6px; border-bottom: 1px solid var(--border);
@@ -342,7 +346,7 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
         conflict = f'<div class="focus-conflict">⚠️ {f["conflict_text"]}</div>' if is_conflict else ""
         # 最高値を更新中（L7-2）。売り判定の日は「売りは見送り候補」を赤で
         for n in f.get("notes") or []:
-            if n.get("kind") == "high":
+            if n.get("kind") in ("high", "big_number"):
                 conflict += (f'<div class="focus-conflict">⚠️ {n["text"]}</div>' if n.get("level") == "high"
                              else f'<div class="focus-range-sub">📈 {n["text"]}</div>')
         card_class = "focus-card conflict" if is_conflict else "focus-card"
@@ -506,6 +510,43 @@ def render_us_indices_row(indices: list[dict]) -> str:
         </div>
         """
     return items
+
+
+# ----- 節目（大台）：日経・1570・1357（過去ログ6 L6-2 ／ 判定別の使い方 L7-3） -----
+
+def render_levels_section(levels: dict | None) -> str:
+    if not levels or not levels.get("rows"):
+        return ""
+    from kiriban import big_level_text
+    rows = "".join(f'<div class="levels-row">{big_level_text(r)}</div>' for r in levels["rows"])
+    hint = f'<div class="levels-hint">{levels["hint"]}</div>' if levels.get("hint") else ""
+    ev = levels.get("evidence") or "初めて触れたときの止まりやすさは未検証（1分足がたまったら週次レポートで確かめる）"
+    return f"""
+  <section>
+    <h2 class="section-title">📏 節目（大台）：前日終値からの距離</h2>
+    <div class="levels-box">
+      {hint}
+      {rows}
+      <div class="levels-ev">{ev}</div>
+    </div>
+  </section>
+"""
+
+
+def render_range_day(rd: dict | None) -> str:
+    """レンジ型の日（L6-5）。逆張りの表示なので、トレンド日には呼び出し側で出さない"""
+    if not rd or not rd.get("show"):
+        return ""
+    ev = f'<div class="levels-ev">{rd["evidence"]}</div>' if rd.get("evidence") else ""
+    return f"""
+  <section>
+    <div class="levels-box">
+      <div class="levels-hint">🔁 {rd["text"]}</div>
+      <div class="levels-row">{rd.get("why", "")}</div>
+      {ev}
+    </div>
+  </section>
+"""
 
 
 # ----- 為替・コモディティ -----
@@ -760,6 +801,8 @@ def render_dashboard(
     focus_signals: list[dict] | None = None,
     late_notice: str | None = None,
     direction_v2: dict | None = None,
+    levels: dict | None = None,
+    range_day: dict | None = None,
 ) -> None:
     """HTMLダッシュボードを生成してファイルに書き出す。"""
     v2_html = render_v2_reference(direction_v2)
@@ -777,6 +820,8 @@ def render_dashboard(
         f'<section><div class="late-notice">{late_notice}</div></section>' if late_notice else ""
     )
     focus_html = render_focus_section(focus_signals)
+    levels_html = render_levels_section(levels)
+    range_html = render_range_day(range_day)
 
     futures_diff = direction_signal["futures_diff"]
     futures_diff_color = (
@@ -974,6 +1019,8 @@ def render_dashboard(
 
   {rules_html}
 
+  {range_html}
+
   {warnings_html}
 
   <!-- 本日の日経デイトレ方針 -->
@@ -1013,6 +1060,8 @@ def render_dashboard(
   </section>
 
   {focus_html}
+
+  {levels_html}
 
   {market_context_html}
 
