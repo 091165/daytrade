@@ -38,6 +38,7 @@ class FocusStock:
     us_label: str
     note: str
     trial: bool = False            # 試用銘柄（条件つきで試し、回数がたまったら承認を決め直す）
+    fiscal_month: int = 3          # 決算月（中間配当はその6か月後）
 
 
 FOCUS_STOCKS: list[FocusStock] = [

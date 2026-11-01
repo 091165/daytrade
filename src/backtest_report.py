@@ -549,9 +549,74 @@ def render_idea_section(ideas: dict | None) -> str:
       <h3>判定の確度ごとに、寄り→10:00 の向きが 10:00→引け も続いた割合（1時間足）</h3>
       <table class="results"><thead><tr><th></th><th class="num">確度 高</th><th class="num">中</th><th class="num">方向なしの日</th></tr></thead><tbody>{st_rows}</tbody></table>
       <div class="muted tiny">米国休場明けの朝：{uc.get("n", 0)}日（今の判定はこの日を「手出し無用」にする）</div>
+      {render_idea_extra(ideas.get("extra") or {}, mark)}
     </div>
   </section>
 """
+
+
+def render_idea_extra(x: dict, mark) -> str:
+    """その2（しきい値・欧州・非対称・先物ジャンプ・米先物・10:30・個別の手仕舞い・月足・前日終値ライン・配当・値嵩株・指数の±3σ・手出し無用の日）"""
+    if not x:
+        return ""
+
+    def row(label: str, cells: list[str]) -> str:
+        return f"<tr><td>{label}</td>" + "".join(f'<td class="num">{c}</td>' for c in cells) + "</tr>"
+
+    def s_cells(s: dict, name: str = "") -> list[str]:
+        return [f'{s["n"]}', _pc(s.get("hit")) + (mark(name) if name else ""), _sg(s.get("mean"))]
+
+    rows = ""
+    for k, s in (x.get("threshold") or {}).items():
+        rows += row(f"「変動なし」±{k}%（後半）", s_cells(s, f"しきい値:{k}") + [f'手出し無用 {_pc(s["hands_off_share"])}'])
+    for k, lab in (("agree", "欧州も同じ向き"), ("against", "欧州が逆向き")):
+        if k in (x.get("europe") or {}):
+            rows += row(f"今の判定・{lab}（後半）", s_cells(x["europe"][k], f"欧州:{k}") + [""])
+    for k, s in (x.get("asym") or {}).items():
+        r9 = s.get("reach_9h") or {}
+        rows += row(f"{k}の日（寄り→引け）", s_cells(s) + [f'9時台に0.5%進んだ {_pc(r9.get("rate"))}'])
+    for k, s in (x.get("jump") or {}).items():
+        rows += row(f"日経：{k}→寄り→10:00 に逆", s_cells(s, f"先物ジャンプ:{k}") + [""])
+    for n, r in (x.get("jump_stocks") or {}).items():
+        for k, s in r.items():
+            rows += row(f"{n}：{k}→寄り→10:00 に逆", s_cells(s, f"先物ジャンプ:{n}:{k}") + [""])
+    for k, s in (x.get("us_fut") or {}).items():
+        rows += row(f"米先物（引け→9:00）と同じ向き：{k}", s_cells(s, f"米先物:{k}") + [""])
+    ho = x.get("hands_off") or {}
+    for k, s in ho.items():
+        if k.startswith("gap_fade"):
+            rows += row(f"手出し無用の日に窓と逆（寄り→10:00）{k[8:]}", s_cells(s, f"手出し無用:窓と逆{k[8:]}") + [""])
+    table1 = (f'<table class="results"><thead><tr><th></th><th class="num">回数</th><th class="num">当たり</th>'
+              f'<th class="num">平均</th><th class="num"></th></tr></thead><tbody>{rows}</tbody></table>')
+    rows2 = ""
+    cp = x.get("cp1030") or {}
+    if cp:
+        rows2 += row("節目の前後30分で向きが変わった割合", [f'{k} {_pc(v["rate"])}（{v["n"]}）' for k, v in cp.items() if k != "p_vs_others"])
+    for n, r in (x.get("stock_week") or {}).items():
+        rows2 += row(f"{n}：自分の週足・月足と逆（金曜／月末／値幅小の週／日経と逆の週）",
+                     [f'{_pc(r["friday"]["all"]["hit"])}（{r["friday"]["all"]["n"]}）', f'{_pc(r["month_end"]["all"]["hit"])}（{r["month_end"]["all"]["n"]}）',
+                      f'{_pc(r["small_week"]["hit"])}（{r["small_week"]["n"]}）{mark(f"銘柄の手仕舞い:{n}:値幅小の週")}',
+                      f'{_pc(r["vs_nikkei_mixed"]["hit"])}（{r["vs_nikkei_mixed"]["n"]}）'])
+    for n, r in (x.get("month_bar") or {}).items():
+        rows2 += row(f"{n}：先月の月足とその日の上げ", [f'{k} {_pc(s["up"])}（{s["n"]}）' for k, s in r.items()])
+    for n, s in (x.get("prev_line") or {}).items():
+        rows2 += row(f"{n}：9時台に前日終値を割ったあと10:00に戻した", [f'{_pc(s["rate"])}（{s["n"]}）'])
+    dv = x.get("dividend") or {}
+    if dv.get("n"):
+        rows2 += row("権利落ち日（3銘柄）：その日に下げた", [f'{k} {_pc(v["down"])}（{v["n"]}）' for k, v in dv.items() if k != "n"])
+    for k, s in (x.get("big_caps") or {}).items():
+        rows2 += row(f"値嵩株のキリ：{k}（参考）", [f'日経 上げ {_pc(s["up"])}（{s["n"]}）', f'安値からの戻り {_pc(s["rebound"])}'])
+    for k, s in (x.get("index_dev") or {}).items():
+        rows2 += row(f"ナスダック・SOX {k} の翌日の日経", [f'上げ {_pc(s["up"])}（{s["n"]}）', f'前場 {_sg(s["am_mean"])}・後場 {_sg(s["pm_mean"])}（{s["n_hourly"]}日）'])
+    for k, r in ho.items():
+        if k.startswith("pattern:"):
+            rows2 += row(f"{k[8:]}：9〜10時の向きが10時以降も続く型", [f'{lab} {_pc(s["rate"])}（{s["n"]}）' for lab, s in r.items()])
+    return f"""
+      <h3>その2：判定のしかた・寄り後の動き</h3>{table1}
+      <h3>その2：節目・個別の手仕舞い・月足・前日終値・配当・値嵩株・指数の±3σ・型の持続</h3>
+      <table class="results"><tbody>{rows2}</tbody></table>
+      <div class="muted tiny">日経平均の寄り値は、まだ寄っていない銘柄があるうちに計算されるので、日経の「寄り→10:00」は個別株より動きが大きく出やすい。
+      値嵩株のキリは「その日の安値で触れたか」で分けているので、下げた日ほど触れやすい（参考。補正には入れない）。</div>"""
 
 
 def render_screen_section(screen: dict | None) -> str:

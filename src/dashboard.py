@@ -310,6 +310,7 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>{f["intraday_text"]}</div>
           {conflict}
           {render_range_block(f.get("range"))}
+          {"".join(f'<div class="focus-note {n.get("level", "")}">・{n["text"]}</div>' for n in f.get("notes") or [])}
           <div class="focus-foot">{_focus_validation_foot(f.get("validation"))}</div>
         </div>
         """
@@ -423,6 +424,19 @@ def render_direction_verdict(direction_signal: dict) -> str:
       </div>
     </div>
     """
+
+
+def render_v2_reference(v2: dict | None) -> str:
+    """参考：ドル円・S&P500 を足した場合の材料のそろい方（判定には使わない）"""
+    if not v2:
+        return ""
+    fx = v2["usdjpy_change_pct"]
+    fx_txt = "円安" if fx >= 0.3 else "円高" if fx <= -0.3 else "小動き"
+    dir_txt = {"bullish": "上向き", "bearish": "下向き"}.get(v2["agreement_direction"], "")
+    agree = f'6材料中 {v2["agreement_count"]}つが{dir_txt}' if dir_txt else "材料の向きは半々"
+    ev = v2.get("evidence") or "未検証"
+    return (f'<div class="v2-ref">参考（判定には使わない）：S&amp;P500 {v2["sp500_change_pct"]:+.2f}%・'
+            f'ドル円 {fx:+.2f}%（{fx_txt}）・{agree}<div class="v2-ev">{ev}</div></div>')
 
 
 def render_us_indices_row(indices: list[dict]) -> str:
@@ -695,8 +709,10 @@ def render_dashboard(
     trading_rules: dict | None = None,
     focus_signals: list[dict] | None = None,
     late_notice: str | None = None,
+    direction_v2: dict | None = None,
 ) -> None:
     """HTMLダッシュボードを生成してファイルに書き出す。"""
+    v2_html = render_v2_reference(direction_v2)
     direction_verdict_html = render_direction_verdict(direction_signal)
     us_indices_html = render_us_indices_row(direction_signal["us_indices"])
     reasons_html = "".join(f"<li>{r}</li>" for r in direction_signal["reasons"])
@@ -745,6 +761,10 @@ def render_dashboard(
 .direction-meta {{ margin-top: 16px; display: flex; gap: 20px; flex-wrap: wrap; }}
 .direction-meta-item {{ flex: 1; min-width: 200px; }}
 .direction-meta-label {{ font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }}
+.v2-ref {{ font-size: 12px; color: var(--muted); margin-top: 10px; }}
+.v2-ev {{ font-size: 11px; margin-top: 2px; }}
+.focus-note {{ font-size: 12px; color: var(--text); margin-top: 6px; }}
+.focus-note.muted {{ color: var(--muted); }}
 .us-indices {{ display: flex; gap: 16px; margin-top: 6px; }}
 .us-idx-item {{ flex: 1; text-align: center; padding: 8px; background: var(--panel-2); border-radius: 6px; }}
 .us-idx-name {{ font-size: 11px; color: var(--muted); }}
@@ -933,6 +953,7 @@ def render_dashboard(
       <div class="reasons-list">
         <ul>{reasons_html}</ul>
       </div>
+      {v2_html}
 
       <div class="time-nodes-note">
         💡 <b>時間節目</b>: 9:40・10:00（前場トレ転）／12:30（後場寄り）／14:00・14:30（後場トレ転）

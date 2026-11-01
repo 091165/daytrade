@@ -473,6 +473,100 @@ def check_dividend_record_warning(today: date, validation: dict | None = None) -
         evidence=ev)
 
 
+# ========== 米国の雇用統計・決算シーズン ==========
+
+def first_friday(year: int, month: int) -> date:
+    d = date(year, month, 1)
+    return d + timedelta(days=(4 - d.weekday()) % 7)
+
+
+def nfp_date(year: int, month: int, events: list[dict] | None = None) -> date:
+    """その月の雇用統計の発表日（米国の日付）。data/us_events.csv に書いてあればそちら、なければ第1金曜"""
+    for e in events or []:
+        if e.get("event") == "nfp" and e.get("date", "")[:7] == f"{year:04d}-{month:02d}":
+            return date.fromisoformat(e["date"])
+    return first_friday(year, month)
+
+
+NFP_READING = {("bad", 1): "とても強い（悪い結果なのに上げた）", ("good", 1): "強い",
+               ("bad", -1): "弱い", ("good", -1): "とても弱い（良い結果なのに下げた）"}
+
+
+def check_nfp_warning(today: date, sp500_change_pct: float | None = None,
+                      events: list[dict] | None = None) -> TradingWarning | None:
+    """雇用統計の日（日本の金曜＝発表前）と、発表後の最初の朝"""
+    if today.weekday() == 4 and nfp_date(today.year, today.month, events) == today:
+        return TradingWarning(
+            type="nfp_before", severity="low",
+            label="🇺🇸 今夜は米国の雇用統計",
+            message="発表前の日本の日中は、様子見のレンジになりやすいとされる（記事より・未検証）。",
+            action="大きな方向を決め打ちしない。持ち越さない。")
+    us_day = us_session_before(today)
+    if nfp_date(us_day.year, us_day.month, events) != us_day:
+        return None
+    result = next((e.get("result", "") for e in events or [] if e.get("event") == "nfp" and e.get("date") == us_day.isoformat()), "")
+    if sp500_change_pct is None:
+        return None
+    move = 1 if sp500_change_pct >= 0.3 else -1 if sp500_change_pct <= -0.3 else 0
+    reading = NFP_READING.get((result, move)) if move else "反応は小さい"
+    if reading is None:
+        reading = "結果の良し悪しを data/us_events.csv に書くと読みを出す"
+    return TradingWarning(
+        type="nfp_after", severity="medium",
+        label=f"🇺🇸 雇用統計明け：S&P500 {sp500_change_pct:+.2f}%",
+        message=f"雇用統計の結果と株価の反応の組み合わせで地合いの強さを読む（記事より）。今回の読み：{reading}。",
+        action="読みは参考。今日のマイルールの向きが優先。",
+        evidence="未検証（雇用統計の結果の良し悪しは手入力のため、過去分の検証はまだ）")
+
+
+EARNINGS_SEASONS = (((1, 20), (2, 15)), ((4, 20), (5, 15)), ((7, 20), (8, 15)), ((10, 20), (11, 15)))
+
+
+def check_earnings_season(today: date) -> TradingWarning | None:
+    md = (today.month, today.day)
+    if not any(a <= md <= b for a, b in EARNINGS_SEASONS):
+        return None
+    return TradingWarning(
+        type="earnings_season", severity="low",
+        label="📊 決算シーズン",
+        message="主要企業の決算が集中する時期。銘柄ごとの差が大きく、指数の予報どおりに動きにくい。",
+        action="各銘柄カードの「決算明け」「次の決算」を確認する。")
+
+
+# ========== 指数の理想乖離（±3σ） ==========
+
+def check_index_deviation_warning(verdict: str, devs: dict | None, validation: dict | None = None) -> TradingWarning | None:
+    """売り判定でナスダック・SOXが -3σ 以下、買い判定で +3σ 以上なら「行き過ぎ」の注意。-2σ〜-3σ は1行の注意"""
+    zs = {n: v["z"] for n, v in (devs or {}).items() if n in ("ナスダック", "SOX") and v.get("z") is not None}
+    if not zs:
+        return None
+    v = (validation or {}).get("-3σ以下") or {}
+    ev = (f"検証（参考・{v['n_hourly']}日しかない）：-3σ以下の翌日の日経は 前場 {v['am_mean']:+.2f}%・後場 {v['pm_mean']:+.2f}%"
+          if v.get("n_hourly") else "未検証")
+    names = lambda cond: "・".join(f"{n} {z:+.1f}σ" for n, z in zs.items() if cond(z))
+    if verdict == "sell_bias" and any(z <= -3 for z in zs.values()):
+        return TradingWarning(
+            type="index_dev", severity="high",
+            label=f"📉 指数が理想乖離 -3σ（{names(lambda z: z <= -3)}）",
+            message="下げが行き過ぎた水準。記事では「売りを続けると焼かれやすい。前場ほど売り、後場ほど買い」。",
+            action="売りは10時前に終える。持ち越さない。値幅が大きくなる前提で株数は守る。",
+            evidence=ev)
+    if verdict == "buy_bias" and any(z >= 3 for z in zs.values()):
+        return TradingWarning(
+            type="index_dev", severity="high",
+            label=f"📈 指数が理想乖離 +3σ（{names(lambda z: z >= 3)}）",
+            message="上げが行き過ぎた水準。記事の考え方を逆にすると「買いを続けると焼かれやすい。前場ほど買い、後場ほど売り」。",
+            action="買いは10時前に終える。持ち越さない。",
+            evidence=ev)
+    if verdict == "sell_bias" and any(-3 < z <= -2 for z in zs.values()):
+        return TradingWarning(
+            type="index_dev", severity="low",
+            label=f"📉 指数が -2σ〜-3σ（{names(lambda z: -3 < z <= -2)}）",
+            message="下げは進んでいるが、記事ではまだ売りの流れとされる水準。",
+            action="今日のマイルールどおり。", evidence="未検証")
+    return None
+
+
 # ========== 統合API ==========
 
 def get_all_warnings(
@@ -481,6 +575,8 @@ def get_all_warnings(
     nikkei_month_is_positive: bool | None = None,
     overnight_diff: float | None = None,
     validation: dict | None = None,
+    sp500_change_pct: float | None = None,
+    us_events: list[dict] | None = None,
 ) -> list[TradingWarning]:
     """今日該当する警告を全て返す（severity=high を先頭に）。
 
@@ -507,6 +603,8 @@ def get_all_warnings(
         check_month_start_warning(today),
         check_us_holiday_warning(today),
         check_after_break_warning(today),
+        check_nfp_warning(today, sp500_change_pct, us_events),
+        check_earnings_season(today),
     ]
     warnings = [w for w in candidates if w is not None]
 
