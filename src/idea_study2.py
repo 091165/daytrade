@@ -333,19 +333,21 @@ def study_index_dev(us: dict[str, pd.Series], nikkei: pd.DataFrame, pts: pd.Data
     return out
 
 
-def study_hands_off(df: pd.DataFrame, pts: dict[str, pd.DataFrame]) -> dict:
+def study_hands_off(df: pd.DataFrame, pts: dict[str, pd.DataFrame],
+                    stock_gaps: dict[str, pd.Series] | None = None) -> dict:
     """手出し無用の日：窓と逆に入る（寄り→10:00）。9〜10時と10時以降が同じ向きだった日が直近3日で2日以上なら、今日も同じか"""
     out = {}
     ho = df.index[df["side_v1"] == 0]
     for name, p in pts.items():
         p = p.dropna(subset=["open", "p10", "close"])
-        d = p.join(df[["gap"]], how="inner") if name == "日経平均" else p
-        if name != "日経平均":
+        gap = df["gap"] if name == "日経平均" else (stock_gaps or {}).get(name)
+        if gap is None:
             continue
+        d = p.join(gap.rename("g"), how="inner")
         r10 = (d["p10"] / d["open"] - 1) * 100
-        side = -np.sign(d["gap"].where(d["gap"].abs() >= 0.2))
+        side = -np.sign(d["g"].where(d["g"].abs() >= 0.2))
         m = d.index.isin(ho)
-        out["gap_fade"] = signed_summary(r10[m], side[m])
+        out["gap_fade" if name == "日経平均" else f"gap_fade:{name}"] = signed_summary(r10[m], side[m])
     for name, p in pts.items():
         p = p.dropna(subset=["open", "p10", "close"])
         same = np.sign(p["p10"] - p["open"]) == np.sign(p["close"] - p["p10"])
@@ -364,11 +366,15 @@ def _download(yf, tickers: list[str], **kw) -> dict[str, pd.DataFrame]:
     out = {}
     for t in tickers:
         try:
-            x = raw[t].dropna(subset=["Open", "Close"]) if len(tickers) > 1 else raw.dropna(subset=["Open", "Close"])
+            if isinstance(raw.columns, pd.MultiIndex) and t in raw.columns.get_level_values(0):
+                x = raw[t]
+            elif isinstance(raw.columns, pd.MultiIndex):
+                x = raw.xs(t, axis=1, level=-1)
+            else:
+                x = raw
+            x = x.dropna(subset=["Open", "Close"])
         except KeyError:
             continue
-        if isinstance(x.columns, pd.MultiIndex):
-            x.columns = x.columns.get_level_values(-1)
         if not x.empty:
             out[t] = x
     return out
@@ -403,7 +409,9 @@ def run_part2(df: pd.DataFrame, ohlc: dict, stk_t: dict[str, str], hourly: dict[
     if not nk_pts.empty:
         step("asym", lambda: study_asym(ok, nk_pts))
         step("jump", lambda: study_jump(df, nk_pts))
-        step("hands_off", lambda: study_hands_off(ok, pts))
+        step("hands_off", lambda: study_hands_off(ok, pts, {n: d["gap"] for n, d in stocks.items()}))
+        step("jump_stocks", lambda: {n: study_jump(ok.assign(gap=stocks[n]["gap"].reindex(ok.index)), p)
+                                     for n, p in pts.items() if n in stocks})
     es = _download(yf, ["ES=F"], period="730d", interval="1h").get("ES=F")
     if es is not None and pts:
         step("us_fut", lambda: study_us_futures(us_futures_move(es, nk_pts.index if not nk_pts.empty else df.index), pts))
@@ -455,11 +463,16 @@ def collect_pvalues2(res: dict) -> list[tuple[str, float]]:
             ps.append((f"月足:{n}:{lab}", s["p_mean"]))
     for n, s in (res.get("prev_line") or {}).items():
         ps.append((f"前日終値ライン:{n}", s["p"]))
-    for lab, s in (res.get("big_caps") or {}).items():
-        ps.append((f"値嵩株キリ:{lab}", s["p_mean"]))
+    # 値嵩株のキリは「その日の安値で触れたか」で分けるので、下げた日ほど触れやすい（結果を先に見ている）。補正には入れない
+    for n, r in (res.get("jump_stocks") or {}).items():
+        for k, s in r.items():
+            ps.append((f"先物ジャンプ:{n}:{k}", s["p_mean"]))
+    for n, r in (res.get("stock_week") or {}).items():
+        ps.append((f"銘柄の手仕舞い:{n}:値幅小の週", r["small_week"]["p_mean"]))
     ho = res.get("hands_off") or {}
-    if "gap_fade" in ho:
-        ps.append(("手出し無用:窓と逆", ho["gap_fade"]["p_mean"]))
+    for k, s in ho.items():
+        if k.startswith("gap_fade"):
+            ps.append((f"手出し無用:窓と逆{k[8:]}", s["p_mean"]))
     for k, r in ho.items():
         if k.startswith("pattern:"):
             for lab, s in r.items():
@@ -505,10 +518,12 @@ def _print2(res: dict) -> None:
         print(f"  値嵩株キリ {k}: n={s['n']} 上げ {_pc(s['up'])} 平均 {_sg(s['mean'])} 安値からの戻り {_pc(s['rebound'])}")
     for k, s in (res.get("index_dev") or {}).items():
         print(f"  指数乖離 {k}: n={s['n']} 上げ {_pc(s['up'])} 平均 {_sg(s['mean'])} 前場 {_sg(s['am_mean'])} 後場 {_sg(s['pm_mean'])}（{s['n_hourly']}日）")
+    for n, r in (res.get("jump_stocks") or {}).items():
+        print(f"  先物ジャンプ（銘柄の窓） {n}: " + "  ".join(f"{k} n={s['n']} 逆 {_pc(s['hit'])} 平均 {_sg(s['mean'])}" for k, s in r.items()))
     ho = res.get("hands_off") or {}
-    if "gap_fade" in ho:
-        g = ho["gap_fade"]
-        print(f"  手出し無用・窓と逆: n={g['n']} 的中 {_pc(g['hit'])} 平均 {_sg(g['mean'])}")
+    for k, g in ho.items():
+        if k.startswith("gap_fade"):
+            print(f"  手出し無用・窓と逆{k[8:]}: n={g['n']} 的中 {_pc(g['hit'])} 平均 {_sg(g['mean'])}")
     for k, r in ho.items():
         if k.startswith("pattern:"):
             print(f"  型の持続 {k[8:]}: " + "  ".join(f"{lab} {_pc(s['rate'])}({s['n']})" for lab, s in r.items()))
