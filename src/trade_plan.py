@@ -22,6 +22,7 @@ from trading_rules import PER_TRADE_STOP_MAX_YEN, REWARD_RISK_RATIO
 
 SHARES = 100
 STOP_PARTS = 3              # 9時台の目安の 1/3 を損切り幅に
+CAP_MARGIN = 1.2            # 1/3 の幅が上限の 1.2倍を超えたら「損切りが近い」と出す（少し超える程度は問題にしない）
 MAX_LEVELS = 3              # 上下それぞれ近い順にいくつ出すか
 
 
@@ -39,7 +40,7 @@ def bracket(morning_width: float | None, earnings_today: bool = False, earnings_
     out = {
         "stop_width": stop, "target_width": target,
         "stop_yen": stop * shares, "target_yen": target * shares,
-        "morning_width": width, "capped": raw > max_stop,
+        "morning_width": width, "capped": raw > max_stop * CAP_MARGIN,
         "reachable": target <= width,
         "skip": bool(earnings_today),
     }
