@@ -1,6 +1,6 @@
 {
   "market": {
-    "timestamp": "2026-11-01T17:16:55.517634+09:00",
+    "timestamp": "2026-11-01T17:19:11.403617+09:00",
     "nikkei": {
       "prev_close": 63290.109375,
       "change_pct": -2.1178017720722475,
@@ -2688,12 +2688,10 @@
           "stop_yen": 5000,
           "target_yen": 15000,
           "morning_width": 152.4328640391424,
-          "capped": true,
+          "capped": false,
           "reachable": true,
           "skip": false,
-          "notes": [
-            "9時台の値幅に比べて損切り（上限 -5,000円）が近い。普段の上下で引っかかりやすい"
-          ]
+          "notes": []
         },
         "levels": {
           "up": [
