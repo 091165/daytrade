@@ -14,7 +14,6 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from trading_rules import REWARD_RISK_RATIO
 
 
 def format_jpy(n: float) -> str:
@@ -217,6 +216,37 @@ def _frac_text(frac: float | None) -> str:
     return f"値幅の約{max(1, round(frac * 10))}割"
 
 
+def _level_txt(x: dict) -> str:
+    return f'{x["price"]:,.0f}円（{x["kind"]}・{x["dist"]:+,.0f}円）'
+
+
+def render_plan_block(plan: dict | None) -> str:
+    """今日の作戦（100株）：損切り・利確の幅と、上値・下値の目安"""
+    if not plan:
+        return ""
+    b = plan.get("bracket")
+    head = ""
+    if b:
+        cls = "high" if b["skip"] else ""
+        head = (f'<div class="focus-range-main plan">損切り -{b["stop_yen"]:,.0f}円（{b["stop_width"]:.0f}円幅）'
+                f'<span class="lot">利確 +{b["target_yen"]:,.0f}円（{b["target_width"]:.0f}円幅）</span></div>')
+        head += "".join(f'<div class="focus-range-sub {cls}">{n}</div>' for n in b["notes"])
+        head += (f'<div class="focus-range-sub">9時台の目安 約{b["morning_width"]:.0f}円 を3つに分けた幅を損切り、その3倍を利確'
+                 f'（損切りの上限は -5,000円）</div>')
+    lv = plan.get("levels") or {}
+    up = " ／ ".join(_level_txt(x) for x in lv.get("up", [])) or "目安の範囲に水準なし"
+    down = " ／ ".join(_level_txt(x) for x in lv.get("down", [])) or "目安の範囲に水準なし"
+    pc = f'（前日終値 {plan["prev_close"]:,.0f}円から）' if plan.get("prev_close") else ""
+    return f"""
+          <div class="focus-range">
+            <div class="focus-range-title">今日の作戦（100株・入る前に決める）</div>
+            {head}
+            <div class="focus-range-sub"><b>上値の目安</b>{pc}：{up}</div>
+            <div class="focus-range-sub"><b>下値の目安</b>：{down}</div>
+            <div class="focus-foot">{plan.get("level_evidence", "")}</div>
+          </div>"""
+
+
 def render_range_block(rg: dict | None) -> str:
     """想定値幅のブロック（フジクラ・SBGカードの中）"""
     if not rg:
@@ -246,16 +276,6 @@ def render_range_block(rg: dict | None) -> str:
         earn = f'<div class="focus-range-sub high">⚠️ 決算明け：今日の値幅は{times}になりやすい。ロットを抑える</div>'
     elif mo.get("next_earnings"):
         earn = f'<div class="focus-range-sub">次の決算：{mo["next_earnings"][5:].replace("-", "/")}</div>'
-    take = ""
-    if rg.get("stop_yen") and rg.get("stop_width"):
-        tp_yen, tp_width = rg["stop_yen"] * REWARD_RISK_RATIO, rg["stop_width"] * REWARD_RISK_RATIO
-        reach = ""
-        if mo.get("available") and mo.get("morning_lot_yen"):
-            frac = tp_yen / mo["morning_lot_yen"]
-            reach = ("。9時台の目安より大きい＝10時までに届きにくい" if frac > 1
-                     else f"。9時台の目安の約{frac * 10:.0f}割")
-        take = (f'<div class="focus-range-sub">利確の目安（損切りの{REWARD_RISK_RATIO}倍）：'
-                f'+{tp_yen:,.0f}円（{tp_width:.0f}円幅）{reach}</div>')
     v = rg.get("validation")
     if v and v.get("r") is not None:
         foot = (f'検証（{v["n"]}日）: 直近{v["window"]}日の平均で翌日の値幅を予測 r={v["r"]:+.2f}'
@@ -268,7 +288,6 @@ def render_range_block(rg: dict | None) -> str:
             <div class="focus-range-main">約{rg["pred_yen"]:,.0f}円<span class="lot">100株で約{rg["lot_yen"]:,.0f}円</span></div>
             {rough}
             <div class="focus-range-sub">損切り-{rg["stop_yen"]:,}円（{rg["stop_width"]:.0f}円幅）は{_frac_text(rg.get("stop_frac"))}</div>
-            {take}
             {level}
             {morning}
             {earn}
@@ -310,6 +329,7 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>{f["intraday_text"]}</div>
           {conflict}
           {render_range_block(f.get("range"))}
+          {render_plan_block(f.get("plan"))}
           {"".join(f'<div class="focus-note {n.get("level", "")}">・{n["text"]}</div>' for n in f.get("notes") or [])}
           <div class="focus-foot">{_focus_validation_foot(f.get("validation"))}</div>
         </div>

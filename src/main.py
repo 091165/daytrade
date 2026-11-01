@@ -20,6 +20,7 @@ from zoneinfo import ZoneInfo
 from kiriban import build_daily_signal
 from market_direction import build_market_direction, build_market_direction_v2
 from card_notes import build_card_notes
+from trade_plan import build_trade_plan
 from sector_mapping import build_all_sector_signals, get_all_us_tickers
 from warnings_module import check_index_deviation_warning, get_all_warnings, us_was_closed
 from market_context import build_market_context
@@ -117,6 +118,19 @@ def _load_idea_validation(docs_dir: Path) -> dict:
             return json.load(f).get("ideas") or {}
     except (json.JSONDecodeError, OSError) as e:
         print(f"⚠️ Failed to load idea validation: {e}")
+        return {}
+
+
+def _load_level_validation(docs_dir: Path) -> dict:
+    """週次レポートの「上値・下値の目安は止まりやすいか」"""
+    path = docs_dir / "backtest_report.json"
+    if not path.exists():
+        return {}
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            return json.load(f).get("levels") or {}
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"⚠️ Failed to load level validation: {e}")
         return {}
 
 
@@ -321,6 +335,12 @@ def main() -> int:
             announcements,
             today,
         )
+
+    # 今日の作戦（100株の損切り・利確の幅）と上値・下値の目安
+    level_val = _load_level_validation(output_dir)
+    for f in focus_signals_dict:
+        f["plan"] = build_trade_plan(records_to_ohlc(focus_ohlc_full.get(f["code"])), f["range"],
+                                     f["range"].get("morning"), level_val)
 
     # カードの注意書き（25日線乖離・月足、金曜・月末の週足、権利落ち日の配当、SOX優先、決算月）
     by_code = {s.code: s for s in FOCUS_STOCKS}
