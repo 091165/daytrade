@@ -29,7 +29,7 @@ def test_bracket_fujikura_sbg_murata():
     assert f["stop_width"] == 40 and f["target_width"] == 120 and f["stop_yen"] == 4000 and f["target_yen"] == 12000
     assert f["reachable"] and not f["capped"] and f["notes"] == []
     s = bracket(152.0)                        # SBG：50円で上限
-    assert s["stop_width"] == 50 and s["target_yen"] == 15000 and s["capped"] and s["reachable"]
+    assert s["stop_width"] == 50 and s["target_yen"] == 15000 and not s["capped"] and s["reachable"]   # 少し超える程度は注意しない
     m = bracket(217.0)                        # 村田：損切りが近い
     assert m["capped"] and any("引っかかりやすい" in x for x in m["notes"])
     e = bracket(120.0, earnings_today=True, earnings_ratio=2.6)
