@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 
 from idea_study import _norm, hit_p, mean_p, signed_summary, wilson_ci
+from index_deviation import dev_sigma
 from market_direction import build_market_direction
 
 BIG_CAPS = {"9983.T": "ファストリ", "8035.T": "東エレク", "6857.T": "アドバンテスト", "9984.T": "SBG",
@@ -31,7 +32,6 @@ BIG_CAPS = {"9983.T": "ファストリ", "8035.T": "東エレク", "6857.T": "�
             "4543.T": "テルモ", "6367.T": "ダイキン"}
 JUMP_FUTURES = 300          # 現対 +300円 以上
 JUMP_GAP = 0.8              # かつ 寄りの窓 +0.8% 以上
-DEV_LOOKBACK = 250
 
 
 def _rate(x: pd.Series) -> dict:
@@ -122,7 +122,8 @@ def us_futures_move(es: pd.DataFrame, jp_days: pd.DatetimeIndex) -> pd.Series:
     """米国の現物の引け（ニューヨーク16:00）→ 日本の寄り（9:00）までの ES=F の騰落%（純粋関数）"""
     s = es["Close"].dropna()
     idx = s.index if s.index.tz is not None else s.index.tz_localize("UTC")
-    s = pd.Series(s.values, index=idx)
+    # 1時間足の時刻は「足の始まり」。終値が確定するのは1時間後なので、確定した時刻に付け替える（先の値段を使わない）
+    s = pd.Series(s.values, index=idx + pd.Timedelta(hours=1))
     out = {}
     for day in jp_days:
         jp_open = pd.Timestamp(day.date()).tz_localize("Asia/Tokyo") + pd.Timedelta(hours=9)
@@ -303,14 +304,6 @@ def study_big_caps(caps: dict[str, pd.DataFrame], nikkei: pd.DataFrame) -> dict:
                     "mean": float(r.mean()) if len(r) else None, "rebound": float(rebound.mean()) if len(r) else None,
                     "p_mean": mean_p(r.values)}
     return out
-
-
-def dev_sigma(close: pd.Series) -> pd.DataFrame:
-    """その日の終値での25日線乖離と、過去250日の乖離の平均±2σ・±3σ（純粋関数）"""
-    dev = (close / close.rolling(25).mean() - 1) * 100
-    mu = dev.rolling(DEV_LOOKBACK, min_periods=120).mean().shift(1)
-    sd = dev.rolling(DEV_LOOKBACK, min_periods=120).std().shift(1)
-    return pd.DataFrame({"dev": dev, "z": (dev - mu) / sd}).dropna()
 
 
 def study_index_dev(us: dict[str, pd.Series], nikkei: pd.DataFrame, pts: pd.DataFrame) -> dict:

@@ -60,9 +60,9 @@ def test_day_points():
 
 
 def test_us_futures_move_window():
-    # ES=F：ニューヨーク 2026/1/5(月) 16:00 に 100、日本の 1/6 9:00（= NY 19:00）に 101
+    # ES=F（時刻は足の始まり）：15:00の足の終値＝16:00の値段 100、18:00の足の終値＝日本の 1/6 9:00（NY 19:00）の値段 101
     idx = pd.date_range("2026-01-05 14:00", "2026-01-05 20:00", freq="1h", tz="America/New_York")
-    es = pd.DataFrame({"Close": [99, 99.5, 100, 100.2, 100.5, 101, 102]}, index=idx.tz_convert("UTC"))
+    es = pd.DataFrame({"Close": [99.5, 100, 100.2, 100.5, 101, 102, 103]}, index=idx.tz_convert("UTC"))
     mv = us_futures_move(es, pd.DatetimeIndex([pd.Timestamp("2026-01-06")]))
     assert abs(mv.iloc[0] - 1.0) < 1e-9
     print("✅ test_us_futures_move_window")

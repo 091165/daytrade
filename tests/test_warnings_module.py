@@ -162,7 +162,7 @@ def test_get_all_warnings_multiple():
 def test_get_all_warnings_empty():
     """通常の平日中日 → 警告なし"""
     warnings = get_all_warnings(
-        date(2026, 4, 22),  # 水曜
+        date(2026, 6, 17),  # 水曜（決算シーズン外）
         nikkei_week_is_positive=True,
         nikkei_month_is_positive=True,
     )
@@ -258,7 +258,38 @@ def test_after_break_and_dividend_days():
     print("✅ test_after_break_and_dividend_days")
 
 
+def test_nfp_and_earnings_season():
+    from warnings_module import check_earnings_season, check_nfp_warning, first_friday, nfp_date
+    assert first_friday(2026, 11) == date(2026, 11, 6)
+    assert check_nfp_warning(date(2026, 11, 6)).type == "nfp_before"          # 日本の金曜＝今夜発表
+    w = check_nfp_warning(date(2026, 11, 9), 0.8)                             # 発表後の月曜の朝
+    assert w.type == "nfp_after" and "data/us_events.csv" in w.message
+    ev = [{"date": "2026-11-06", "event": "nfp", "result": "bad"}]
+    assert "とても強い" in check_nfp_warning(date(2026, 11, 9), 0.8, ev).message
+    assert "とても弱い" in check_nfp_warning(date(2026, 11, 9), -0.8,
+                                         [{"date": "2026-11-06", "event": "nfp", "result": "good"}]).message
+    assert nfp_date(2026, 1, [{"date": "2026-01-09", "event": "nfp", "result": ""}]) == date(2026, 1, 9)
+    assert check_nfp_warning(date(2026, 11, 10), 0.8) is None
+    assert check_earnings_season(date(2026, 11, 2)) is not None
+    assert check_earnings_season(date(2026, 6, 17)) is None
+    print("✅ test_nfp_and_earnings_season")
+
+
+def test_index_deviation_warning():
+    from warnings_module import check_index_deviation_warning
+    devs = {"ナスダック": {"z": -3.4}, "SOX": {"z": -2.5}, "日経平均": {"z": -4}}
+    w = check_index_deviation_warning("sell_bias", devs, {"-3σ以下": {"n_hourly": 11, "am_mean": 0.9, "pm_mean": -0.8}})
+    assert w.severity == "high" and "ナスダック -3.4σ" in w.label and "11日" in w.evidence
+    assert check_index_deviation_warning("hands_off", devs) is None
+    assert check_index_deviation_warning("sell_bias", {"SOX": {"z": -2.5}}).severity == "low"
+    assert check_index_deviation_warning("buy_bias", {"SOX": {"z": 3.2}}).label.startswith("📈")
+    assert check_index_deviation_warning("sell_bias", {"日経平均": {"z": -5}}) is None   # 見るのは米2指数だけ
+    print("✅ test_index_deviation_warning")
+
+
 if __name__ == "__main__":
+    test_nfp_and_earnings_season()
+    test_index_deviation_warning()
     test_japanese_holidays()
     test_is_trading_day()
     test_next_trading_day_skips_weekend()

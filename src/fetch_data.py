@@ -18,6 +18,7 @@ TICKER_NIKKEI_LEV_ETF = "1570.T"
 TICKER_NASDAQ = "^IXIC"
 TICKER_DOW = "^DJI"
 TICKER_SOX = "^SOX"
+TICKER_SP500 = "^GSPC"
 TICKER_USDJPY = "JPY=X"
 TICKER_GOLD = "GC=F"        # ゴールド先物
 TICKER_OIL_WTI = "CL=F"     # WTI原油先物
@@ -173,6 +174,25 @@ def _week_and_month_direction() -> tuple[bool | None, bool | None]:
         return None, None
 
 
+def fetch_index_deviation() -> dict:
+    """ナスダック・SOX・日経の25日線乖離が何σか（2年分の日足を1回で取る）"""
+    from index_deviation import latest_z
+
+    names = {TICKER_NASDAQ: "ナスダック", TICKER_SOX: "SOX", TICKER_NIKKEI_SPOT: "日経平均"}
+    try:
+        data = yf.download(" ".join(names), period="2y", interval="1d", progress=False,
+                           group_by="ticker", auto_adjust=True)
+        out = {}
+        for t, n in names.items():
+            z = latest_z(data[t]["Close"])
+            if z:
+                out[n] = z
+        return out
+    except Exception as e:
+        print(f"⚠️ Failed to compute index deviation: {e}")
+        return {}
+
+
 def fetch_all_market_data(us_sector_tickers: list[str] | None = None) -> dict:
     """ダッシュボード用の全マーケットデータを一括取得する。"""
     now = datetime.now(JST)
@@ -184,6 +204,7 @@ def fetch_all_market_data(us_sector_tickers: list[str] | None = None) -> dict:
     nasdaq_change = fetch_change_pct(TICKER_NASDAQ)
     dow_change = fetch_change_pct(TICKER_DOW)
     sox_change = fetch_change_pct(TICKER_SOX)
+    sp500_change = _safe_change_pct(TICKER_SP500)
     nikkei_change = fetch_change_pct(TICKER_NIKKEI_SPOT)
 
     # 為替・コモディティ
@@ -219,7 +240,9 @@ def fetch_all_market_data(us_sector_tickers: list[str] | None = None) -> dict:
             "nasdaq_change_pct": nasdaq_change,
             "dow_change_pct": dow_change,
             "sox_change_pct": sox_change,
+            "sp500_change_pct": sp500_change,
         },
+        "index_deviation": fetch_index_deviation(),
         "fx_commodities": {
             "usdjpy_price": usdjpy_price,
             "usdjpy_change_pct": usdjpy_change,
