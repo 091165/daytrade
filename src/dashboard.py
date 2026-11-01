@@ -128,6 +128,11 @@ _RULES_FOCUS_CSS = """
 @media (max-width: 720px) { .focus-grid { grid-template-columns: 1fr; } }
 .focus-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
 .focus-card.conflict { border-color: var(--short); }
+.focus-plan { font-size: 15px; font-weight: 700; margin-top: 8px; }
+.focus-plan .stop { color: var(--short); } .focus-plan .take { color: var(--long); }
+.focus-plan .muted { color: var(--muted); font-size: 11px; font-weight: 400; display: block; }
+.focus-more { display: block; margin-top: 10px; padding: 8px 10px; border: 1px solid var(--accent); border-radius: 8px;
+  color: var(--accent); text-decoration: none; font-size: 13px; text-align: center; }
 .focus-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .focus-name { font-size: 17px; font-weight: 700; }
 .focus-code { color: var(--muted); font-size: 12px; margin-left: 4px; font-weight: 400; }
@@ -218,6 +223,28 @@ def _frac_text(frac: float | None) -> str:
 
 def _level_txt(x: dict) -> str:
     return f'{x["price"]:,.0f}円（{x["kind"]}・{x["dist"]:+,.0f}円）'
+
+
+def render_card_summary(f: dict) -> str:
+    """トップページのカード用の短いまとめ（くわしくは銘柄ページ）"""
+    plan = f.get("plan") or {}
+    b = plan.get("bracket")
+    mo = (f.get("range") or {}).get("morning") or {}
+    out = ""
+    if b:
+        out += (f'<div class="focus-plan"><span class="stop">損切り -{b["stop_yen"]:,.0f}円</span>　'
+                f'<span class="take">利確 +{b["target_yen"]:,.0f}円</span>'
+                f'<span class="muted">（{b["stop_width"]:.0f}円幅 / {b["target_width"]:.0f}円幅・9時台の目安 約{b["morning_width"]:.0f}円）</span></div>')
+        out += "".join(f'<div class="focus-range-sub high">⚠️ {n}</div>' for n in b["notes"])
+    lv = plan.get("levels") or {}
+    up, down = (lv.get("up") or [None])[0], (lv.get("down") or [None])[0]
+    if up or down:
+        u = f'上 {up["price"]:,.0f}（{up["kind"]}）' if up else ""
+        d = f'下 {down["price"]:,.0f}（{down["kind"]}）' if down else ""
+        out += f'<div class="focus-range-sub">いちばん近い目安：{" ／ ".join(x for x in (u, d) if x)}</div>'
+    if mo.get("next_earnings") and not mo.get("earnings_today"):
+        out += f'<div class="focus-range-sub">次の決算：{mo["next_earnings"][5:].replace("-", "/")}</div>'
+    return out
 
 
 def render_plan_block(plan: dict | None) -> str:
@@ -328,10 +355,8 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
           <div class="focus-line"><span class="lbl">寄り（窓）</span>{f["gap_text"]}</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>{f["intraday_text"]}</div>
           {conflict}
-          {render_range_block(f.get("range"))}
-          {render_plan_block(f.get("plan"))}
-          {"".join(f'<div class="focus-note {n.get("level", "")}">・{n["text"]}</div>' for n in f.get("notes") or [])}
-          <div class="focus-foot">{_focus_validation_foot(f.get("validation"))}</div>
+          {render_card_summary(f)}
+          <a class="focus-more" href="stock/{f["code"]}.html">📈 図と作戦を見る（{f["name"]}のページ）→</a>
         </div>
         """
     return f"""

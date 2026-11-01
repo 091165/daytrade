@@ -21,6 +21,7 @@ from kiriban import build_daily_signal
 from market_direction import build_market_direction, build_market_direction_v2
 from card_notes import build_card_notes
 from trade_plan import build_trade_plan
+from stock_page import write_stock_pages
 from sector_mapping import build_all_sector_signals, get_all_us_tickers
 from warnings_module import check_index_deviation_warning, get_all_warnings, us_was_closed
 from market_context import build_market_context
@@ -399,6 +400,10 @@ def main() -> int:
         late_notice=notice,
         direction_v2=direction_v2,
     )
+
+    # 銘柄ごとのページ（図と作戦）
+    write_stock_pages(output_dir / "stock", focus_signals_dict, focus_ohlc, direction_signal.as_dict(),
+                      warnings_dict, trading_rules.as_dict(), f"{generated_at:%Y-%m-%d %H:%M} JST")
 
     # サマリ
     print("\n" + "=" * 60)

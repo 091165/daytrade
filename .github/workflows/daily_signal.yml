@@ -48,6 +48,7 @@ jobs:
           python tests/test_stock_trend.py
           python tests/test_card_notes.py
           python tests/test_trade_plan.py
+          python tests/test_stock_page.py
           python tests/test_focus_stocks.py
           python tests/test_focus_backtest.py
           python tests/test_expected_range.py
