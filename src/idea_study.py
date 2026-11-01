@@ -80,8 +80,20 @@ def signed_summary(ret: pd.Series, side: pd.Series) -> dict:
     pnl = (ret[m] * side[m]).astype(float)
     n = len(pnl)
     k = int((pnl > 0).sum())
-    return {"n": n, "hit": k / n if n else None, "mean": float(pnl.mean()) if n else None,
+    return {"n": n, "hit": k / n if n else None, "hit_ci": wilson_ci(k, n),
+            "mean": float(pnl.mean()) if n else None,
             "sum": float(pnl.sum()) if n else None, "p_hit": hit_p(k, n), "p_mean": mean_p(pnl.values)}
+
+
+def wilson_ci(k: int, n: int, z: float = 1.96) -> list[float] | None:
+    """当たりの割合の95%区間（ウィルソン）"""
+    if n == 0:
+        return None
+    p = k / n
+    den = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / den
+    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den
+    return [max(0.0, c - h), min(1.0, c + h)]
 
 
 # ========== 日ごとの表 ==========
@@ -427,8 +439,12 @@ def run_idea_study() -> dict:
     except Exception as e:  # 1時間足が取れなくても他の結果は出す
         print(f"  ⚠️ 1時間足を取得できませんでした: {e}")
         res["strength"] = {}
+        hourly = {}
 
-    ps = collect_pvalues(res)
+    from idea_study2 import collect_pvalues2, run_part2
+    res["extra"] = run_part2(df, ohlc, stk_t, hourly, START)
+
+    ps = collect_pvalues(res) + collect_pvalues2(res["extra"])
     qs = bh_qvalues([p for _, p in ps])
     res["tests"] = [{"name": n, "p": p, "q": q, "significant": q < Q_TH} for (n, p), q in zip(ps, qs)]
     _print(res)

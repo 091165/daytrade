@@ -62,11 +62,11 @@ class MarketDirectionSignal:
         return d
 
 
-def classify_move(change_pct: float) -> Direction:
-    """騰落率からdirectionを分類"""
-    if change_pct >= WEAK_MOVE_THRESHOLD:
+def classify_move(change_pct: float, threshold: float = WEAK_MOVE_THRESHOLD) -> Direction:
+    """騰落率からdirectionを分類（±threshold 未満は「変動なし」）"""
+    if change_pct >= threshold:
         return "bullish"
-    if change_pct <= -WEAK_MOVE_THRESHOLD:
+    if change_pct <= -threshold:
         return "bearish"
     return "neutral"
 
@@ -88,6 +88,7 @@ def build_market_direction(
     sox_change_pct: float,
     futures_diff: float,
     us_closed: bool = False,
+    weak_threshold: float = WEAK_MOVE_THRESHOLD,
 ) -> MarketDirectionSignal:
     """本日のデイトレ方針を判定する。
 
@@ -101,9 +102,9 @@ def build_market_direction(
         futures_diff: 日経先物 − 日経現物（円）
     """
     indices = [
-        IndexMove("ナスダック", nasdaq_change_pct, classify_move(nasdaq_change_pct)),
-        IndexMove("ダウ", dow_change_pct, classify_move(dow_change_pct)),
-        IndexMove("SOX", sox_change_pct, classify_move(sox_change_pct)),
+        IndexMove("ナスダック", nasdaq_change_pct, classify_move(nasdaq_change_pct, weak_threshold)),
+        IndexMove("ダウ", dow_change_pct, classify_move(dow_change_pct, weak_threshold)),
+        IndexMove("SOX", sox_change_pct, classify_move(sox_change_pct, weak_threshold)),
     ]
 
     us_direction = _majority_direction(indices)
