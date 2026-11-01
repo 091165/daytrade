@@ -64,6 +64,9 @@ def test_build_trade_plan_uses_as_of():
     assert "未検証" in plan["level_evidence"]
     v = {"source": "x", "control_bounce": 0.5, "kinds": [{"kind": "前日高値", "bounce": 0.62, "significant": True, "diff": 0.12}]}
     assert "前日高値 62%" in level_evidence(v)
+    v2 = {"source": "x", "control_bounce": 0.43, "kinds": [{"kind": "5日高値", "bounce": 0.32, "significant": True, "diff": -0.11},
+                                                          {"kind": "キリ", "bounce": 0.43, "significant": False, "diff": 0.0}]}
+    assert "抜けやすい水準 5日高値" in level_evidence(v2)
     print("✅ test_build_trade_plan_uses_as_of")
 
 

@@ -140,8 +140,14 @@ def level_evidence(v: dict | None) -> str:
     if not v or not v.get("kinds"):
         return "未検証（毎週日曜のバックテスト後に、止まりやすさを表示）"
     base = v.get("control_bounce")
-    good = [k for k in v["kinds"] if k.get("significant") and k.get("diff", 0) > 0]
+    good = [k for k in v["kinds"] if k.get("significant") and (k.get("diff") or 0) > 0]
+    weak = [k for k in v["kinds"] if k.get("significant") and (k.get("diff") or 0) < 0]
+    parts = []
     if good:
-        txt = "・".join(f'{k["kind"]} {k["bounce"] * 100:.0f}%' for k in good)
-        return f"検証（{v['source']}）：止まりやすい水準 {txt}（比較用 {base * 100:.0f}%）"
-    return f"検証（{v['source']}）：どの水準も、比較用の値段（止まった割合 {base * 100:.0f}%）と差なし。目安として使う"
+        parts.append("止まりやすい水準 " + "・".join(f'{k["kind"]} {k["bounce"] * 100:.0f}%' for k in good))
+    if weak:
+        parts.append("抜けやすい水準 " + "・".join(f'{k["kind"]}（止まったのは {k["bounce"] * 100:.0f}%）' for k in weak))
+    if not parts:
+        parts.append("どの水準も止まりやすさは差なし")
+    return (f"検証（{v['source']}）：{'。'.join(parts)}。比較用のただの値段で止まった割合は {base * 100:.0f}%。"
+            "止まる場所というより、損切り・利確の位置を決めるときの目安として使う")

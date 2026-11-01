@@ -619,6 +619,73 @@ def render_idea_extra(x: dict, mark) -> str:
       値嵩株のキリは「その日の安値で触れたか」で分けているので、下げた日ほど触れやすい（参考。補正には入れない）。</div>"""
 
 
+MIN_STOP_YEN = 3000     # マイルールの損切り「-3,000〜-5,000円」の下限。これより小さい幅しか取れない銘柄は100株では利益も小さい
+
+
+def rule_fit_rows(screen: dict | None, morning: dict | None) -> list[dict]:
+    """売買代金上位の銘柄を、100株・損切り-5,000円・利確は損切りの3倍・10時前 のルールに当てはめる"""
+    from trade_plan import bracket
+    ratios = [v["ratio"] for v in ((morning or {}).get("per_code") or {}).values() if v.get("ratio")]
+    ratio = sum(ratios) / len(ratios) if ratios else 0.62
+    out = []
+    for r in (screen or {}).get("results", []):
+        if not r.get("range_yen") or not r.get("price"):
+            continue
+        per = ((morning or {}).get("per_code") or {}).get(r["code"], {}).get("ratio") or ratio
+        w = r["range_yen"] / 100 * per
+        b = bracket(w)
+        small = bool(b and b["stop_yen"] < MIN_STOP_YEN)
+        fit = "◎" if (b and not b["capped"] and not small) else "△" if b and b["capped"] else "×"
+        out.append({"code": r["code"], "name": r["name"], "price": r["price"], "turnover_oku": r.get("turnover_oku"),
+                    "morning_width": w, "bracket": b, "fit": fit, "small": small})
+    order = {"◎": 0, "△": 1, "×": 2}
+    out.sort(key=lambda x: (order[x["fit"]], -(x["turnover_oku"] or 0)))
+    return out
+
+
+def render_level_section(levels: dict | None, screen: dict | None, morning: dict | None) -> str:
+    title = "🧭 ルールに合う銘柄・上値／下値の目安は止まりやすいか"
+    fit = rule_fit_rows(screen, morning)
+    rows = ""
+    for x in fit:
+        b = x["bracket"] or {}
+        why = ("損切り-5,000円では近すぎる（値動きが大きい）" if b.get("capped")
+               else "値動きが小さい（100株では1回の利益が小さい）" if x["small"] else "")
+        rows += (f'<tr><td>{x["fit"]} {x["name"]}<span class="muted tiny"> {x["code"]}</span></td>'
+                 f'<td class="num">{x["price"]:,.0f}円</td><td class="num">{x["morning_width"]:.0f}円</td>'
+                 f'<td class="num">-{b.get("stop_yen", 0):,.0f}円 / +{b.get("target_yen", 0):,.0f}円</td>'
+                 f'<td class="num">{(x["turnover_oku"] or 0):,.0f}億円</td><td>{why}</td></tr>')
+    lv = ""
+    if levels and levels.get("kinds"):
+        base = levels.get("control_bounce") or 0
+        cells = ""
+        for k in levels["kinds"]:
+            if k["bounce"] is None:
+                continue
+            mark = "✅" if k["significant"] and k["diff"] > 0 else ("（止まりにくい）" if k["significant"] else "")
+            ci = f'{k["diff"] * 100:+.0f}pt（95%区間 {k["ci"][0] * 100:+.0f}〜{k["ci"][1] * 100:+.0f}）' if k["ci"] else "件数不足"
+            cells += f'<tr><td>{k["kind"]}</td><td class="num">{k["bounce"] * 100:.0f}%（{k["n"]}回）</td><td class="num">{ci} {mark}</td></tr>'
+        lv = f"""
+      <h3>上値・下値の目安で9時台に止まった割合（比較用のただの値段は {base * 100:.0f}%・{levels.get("n_control", 0)}回）</h3>
+      <div class="period-note">{levels.get("source", "")}</div>
+      <table class="results"><thead><tr><th>水準</th><th class="num">止まった</th><th class="num">比較用との差</th></tr></thead><tbody>{cells}</tbody></table>"""
+    else:
+        lv = '<div class="muted">上値・下値の目安の検証：まだ結果がありません</div>'
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">{title}</h2>
+    <div class="explainer" style="margin-top: 0;">
+      <h3>100株・損切り-5,000円まで・利確は損切りの3倍・10時前 に合う銘柄（売買代金上位）</h3>
+      <table class="results"><thead><tr><th>銘柄</th><th class="num">株価</th><th class="num">9時台の目安</th>
+        <th class="num">損切り / 利確（100株）</th><th class="num">売買代金</th><th></th></tr></thead><tbody>{rows}</tbody></table>
+      <div class="muted tiny">◎ 損切りが -3,000〜-5,000円に収まり、利確が9時台に届く ／ △ 値動きが大きく、-5,000円の損切りでは振り回されやすい ／ × 値動きが小さく、100株では取れる額が小さい。
+      損切りは9時台の目安の1/3（上限50円）、利確はその3倍。承認・試用銘柄を決め直すときの参考（毎朝の画面には承認・試用銘柄だけ出す）。</div>
+      {lv}
+    </div>
+  </section>
+"""
+
+
 def render_screen_section(screen: dict | None) -> str:
     """売買代金上位の銘柄スクリーニング（研究用）"""
     if not screen or not screen.get("results"):
@@ -699,6 +766,7 @@ def render_report(
     checkpoint_result: dict | None = None,
     fib_result: dict | None = None,
     idea_result: dict | None = None,
+    level_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -816,6 +884,7 @@ def render_report(
     checkpoint_section = render_checkpoint_section(checkpoint_result)
     fib_section = render_fib_section(fib_result)
     idea_section = render_idea_section(idea_result)
+    level_section = render_level_section(level_result, screen_result, morning_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -995,6 +1064,7 @@ def render_report(
   {morning_section}
   {checkpoint_section}
   {fib_section}
+  {level_section}
   {idea_section}
 
   {scan_section}
@@ -1094,6 +1164,7 @@ def render_report(
         "checkpoints": checkpoint_result,
         "fibonacci": fib_result,
         "ideas": idea_result,
+        "levels": level_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -1183,6 +1254,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Fibonacci study failed: {e}")
 
     print()
+    print("🔍 Running level study (上値・下値の目安)")
+    level_result = None
+    try:
+        from level_study import run_level_study
+        level_result = run_level_study()
+    except Exception as e:
+        print(f"⚠️ Level study failed: {e}")
+
+    print()
     print("🔍 Running idea study (メンサロ記事の考え方)")
     idea_result = None
     try:
@@ -1216,6 +1296,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         checkpoint_result=checkpoint_result,
         fib_result=fib_result,
         idea_result=idea_result,
+        level_result=level_result,
     )
 
 
