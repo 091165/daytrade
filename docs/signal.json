@@ -1,6 +1,6 @@
 {
   "market": {
-    "timestamp": "2026-11-01T18:32:59.309789+09:00",
+    "timestamp": "2026-11-02T06:40:31.801505+09:00",
     "nikkei": {
       "prev_close": 63290.109375,
       "change_pct": -2.1178017720722475,
@@ -1987,6 +1987,14 @@
   },
   "warnings": [
     {
+      "type": "month_start",
+      "severity": "low",
+      "label": "🆕 月初営業日 = 月間トレンド形成に注目",
+      "message": "月初の値動きが月全体のバイアスになりやすい（特に下げの場合）。",
+      "action": "今日の方向性は月間トレンドの示唆になりうる。過大な逆張りは控えめに。",
+      "evidence": ""
+    },
+    {
       "type": "earnings_season",
       "severity": "low",
       "label": "📊 決算シーズン",
@@ -2281,6 +2289,20 @@
   ],
   "recent_history": [
     {
+      "date": "2026-11-02",
+      "verdict": "sell_bias",
+      "verdict_label": "売りポジ主体",
+      "confidence": "high",
+      "futures_diff": -655.109375,
+      "nasdaq_pct": -2.8555611175022477,
+      "dow_pct": -1.0932786156699792,
+      "sox_pct": -7.200781168593828,
+      "warnings": [
+        "🆕 月初営業日 = 月間トレンド形成に注目",
+        "📊 決算シーズン"
+      ]
+    },
+    {
       "date": "2026-11-01",
       "verdict": "sell_bias",
       "verdict_label": "売りポジ主体",
@@ -2327,17 +2349,6 @@
       "nasdaq_pct": -0.16640555229064935,
       "dow_pct": 0.1381346291329022,
       "sox_pct": 0.3307682887002006,
-      "warnings": []
-    },
-    {
-      "date": "2026-10-27",
-      "verdict": "hands_off",
-      "verdict_label": "初心者手出し無用",
-      "confidence": "low",
-      "futures_diff": -23.91015625,
-      "nasdaq_pct": 0.8246511774205878,
-      "dow_pct": 0.28041275428793977,
-      "sox_pct": 2.8202689812538706,
       "warnings": []
     }
   ],
@@ -2392,7 +2403,7 @@
       }
     }
   },
-  "generated_after_open": true,
+  "generated_after_open": false,
   "focus_stocks": [
     {
       "code": "5803",

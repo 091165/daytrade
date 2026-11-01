@@ -274,13 +274,13 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-11-01 18:32 JST</div>
+      <div class="timestamp">Updated: 2026-11-02 06:40 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
       <a href="../daytrade-journal/review.html" class="report-link">✅ ルール遵守の振り返り →</a>
     </div>
   </header>
 
-  <section><div class="late-notice">⚠️ この判定は寄り付き後（18:32）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
+  
 
   
     <section>
@@ -305,6 +305,13 @@ section > h2.section-title {
   
     <section>
       <div class="warnings-wrap">
+        
+        <div class="warning-item" style="border-left-color: var(--muted); background: rgba(107, 114, 128, 0.08);">
+          <div style="font-size: 15px; margin-bottom: 4px; color: var(--muted); font-weight: 600;">🆕 月初営業日 = 月間トレンド形成に注目</div>
+          <div class="warning-message">月初の値動きが月全体のバイアスになりやすい（特に下げの場合）。</div>
+          <div class="warning-action">→ 今日の方向性は月間トレンドの示唆になりうる。過大な逆張りは控えめに。</div>
+          
+        </div>
         
         <div class="warning-item" style="border-left-color: var(--muted); background: rgba(107, 114, 128, 0.08);">
           <div style="font-size: 15px; margin-bottom: 4px; color: var(--muted); font-weight: 600;">📊 決算シーズン</div>
@@ -729,6 +736,16 @@ section > h2.section-title {
         </thead>
         <tbody>
         <tr>
+          <td>11/2(月)</td>
+          <td><span class="hist-badge hist-sell">📉 売りポジ主体</span></td>
+          <td class="num"><span style="color: var(--muted);">高</span></td>
+          <td class="num">-2.86%</td>
+          <td class="num">-1.09%</td>
+          <td class="num">-7.20%</td>
+          <td class="num">-655</td>
+        </tr>
+        
+        <tr>
           <td>11/1(日)</td>
           <td><span class="hist-badge hist-sell">📉 売りポジ主体</span></td>
           <td class="num"><span style="color: var(--muted);">高</span></td>
@@ -766,16 +783,6 @@ section > h2.section-title {
           <td class="num">+0.14%</td>
           <td class="num">+0.33%</td>
           <td class="num">+536</td>
-        </tr>
-        
-        <tr>
-          <td>10/27(火)</td>
-          <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
-          <td class="num"><span style="color: var(--muted);">低</span></td>
-          <td class="num">+0.82%</td>
-          <td class="num">+0.28%</td>
-          <td class="num">+2.82%</td>
-          <td class="num">-24</td>
         </tr>
         </tbody>
       </table>
