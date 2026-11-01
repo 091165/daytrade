@@ -1,6 +1,6 @@
 {
   "market": {
-    "timestamp": "2026-11-01T17:40:50.440137+09:00",
+    "timestamp": "2026-11-01T17:46:43.743424+09:00",
     "nikkei": {
       "prev_close": 63290.109375,
       "change_pct": -2.1178017720722475,
@@ -2507,6 +2507,12 @@
           "next_earnings": "2026-11-10"
         }
       },
+      "us_range": {
+        "bucket": "3%以上",
+        "multiplier": null,
+        "n": 0,
+        "evidence": "未検証"
+      },
       "plan": {
         "bracket": {
           "stop_width": 40,
@@ -2681,6 +2687,12 @@
           "next_earnings": "2026-11-10"
         }
       },
+      "us_range": {
+        "bucket": "3%以上",
+        "multiplier": null,
+        "n": 0,
+        "evidence": "未検証"
+      },
       "plan": {
         "bracket": {
           "stop_width": 50,
@@ -2854,6 +2866,12 @@
           "earnings_n": 8,
           "next_earnings": "2027-02-02"
         }
+      },
+      "us_range": {
+        "bucket": "3%以上",
+        "multiplier": null,
+        "n": 0,
+        "evidence": "未検証"
       },
       "plan": {
         "bracket": {
