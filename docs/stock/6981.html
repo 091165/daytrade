@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>村田製作所（6981）｜Daytrade Signal Board</title>
+<style>
+
+:root {
+  --bg: #0b1220;
+  --panel: #151f33;
+  --panel-2: #1d2842;
+  --text: #e6edf3;
+  --muted: #8ca0b3;
+  --accent: #fbbf24;
+  --long: #10b981;
+  --short: #ef4444;
+  --neutral: #6b7280;
+  --border: #2a3654;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+.container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+h1 { margin: 0; font-size: 20px; font-weight: 600; }
+.header-right { text-align: right; }
+.timestamp { color: var(--muted); font-size: 13px; }
+.report-link { color: var(--accent); text-decoration: none; font-size: 13px; }
+.report-link:hover { text-decoration: underline; }
+
+section { margin-bottom: 28px; }
+section > h2.section-title {
+  font-size: 16px; font-weight: 600; color: var(--accent);
+  margin: 0 0 14px 0; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  letter-spacing: 0.02em;
+}
+.footer-note {
+  margin-top: 32px; padding: 16px; background: var(--panel);
+  border-radius: 8px; font-size: 12px; color: var(--muted); border: 1px solid var(--border);
+}
+
+
+.rules-banner { border-radius: 12px; padding: 18px 20px; border: 2px solid var(--accent); background: rgba(251, 191, 36, 0.07); }
+.rules-banner.tone-danger { border-color: var(--short); background: rgba(239, 68, 68, 0.08); }
+.rules-kicker { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 6px; }
+.rules-headline { font-size: 22px; font-weight: 700; line-height: 1.35; margin-bottom: 6px; }
+.tone-danger .rules-headline { color: #fca5a5; }
+.tone-caution .rules-headline { color: var(--accent); }
+.rules-subline { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+.rules-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.rules-col h3 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 0.05em; }
+.rules-col ul { margin: 0; padding-left: 18px; }
+.rules-col li { margin: 4px 0; font-size: 14px; }
+.rules-col.day li { font-weight: 600; }
+@media (max-width: 720px) {
+  .container { padding: 16px; }
+  .rules-cols { grid-template-columns: 1fr; }
+  .rules-headline { font-size: 19px; }
+}
+
+.focus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 720px) { .focus-grid { grid-template-columns: 1fr; } }
+.focus-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.focus-card.conflict { border-color: var(--short); }
+.focus-plan { font-size: 15px; font-weight: 700; margin-top: 8px; }
+.focus-plan .stop { color: var(--short); } .focus-plan .take { color: var(--long); }
+.focus-plan .muted { color: var(--muted); font-size: 11px; font-weight: 400; display: block; }
+.focus-more { display: block; margin-top: 10px; padding: 8px 10px; border: 1px solid var(--accent); border-radius: 8px;
+  color: var(--accent); text-decoration: none; font-size: 13px; text-align: center; }
+.focus-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+.focus-name { font-size: 17px; font-weight: 700; }
+.focus-code { color: var(--muted); font-size: 12px; margin-left: 4px; font-weight: 400; }
+.focus-trial { font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid currentColor; border-radius: 6px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; }
+.focus-trial-note { font-size: 12px; color: var(--accent); margin-bottom: 6px; }
+.focus-dir { font-size: 15px; font-weight: 700; white-space: nowrap; }
+.focus-dir.bullish { color: var(--long); }
+.focus-dir.bearish { color: var(--short); }
+.focus-dir.neutral { color: var(--muted); }
+.focus-us { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.focus-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.focus-chip { background: var(--panel-2); border-radius: 4px; padding: 2px 8px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.focus-line { font-size: 14px; margin: 4px 0; }
+.focus-line .lbl { display: inline-block; min-width: 4.5em; color: var(--muted); font-size: 12px; }
+.focus-conflict { margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: rgba(239, 68, 68, 0.12); color: #fca5a5; font-size: 13px; font-weight: 600; }
+.focus-foot { margin-top: 10px; font-size: 11px; color: var(--muted); }
+.late-notice { border: 2px solid var(--accent); border-radius: 10px; padding: 12px 16px; background: rgba(251, 191, 36, 0.10); color: var(--accent); font-size: 14px; font-weight: 600; }
+.focus-range { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: var(--panel-2); }
+.focus-range-title { font-size: 12px; color: var(--muted); }
+.focus-range-main { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.focus-range-main .lot { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+.focus-range-sub { font-size: 13px; margin-top: 2px; }
+.focus-range-sub.high { color: #fca5a5; font-weight: 600; }
+.focus-range-sub.low { color: var(--muted); }
+
+/* スマホで履歴の表がページ全体をはみ出さないように、表だけ横スクロールさせる */
+@media (max-width: 720px) {
+  .history-table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+}
+
+
+.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+.box { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+.box h2 { font-size: 15px; color: var(--accent); margin: 0 0 8px; }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font-size: 13px; fill: var(--text); }
+.chart .t-muted { fill: var(--muted); font-size: 11px; }
+.ruler text { font-size: 14px; }
+.ruler .t-label { fill: var(--text); font-weight: 600; }
+.ruler .t-entry { fill: var(--muted); font-size: 12px; }
+.ruler .t-muted { font-size: 12px; }
+.chart .grid { stroke: var(--border); stroke-width: 1; }
+.chart .c-up { fill: var(--long); } .chart .c-up-w { stroke: var(--long); stroke-width: 1; }
+.chart .c-down { fill: var(--short); } .chart .c-down-w { stroke: var(--short); stroke-width: 1; }
+.chart .band { fill: rgba(251, 191, 36, 0.18); stroke: rgba(251, 191, 36, 0.6); stroke-width: 1; }
+.chart .pc { stroke: var(--text); stroke-width: 1.5; }
+.chart .pc-t { fill: var(--text); font-weight: 600; }
+.chart .lv-up { stroke: #f87171; stroke-width: 1; stroke-dasharray: 4 3; }
+.chart .lv-up-t { fill: #f87171; }
+.chart .lv-down { stroke: #34d399; stroke-width: 1; stroke-dasharray: 4 3; }
+.chart .lv-down-t { fill: #34d399; }
+.chart .r-stop { stroke: var(--short); stroke-width: 10; }
+.chart .r-take { stroke: var(--long); stroke-width: 10; }
+.chart .r-entry { fill: var(--text); }
+.chart .r-stop-t { fill: var(--short); } .chart .r-take-t { fill: var(--long); }
+table.lv { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.lv td, table.lv th { padding: 4px 6px; border-bottom: 1px solid var(--border); text-align: left; }
+table.lv .num { text-align: right; }
+.lv-up-t { color: #f87171; } .lv-down-t { color: #34d399; }
+.muted { color: var(--muted); }
+.big { font-size: 18px; font-weight: 700; }
+.big .stop { color: var(--short); } .big .take { color: var(--long); }
+.note { font-size: 13px; margin-top: 6px; }
+.note.muted { color: var(--muted); }
+.dir { font-weight: 700; }
+.dir.bullish { color: var(--long); } .dir.bearish { color: var(--short); } .dir.neutral { color: var(--muted); }
+
+.warnings-wrap { display: flex; flex-direction: column; gap: 10px; }
+.warning-item { background: var(--panel); border-left: 4px solid var(--accent); border-radius: 6px; padding: 10px 14px; }
+.warning-message { font-size: 13px; margin: 4px 0; }
+.warning-action { font-size: 12px; color: var(--muted); }
+.warning-evidence { font-size: 11px; color: var(--muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="container" style="max-width: 760px;">
+  <header>
+    <h1>村田製作所 <span class="focus-code">6981</span><span class="focus-trial">試用</span></h1>
+    <div class="header-right"><a class="back" href="../index.html">← 今日の判定に戻る</a><div class="timestamp">2026-11-01 17:37 JST</div></div>
+  </header>
+
+  <div class="box">
+    <h2>🎯 今日の作戦（100株・入る前に決める）</h2>
+    <div class="note">今日の方針：<b>売りポジ主体</b>　この銘柄の寄り前予測：<span class="dir bearish">▼ 売り寄り</span></div>
+    
+    <div class="big"><span class="stop">損切り -5,000円</span>（50円幅）　<span class="take">利確 +15,000円</span>（150円幅）</div><div class="note">⚠️ 9時台の値幅に比べて損切り（上限 -5,000円）が近い。普段の上下で引っかかりやすい</div>
+    <div class="note muted">今日の方針は売り。売りで入るときの図。入った値段（寄り値など）を0として見る。</div>
+    <svg viewBox="0 0 360 136" class="chart ruler" role="img" aria-label="損切り・利確の物差し"><text x="16" y="22" class="t-label">売りで入ったとき</text><line x1="262.0" x2="344.0" y1="52" y2="52" class="r-stop"/><line x1="262.0" x2="16.0" y1="52" y2="52" class="r-take"/><circle cx="262.0" cy="52" r="6" class="r-entry"/><text x="262.0" y="40" class="t-entry" text-anchor="middle">▼入った値段</text><text x="344.0" y="76" class="r-stop-t" text-anchor="end">損切り +50円</text><text x="16.0" y="76" class="r-take-t" text-anchor="start">利確 -150円</text><rect x="16" y="96" width="328.0" height="12" class="band"/><text x="16" y="126" class="t-muted">黄色＝9時台にふつう動く幅 約217円（同じ縮尺）</text></svg>
+  </div>
+
+  <div class="box">
+    <h2>📈 上値・下値の目安（直近15日の日足）</h2>
+    <svg viewBox="0 0 400 400" class="chart" role="img" aria-label="日足と上値・下値の目安"><clipPath id="plot"><rect x="0" y="18" width="270" height="362"/></clipPath><line x1="6" x2="270" y1="380.0" y2="380.0" class="grid"/><line x1="6" x2="270" y1="289.5" y2="289.5" class="grid"/><line x1="6" x2="270" y1="199.0" y2="199.0" class="grid"/><line x1="6" x2="270" y1="108.5" y2="108.5" class="grid"/><line x1="6" x2="270" y1="18.0" y2="18.0" class="grid"/><g clip-path="url(#plot)"><line x1="13.7" x2="13.7" y1="-620.4" y2="-480.4" class="c-up-w"/><rect x="9.1" y="-560.5" width="9.2" height="63.1" class="c-up"/><line x1="29.0" x2="29.0" y1="-499.8" y2="-285.8" class="c-down-w"/><rect x="24.4" y="-393.3" width="9.2" height="15.5" class="c-down"/><line x1="44.3" x2="44.3" y1="-447.0" y2="-305.2" class="c-down-w"/><rect x="39.7" y="-393.3" width="9.2" height="53.7" class="c-down"/><line x1="59.7" x2="59.7" y1="-177.9" y2="37.9" class="c-down-w"/><rect x="55.1" y="-151.6" width="9.2" height="166.3" class="c-down"/><line x1="75.0" x2="75.0" y1="-138.8" y2="56.7" class="c-up-w"/><rect x="70.4" y="-56.4" width="9.2" height="47.1" class="c-up"/><line x1="90.3" x2="90.3" y1="-13.5" y2="115.1" class="c-up-w"/><rect x="85.7" y="-8.3" width="9.2" height="93.3" class="c-up"/><line x1="105.7" x2="105.7" y1="-29.5" y2="104.8" class="c-down-w"/><rect x="101.1" y="14.3" width="9.2" height="50.4" class="c-down"/><line x1="121.0" x2="121.0" y1="-111.5" y2="34.1" class="c-down-w"/><rect x="116.4" y="-35.2" width="9.2" height="46.6" class="c-down"/><line x1="136.3" x2="136.3" y1="-81.8" y2="208.9" class="c-down-w"/><rect x="131.7" y="-35.6" width="9.2" height="199.8" class="c-down"/><line x1="151.7" x2="151.7" y1="228.2" y2="423.8" class="c-up-w"/><rect x="147.1" y="238.1" width="9.2" height="161.6" class="c-up"/><line x1="167.0" x2="167.0" y1="214.1" y2="323.4" class="c-up-w"/><rect x="162.4" y="273.0" width="9.2" height="12.3" class="c-up"/><line x1="182.3" x2="182.3" y1="116.5" y2="205.6" class="c-down-w"/><rect x="177.7" y="151.4" width="9.2" height="43.3" class="c-down"/><line x1="197.7" x2="197.7" y1="-3.6" y2="111.4" class="c-up-w"/><rect x="193.1" y="37.4" width="9.2" height="21.7" class="c-up"/><line x1="213.0" x2="213.0" y1="-51.7" y2="120.8" class="c-up-w"/><rect x="208.4" y="-51.7" width="9.2" height="94.7" class="c-up"/><line x1="228.3" x2="228.3" y1="52.5" y2="361.6" class="c-down-w"/><rect x="223.7" y="136.8" width="9.2" height="62.2" class="c-down"/></g><text x="6" y="396" class="t-muted">10/09</text><text x="236" y="396" class="t-muted" text-anchor="end">10/30</text><rect x="242" y="148.0" width="28" height="102.1" class="band"/><text x="256.0" y="12" class="t-muted" text-anchor="middle">今日</text><line x1="6" x2="270" y1="199.0" y2="199.0" class="pc"/><line x1="6" x2="270" y1="52.5" y2="52.5" class="lv-up"/><text x="276" y="56.5" class="lv-up-t">6,669 前日高値</text><line x1="6" x2="270" y1="132.1" y2="132.1" class="lv-up"/><text x="276" y="136.1" class="lv-up-t">6,500 キリ</text><line x1="6" x2="270" y1="179.2" y2="179.2" class="lv-up"/><text x="276" y="183.2" class="lv-up-t">6,400 キリ</text><line x1="6" x2="270" y1="226.3" y2="226.3" class="lv-down"/><text x="276" y="230.3" class="lv-down-t">6,300 キリ</text><line x1="6" x2="270" y1="273.4" y2="273.4" class="lv-down"/><text x="276" y="277.4" class="lv-down-t">6,200 キリ</text><line x1="6" x2="270" y1="320.6" y2="320.6" class="lv-down"/><text x="276" y="324.6" class="lv-down-t">6,100 キリ</text><text x="276" y="203.0" class="pc-t">6,358 前日終値</text></svg>
+    <div class="note muted">黄色の帯＝今日の9時台にふつう動く幅を、前日終値の上下に置いたもの。赤い点線＝上値の目安、緑の点線＝下値の目安。</div>
+    <table class="lv"><thead><tr><th></th><th>水準</th><th class="num">値段</th><th class="num">前日終値から</th><th class="num">100株で</th></tr></thead>
+      <tbody><tr><td class="lv-up-t">上値</td><td>キリ</td><td class="num">6,400円</td><td class="num">+42円</td><td class="num">+4,200円</td></tr><tr><td class="lv-up-t">上値</td><td>キリ</td><td class="num">6,500円</td><td class="num">+142円</td><td class="num">+14,200円</td></tr><tr><td class="lv-up-t">上値</td><td>前日高値</td><td class="num">6,669円</td><td class="num">+311円</td><td class="num">+31,100円</td></tr><tr><td class="lv-down-t">下値</td><td>キリ</td><td class="num">6,300円</td><td class="num">-58円</td><td class="num">-5,800円</td></tr><tr><td class="lv-down-t">下値</td><td>キリ</td><td class="num">6,200円</td><td class="num">-158円</td><td class="num">-15,800円</td></tr><tr><td class="lv-down-t">下値</td><td>キリ</td><td class="num">6,100円</td><td class="num">-258円</td><td class="num">-25,800円</td></tr></tbody></table>
+    <div class="note muted">検証（売買代金上位20銘柄・5分足60日・9時台）：抜けやすい水準 5日高値（止まったのは 32%）。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う</div>
+  </div>
+
+  <div class="box">
+    <h2>📏 値幅</h2>
+    
+          <div class="focus-range">
+            <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
+            <div class="focus-range-main">約343円<span class="lot">100株で約34,299円</span></div>
+            <div class="focus-range-sub">荒れた日（5日に1日）は約451円まで（100株で約45,077円）</div>
+            <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約1割</div>
+            <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約21,663円</b>（荒れた日は約27,521円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約15,434円（100株）以上動いたら、9時台は約27,197円まで広がりやすい</div>
+            <div class="focus-range-sub">次の決算：02/02</div>
+            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.64／予測以内に収まった日 59%</div>
+          </div>
+  </div>
+
+  <div class="box">
+    <h2>🇺🇸 寄り前予測（米関連株）</h2>
+    <div class="note">米関連株の平均 -5.31%（半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品））</div>
+    <div class="focus-chips"><span class="focus-chip">SOXX <span style="color: var(--short);">-8.2%</span></span><span class="focus-chip">QQQ <span style="color: var(--short);">-3.5%</span></span><span class="focus-chip">NVDA <span style="color: var(--short);">-4.2%</span></span></div>
+    <div class="note"><b>寄り（窓）</b>　寄りは安く始まりやすい（窓の連動：検証済み r=+0.62）</div>
+    <div class="note"><b>寄り後（〜引け）</b>　寄り後の方向は読めない（r=-0.11）。寄り値で飛びつかない</div>
+    <div class="note muted">検証（232日）: 窓 r=+0.62 ✅ 連動を確認 ／ 寄り後（〜引け） r=-0.11 ✗ 連動なし</div>
+  </div>
+
+  <div class="box">
+    <h2>📝 この銘柄の注意</h2>
+    <div class="note muted">・25日線乖離 -14.3%・月足 陰線1本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）</div><div class="note muted">・3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る</div>
+  </div>
+
+  <div class="box"><h2>⚠️ 今日の警告（全体）</h2>
+    <section>
+      <div class="warnings-wrap">
+        
+        <div class="warning-item" style="border-left-color: var(--muted); background: rgba(107, 114, 128, 0.08);">
+          <div style="font-size: 15px; margin-bottom: 4px; color: var(--muted); font-weight: 600;">📊 決算シーズン</div>
+          <div class="warning-message">主要企業の決算が集中する時期。銘柄ごとの差が大きく、指数の予報どおりに動きにくい。</div>
+          <div class="warning-action">→ 各銘柄カードの「決算明け」「次の決算」を確認する。</div>
+          
+        </div>
+        
+      </div>
+    </section>
+    </div>
+
+  <div class="box">
+    <h2>📌 今日のマイルール</h2>
+    <ul style="margin: 0; padding-left: 20px; font-size: 13px;"><li>買いは入れない（1銘柄だけ逆を張らない）</li><li>落ちている銘柄を拾わない（落ちるナイフを掴まない）</li><li>逆行したら即損切り（-3,000〜5,000円）。粘らない</li><li>10:00前に「取引終了」を宣言する</li><li>1日 -10,000円 でその日は終了</li><li>株数は100株まで（200株以上は使わない）</li><li>2回続けて損切りしたら、その日は終了</li><li>触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない</li><li>試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り</li><li>注文画面で「日計り」になっているか毎回確認する</li></ul>
+  </div>
+</div>
+</body>
+</html>

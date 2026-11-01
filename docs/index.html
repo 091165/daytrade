@@ -68,6 +68,11 @@ section > h2.section-title {
 @media (max-width: 720px) { .focus-grid { grid-template-columns: 1fr; } }
 .focus-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
 .focus-card.conflict { border-color: var(--short); }
+.focus-plan { font-size: 15px; font-weight: 700; margin-top: 8px; }
+.focus-plan .stop { color: var(--short); } .focus-plan .take { color: var(--long); }
+.focus-plan .muted { color: var(--muted); font-size: 11px; font-weight: 400; display: block; }
+.focus-more { display: block; margin-top: 10px; padding: 8px 10px; border: 1px solid var(--accent); border-radius: 8px;
+  color: var(--accent); text-decoration: none; font-size: 13px; text-align: center; }
 .focus-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .focus-name { font-size: 17px; font-weight: 700; }
 .focus-code { color: var(--muted); font-size: 12px; margin-left: 4px; font-weight: 400; }
@@ -269,13 +274,13 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-11-01 17:19 JST</div>
+      <div class="timestamp">Updated: 2026-11-01 17:37 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
       <a href="../daytrade-journal/review.html" class="report-link">✅ ルール遵守の振り返り →</a>
     </div>
   </header>
 
-  <section><div class="late-notice">⚠️ この判定は寄り付き後（17:19）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
+  <section><div class="late-notice">⚠️ この判定は寄り付き後（17:37）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
 
   
     <section>
@@ -387,27 +392,8 @@ section > h2.section-title {
           <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.64）</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=+0.10）。寄り値で飛びつかない</div>
           
-          
-          <div class="focus-range">
-            <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
-            <div class="focus-range-main">約198円<span class="lot">100株で約19,828円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約243円まで（100株で約24,270円）</div>
-            <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約3割</div>
-            <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約12,052円</b>（荒れた日は約15,105円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約8,923円（100株）以上動いたら、9時台は約15,723円まで広がりやすい</div>
-            <div class="focus-range-sub">次の決算：11/10</div>
-            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.37／予測以内に収まった日 58%</div>
-          </div>
-          
-          <div class="focus-range">
-            <div class="focus-range-title">今日の作戦（100株・入る前に決める）</div>
-            <div class="focus-range-main plan">損切り -4,000円（40円幅）<span class="lot">利確 +12,000円（120円幅）</span></div><div class="focus-range-sub">9時台の目安 約121円 を3つに分けた幅を損切り、その3倍を利確（損切りの上限は -5,000円）</div>
-            <div class="focus-range-sub"><b>上値の目安</b>（前日終値 3,918円から）：4,000円（キリ（大）・+82円） ／ 4,048円（前日高値・+130円） ／ 4,100円（キリ・+182円）</div>
-            <div class="focus-range-sub"><b>下値の目安</b>：3,900円（キリ・-18円） ／ 3,866円（前日安値・5日安値・-52円） ／ 3,775円（20日安値・-143円）</div>
-            <div class="focus-foot">検証（売買代金上位20銘柄・5分足60日・9時台）：抜けやすい水準 5日高値（止まったのは 32%）。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う</div>
-          </div>
-          <div class="focus-note muted">・25日線乖離 -18.2%・月足 陰線2本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）</div><div class="focus-note muted">・3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る</div>
-          <div class="focus-foot">検証（232日）: 窓 r=+0.64 ✅ 連動を確認 ／ 寄り後（〜引け） r=+0.10 △ 弱い連動</div>
+          <div class="focus-plan"><span class="stop">損切り -4,000円</span>　<span class="take">利確 +12,000円</span><span class="muted">（40円幅 / 120円幅・9時台の目安 約121円）</span></div><div class="focus-range-sub">いちばん近い目安：上 4,000（キリ（大）） ／ 下 3,900（キリ）</div><div class="focus-range-sub">次の決算：11/10</div>
+          <a class="focus-more" href="stock/5803.html">📈 図と作戦を見る（フジクラのページ）→</a>
         </div>
         
         <div class="focus-card">
@@ -421,27 +407,8 @@ section > h2.section-title {
           <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.72）</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.08）。寄り値で飛びつかない</div>
           
-          
-          <div class="focus-range">
-            <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
-            <div class="focus-range-main">約243円<span class="lot">100株で約24,316円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約321円まで（100株で約32,059円）</div>
-            <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約2割</div>
-            <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約15,243円</b>（荒れた日は約20,794円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約10,942円（100株）以上動いたら、9時台は約19,282円まで広がりやすい</div>
-            <div class="focus-range-sub">次の決算：11/10</div>
-            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.24／予測以内に収まった日 56%</div>
-          </div>
-          
-          <div class="focus-range">
-            <div class="focus-range-title">今日の作戦（100株・入る前に決める）</div>
-            <div class="focus-range-main plan">損切り -5,000円（50円幅）<span class="lot">利確 +15,000円（150円幅）</span></div><div class="focus-range-sub">9時台の目安 約152円 を3つに分けた幅を損切り、その3倍を利確（損切りの上限は -5,000円）</div>
-            <div class="focus-range-sub"><b>上値の目安</b>（前日終値 4,481円から）：4,500円（キリ（大）・+19円） ／ 4,597円（前日高値・+116円） ／ 4,600円（キリ・+119円）</div>
-            <div class="focus-range-sub"><b>下値の目安</b>：4,408円（前日安値・-73円） ／ 4,400円（キリ・-81円） ／ 4,300円（キリ・-181円）</div>
-            <div class="focus-foot">検証（売買代金上位20銘柄・5分足60日・9時台）：抜けやすい水準 5日高値（止まったのは 32%）。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う</div>
-          </div>
-          <div class="focus-note muted">・25日線乖離 -16.7%・月足 陰線1本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）</div><div class="focus-note muted">・3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る</div>
-          <div class="focus-foot">検証（232日）: 窓 r=+0.72 ✅ 連動を確認 ／ 寄り後（〜引け） r=-0.08 ✗ 連動なし</div>
+          <div class="focus-plan"><span class="stop">損切り -5,000円</span>　<span class="take">利確 +15,000円</span><span class="muted">（50円幅 / 150円幅・9時台の目安 約152円）</span></div><div class="focus-range-sub">いちばん近い目安：上 4,500（キリ（大）） ／ 下 4,408（前日安値）</div><div class="focus-range-sub">次の決算：11/10</div>
+          <a class="focus-more" href="stock/9984.html">📈 図と作戦を見る（ソフトバンクGのページ）→</a>
         </div>
         
         <div class="focus-card">
@@ -455,27 +422,8 @@ section > h2.section-title {
           <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.62）</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.11）。寄り値で飛びつかない</div>
           
-          
-          <div class="focus-range">
-            <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
-            <div class="focus-range-main">約343円<span class="lot">100株で約34,299円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約451円まで（100株で約45,077円）</div>
-            <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約1割</div>
-            <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約21,663円</b>（荒れた日は約27,521円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約15,434円（100株）以上動いたら、9時台は約27,197円まで広がりやすい</div>
-            <div class="focus-range-sub">次の決算：02/02</div>
-            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.64／予測以内に収まった日 59%</div>
-          </div>
-          
-          <div class="focus-range">
-            <div class="focus-range-title">今日の作戦（100株・入る前に決める）</div>
-            <div class="focus-range-main plan">損切り -5,000円（50円幅）<span class="lot">利確 +15,000円（150円幅）</span></div><div class="focus-range-sub ">9時台の値幅に比べて損切り（上限 -5,000円）が近い。普段の上下で引っかかりやすい</div><div class="focus-range-sub">9時台の目安 約217円 を3つに分けた幅を損切り、その3倍を利確（損切りの上限は -5,000円）</div>
-            <div class="focus-range-sub"><b>上値の目安</b>（前日終値 6,358円から）：6,400円（キリ・+42円） ／ 6,500円（キリ・+142円） ／ 6,669円（前日高値・+311円）</div>
-            <div class="focus-range-sub"><b>下値の目安</b>：6,300円（キリ・-58円） ／ 6,200円（キリ・-158円） ／ 6,100円（キリ・-258円）</div>
-            <div class="focus-foot">検証（売買代金上位20銘柄・5分足60日・9時台）：抜けやすい水準 5日高値（止まったのは 32%）。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う</div>
-          </div>
-          <div class="focus-note muted">・25日線乖離 -14.3%・月足 陰線1本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）</div><div class="focus-note muted">・3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る</div>
-          <div class="focus-foot">検証（232日）: 窓 r=+0.62 ✅ 連動を確認 ／ 寄り後（〜引け） r=-0.11 ✗ 連動なし</div>
+          <div class="focus-plan"><span class="stop">損切り -5,000円</span>　<span class="take">利確 +15,000円</span><span class="muted">（50円幅 / 150円幅・9時台の目安 約217円）</span></div><div class="focus-range-sub high">⚠️ 9時台の値幅に比べて損切り（上限 -5,000円）が近い。普段の上下で引っかかりやすい</div><div class="focus-range-sub">いちばん近い目安：上 6,400（キリ） ／ 下 6,300（キリ）</div><div class="focus-range-sub">次の決算：02/02</div>
+          <a class="focus-more" href="stock/6981.html">📈 図と作戦を見る（村田製作所のページ）→</a>
         </div>
         
       </div>
