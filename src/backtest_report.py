@@ -686,6 +686,29 @@ def render_level_section(levels: dict | None, screen: dict | None, morning: dict
 """
 
 
+def render_us_range_section(r: dict | None) -> str:
+    """米関連株が大きく動いた翌日の値幅（目安の何倍か）"""
+    pc = (r or {}).get("per_code") or {}
+    if not pc:
+        return ""
+    heads = "".join(f'<th class="num">{b["bucket"]}</th>' for b in next(iter(pc.values()))["buckets"])
+    rows = ""
+    for c, x in pc.items():
+        cells = ""
+        for b in x["buckets"]:
+            q = f'<div class="muted tiny">q={b["q"]:.2f}{" ✅" if b.get("significant") else ""}</div>' if b.get("q") is not None else ""
+            cells += f'<td class="num">{(b["mean"] or 0):.2f}倍（{b["n"]}）{q}</td>'
+        rows += f'<tr><td>{x["name"]}</td>{cells}</tr>'
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">🇺🇸 米関連株が大きく動いた翌日の値幅</h2>
+    <div class="period-note">{r["period"]}・決算明けの日は除く。値幅（高値−安値）が目安（直近{r["window"]}日平均）の何倍だったか。列は前日の米関連株の平均の動きの大きさ</div>
+    <table class="results"><thead><tr><th></th>{heads}</tr></thead><tbody>{rows}</tbody></table>
+    <div class="explainer"><ul><li>✅ の区分（1%未満の日より広く、補正後 q&lt;0.05）だけ、毎朝の値幅・作戦の幅にその倍率を掛ける。</li></ul></div>
+  </section>
+"""
+
+
 def render_screen_section(screen: dict | None) -> str:
     """売買代金上位の銘柄スクリーニング（研究用）"""
     if not screen or not screen.get("results"):
@@ -767,6 +790,7 @@ def render_report(
     fib_result: dict | None = None,
     idea_result: dict | None = None,
     level_result: dict | None = None,
+    us_range_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -885,6 +909,7 @@ def render_report(
     fib_section = render_fib_section(fib_result)
     idea_section = render_idea_section(idea_result)
     level_section = render_level_section(level_result, screen_result, morning_result)
+    us_range_section = render_us_range_section(us_range_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -1065,6 +1090,7 @@ def render_report(
   {checkpoint_section}
   {fib_section}
   {level_section}
+  {us_range_section}
   {idea_section}
 
   {scan_section}
@@ -1165,6 +1191,7 @@ def render_report(
         "fibonacci": fib_result,
         "ideas": idea_result,
         "levels": level_result,
+        "us_range": us_range_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -1254,6 +1281,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ Fibonacci study failed: {e}")
 
     print()
+    print("🔍 Running US move → next-day range study")
+    us_range_result = None
+    try:
+        from us_range_study import run_us_range_study
+        us_range_result = run_us_range_study("5y")
+    except Exception as e:
+        print(f"⚠️ US range study failed: {e}")
+
+    print()
     print("🔍 Running level study (上値・下値の目安)")
     level_result = None
     try:
@@ -1297,6 +1333,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         fib_result=fib_result,
         idea_result=idea_result,
         level_result=level_result,
+        us_range_result=us_range_result,
     )
 
 
