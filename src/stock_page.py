@@ -146,6 +146,15 @@ def ruler_svg(plan: dict | None, side_hint: str) -> str:
     return f'<svg viewBox="0 0 {Wd} {h}" class="chart ruler" role="img" aria-label="損切り・利確の物差し">' + "".join(rows) + "</svg>"
 
 
+def _us_range_note(u: dict | None) -> str:
+    """米関連株の動きの大きさと、翌日の値幅の関係（週次の検証）"""
+    if not u:
+        return ""
+    head = (f'<div class="note">⚠️ 米関連株が{u["bucket"]}動いた翌日：値幅は目安の約{u["multiplier"]:.1f}倍になりやすい（作戦の幅に反映）</div>'
+            if u.get("multiplier") else f'<div class="note muted">米関連株の前日の動き：{u["bucket"]}（値幅の目安はそのまま）</div>')
+    return head + f'<div class="note muted">{escape(u.get("evidence", ""))}</div>'
+
+
 def _level_rows(plan: dict) -> str:
     lv = plan.get("levels") or {}
     rows = ""
@@ -265,6 +274,7 @@ def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warn
   <div class="box">
     <h2>📏 値幅</h2>
     {render_range_block(f.get("range"))}
+    {_us_range_note(f.get("us_range"))}
   </div>
 
   <div class="box">

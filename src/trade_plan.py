@@ -120,13 +120,20 @@ def nearest_levels(levels: list[dict], n: int = MAX_LEVELS) -> dict:
 
 
 def build_trade_plan(ohlc: pd.DataFrame | None, rng: dict | None, morning: dict | None,
-                     level_validation: dict | None = None) -> dict | None:
-    """カード用：今日の作戦（100株）と上値・下値の目安"""
+                     level_validation: dict | None = None, us_multiplier: float | None = None) -> dict | None:
+    """カード用：今日の作戦（100株）と上値・下値の目安
+
+    us_multiplier: 米関連株が大きく動いた翌朝、検証で効いていた倍率（9時台の目安に掛ける）
+    """
     if ohlc is None or ohlc.empty or not rng or not rng.get("available"):
         return None
     mo = morning or {}
     width = mo.get("morning_yen") if mo.get("available") else None
+    if width and us_multiplier and not mo.get("earnings_today"):
+        width *= us_multiplier
     plan = {"bracket": bracket(width, bool(mo.get("earnings_today")), mo.get("earnings_ratio"))}
+    if plan["bracket"] and us_multiplier and not mo.get("earnings_today"):
+        plan["bracket"]["notes"].insert(0, f"米関連株が大きく動いた翌日。値幅は目安の約{us_multiplier:.1f}倍になりやすいので、幅も広げてある")
     as_of = pd.Timestamp(rng["as_of"]) if rng.get("as_of") else ohlc.index[-1]
     done = ohlc[ohlc.index <= as_of]
     lv = nearest_levels(price_levels(done, float(rng["pred_yen"])))
