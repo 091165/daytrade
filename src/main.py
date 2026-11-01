@@ -18,9 +18,10 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from kiriban import build_daily_signal
-from market_direction import build_market_direction
+from market_direction import build_market_direction, build_market_direction_v2
+from card_notes import build_card_notes
 from sector_mapping import build_all_sector_signals, get_all_us_tickers
-from warnings_module import get_all_warnings, us_was_closed
+from warnings_module import check_index_deviation_warning, get_all_warnings, us_was_closed
 from market_context import build_market_context
 from archive import backfill_from_history, save_daily_archive, write_archive_index
 from history import append_today_signal, load_history, get_recent_entries
@@ -119,13 +120,38 @@ def _load_idea_validation(docs_dir: Path) -> dict:
         return {}
 
 
+def _load_us_events(root: Path) -> list[dict]:
+    """data/us_events.csv（雇用統計の日付と結果の良し悪しを手で書く）"""
+    path = root / "data" / "us_events.csv"
+    if not path.exists():
+        return []
+    import csv
+    with path.open(encoding="utf-8") as f:
+        return [r for r in csv.DictReader(f) if r.get("date")]
+
+
+def _fetch_dividend(ticker: str, today) -> float | None:
+    """権利落ち日だけ、直近の1株配当を取る"""
+    from warnings_module import dividend_days
+    days = dividend_days(today.year, today.month) if today.month in (3, 6, 9, 12) else None
+    if not days or today != days[1]:
+        return None
+    try:
+        import yfinance as yf
+        d = yf.Ticker(ticker).dividends
+        return float(d.iloc[-1]) if len(d) else None
+    except Exception as e:
+        print(f"⚠️ Failed to fetch dividend for {ticker}: {e}")
+        return None
+
+
 def _fetch_focus_ohlc(use_stub: bool) -> dict[str, list[dict]]:
     """承認銘柄の日足を取得してJSON用の形で返す。失敗してもページ生成は続ける。"""
     if use_stub:
         return _build_stub_focus_ohlc()
     try:
         from fetch_data import fetch_daily_ohlc
-        raw = fetch_daily_ohlc([s.ticker for s in FOCUS_STOCKS], period="6mo")
+        raw = fetch_daily_ohlc([s.ticker for s in FOCUS_STOCKS], period="2y")
         return {s.code: ohlc_to_records(raw[s.ticker]) for s in FOCUS_STOCKS if s.ticker in raw}
     except Exception as e:
         print(f"⚠️ Failed to fetch focus OHLC (想定値幅はスキップ): {e}")
@@ -170,12 +196,16 @@ def main() -> int:
 
     # 警告（時間外の動きは今朝の現対で見る）
     futures_diff = market["nikkei_futures"]["price"] - market["nikkei"]["prev_close"]
+    idea_validation = _load_idea_validation(output_dir)
+    sp500_change = market["us_markets"].get("sp500_change_pct")
     warnings = get_all_warnings(
         today=today,
         nikkei_week_is_positive=market["nikkei"].get("week_is_positive"),
         nikkei_month_is_positive=market["nikkei"].get("month_is_positive"),
         overnight_diff=futures_diff,
-        validation=_load_idea_validation(output_dir),
+        validation=idea_validation,
+        sp500_change_pct=sp500_change,
+        us_events=_load_us_events(output_dir.parent),
     )
 
     # 為替・コモディティ
@@ -197,6 +227,25 @@ def main() -> int:
         futures_diff=futures_diff,
         us_closed=us_was_closed(today),
     )
+    # 指数の理想乖離（判定の向きによって出す警告）
+    idx_warn = check_index_deviation_warning(direction_signal.verdict, market.get("index_deviation"),
+                                             (idea_validation.get("extra") or {}).get("index_dev"))
+    if idx_warn:
+        warnings.append(idx_warn)
+        warnings.sort(key=lambda w: {"high": 0, "medium": 1, "low": 2}.get(w.severity, 9))
+    # 参考：ドル円・S&P500 を足した判定（検証では当たりが上がらなかったので、判定には使わない）
+    direction_v2 = None
+    if sp500_change is not None:
+        direction_v2 = build_market_direction_v2(
+            market["us_markets"]["nasdaq_change_pct"], market["us_markets"]["dow_change_pct"],
+            market["us_markets"]["sox_change_pct"], sp500_change,
+            market.get("fx_commodities", {}).get("usdjpy_change_pct", 0.0), futures_diff).as_dict()
+        direction_v2["sp500_change_pct"] = sp500_change
+        direction_v2["usdjpy_change_pct"] = market.get("fx_commodities", {}).get("usdjpy_change_pct", 0.0)
+        v = idea_validation.get("v2") or {}
+        if v.get("v1") and v.get("v2"):
+            direction_v2["evidence"] = (f'検証（{v["split"]}〜）：今の判定 的中 {v["v1"]["hit"] * 100:.0f}% ／ '
+                                        f'ドル円・S&P500 入り {v["v2"]["hit"] * 100:.0f}%（手出し無用が {v["v2"]["hands_off_share"] * 100:.0f}% に増える）')
 
     # キリバン（参考用にJSONには保存するが、ダッシュボードには表示しない）
     kiriban_signal = build_daily_signal(
@@ -249,7 +298,8 @@ def main() -> int:
     focus_signals_dict = [f.as_dict() for f in focus_signals]
 
     # 想定値幅（承認銘柄）
-    focus_ohlc = _fetch_focus_ohlc(use_stub)
+    focus_ohlc_full = _fetch_focus_ohlc(use_stub)          # 25日線の乖離のσに2年分使う
+    focus_ohlc = {k: v[-130:] for k, v in focus_ohlc_full.items()}   # JSON に残すのは約半年分
     market["focus_ohlc"] = focus_ohlc
     range_validation = _load_range_validation(output_dir) or {}
     for f in focus_signals_dict:
@@ -272,12 +322,26 @@ def main() -> int:
             today,
         )
 
+    # カードの注意書き（25日線乖離・月足、金曜・月末の週足、権利落ち日の配当、SOX優先、決算月）
+    by_code = {s.code: s for s in FOCUS_STOCKS}
+    for f in focus_signals_dict:
+        st = by_code[f["code"]]
+        f["notes"] = build_card_notes(
+            code=f["code"], ohlc=records_to_ohlc(focus_ohlc_full.get(f["code"])), today=today,
+            validation=idea_validation, fiscal_month=st.fiscal_month, us_proxies=st.us_proxies,
+            sox_change_pct=market["us_markets"].get("sox_change_pct"),
+            nikkei_week_positive=market["nikkei"].get("week_is_positive"),
+            nikkei_month_positive=market["nikkei"].get("month_is_positive"),
+            dividend=None if use_stub else _fetch_dividend(st.ticker, today),
+        )
+
     # JSON
     signal = {
         "market": market,
         "warnings": warnings_dict,
         "market_context": market_ctx.as_dict(),
         "direction": direction_signal.as_dict(),
+        "direction_v2_reference": direction_v2,
         "kiriban": kiriban_signal,
         "sectors": sector_signals_dict,
         "recent_history": recent_history,
@@ -313,6 +377,7 @@ def main() -> int:
         trading_rules=trading_rules.as_dict(),
         focus_signals=focus_signals_dict,
         late_notice=notice,
+        direction_v2=direction_v2,
     )
 
     # サマリ
@@ -368,7 +433,10 @@ def _build_stub_data() -> dict:
             "nasdaq_change_pct": -1.2,
             "dow_change_pct": -0.8,
             "sox_change_pct": -2.5,
+            "sp500_change_pct": -1.0,
         },
+        "index_deviation": {"ナスダック": {"dev": -6.0, "z": -3.2, "date": "2026-10-30"},
+                            "SOX": {"dev": -9.0, "z": -2.6, "date": "2026-10-30"}},
         "fx_commodities": {
             "usdjpy_price": 150.2,
             "usdjpy_change_pct": -0.8,
