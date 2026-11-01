@@ -116,6 +116,10 @@ section > h2.section-title {
 .direction-meta { margin-top: 16px; display: flex; gap: 20px; flex-wrap: wrap; }
 .direction-meta-item { flex: 1; min-width: 200px; }
 .direction-meta-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.v2-ref { font-size: 12px; color: var(--muted); margin-top: 10px; }
+.v2-ev { font-size: 11px; margin-top: 2px; }
+.focus-note { font-size: 12px; color: var(--text); margin-top: 6px; }
+.focus-note.muted { color: var(--muted); }
 .us-indices { display: flex; gap: 16px; margin-top: 6px; }
 .us-idx-item { flex: 1; text-align: center; padding: 8px; background: var(--panel-2); border-radius: 6px; }
 .us-idx-name { font-size: 11px; color: var(--muted); }
@@ -265,13 +269,13 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-11-01 04:11 JST</div>
+      <div class="timestamp">Updated: 2026-11-01 14:11 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
       <a href="../daytrade-journal/review.html" class="report-link">✅ ルール遵守の振り返り →</a>
     </div>
   </header>
 
-  
+  <section><div class="late-notice">⚠️ この判定は寄り付き後（14:11）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
 
   
     <section>
@@ -294,6 +298,19 @@ section > h2.section-title {
     
 
   
+    <section>
+      <div class="warnings-wrap">
+        
+        <div class="warning-item" style="border-left-color: var(--muted); background: rgba(107, 114, 128, 0.08);">
+          <div style="font-size: 15px; margin-bottom: 4px; color: var(--muted); font-weight: 600;">📊 決算シーズン</div>
+          <div class="warning-message">主要企業の決算が集中する時期。銘柄ごとの差が大きく、指数の予報どおりに動きにくい。</div>
+          <div class="warning-action">→ 各銘柄カードの「決算明け」「次の決算」を確認する。</div>
+          
+        </div>
+        
+      </div>
+    </section>
+    
 
   <!-- 本日の日経デイトレ方針 -->
   <section>
@@ -345,6 +362,7 @@ section > h2.section-title {
       <div class="reasons-list">
         <ul><li>米指数が揃って下げ（ナスダック, ダウ, SOX）</li><li>日経先物が米に追随（現対-655円）</li><li>→ 米日連動の下落相場として売り目線</li></ul>
       </div>
+      <div class="v2-ref">参考（判定には使わない）：S&amp;P500 -1.82%・ドル円 -0.02%（小動き）・6材料中 5つが下向き<div class="v2-ev">検証（2022-12-05〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）</div></div>
 
       <div class="time-nodes-note">
         💡 <b>時間節目</b>: 9:40・10:00（前場トレ転）／12:30（後場寄り）／14:00・14:30（後場トレ転）
@@ -377,11 +395,12 @@ section > h2.section-title {
             <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約3割</div>
             <div class="focus-range-sub">利確の目安（損切りの3倍）：+15,000円（150円幅）。9時台の目安より大きい＝10時までに届きにくい</div>
             <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約12,055円</b>（荒れた日は約15,232円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約8,923円（100株）以上動いたら、9時台は約15,718円まで広がりやすい</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約12,052円</b>（荒れた日は約15,105円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約8,923円（100株）以上動いたら、9時台は約15,723円まで広がりやすい</div>
             <div class="focus-range-sub">次の決算：11/10</div>
             <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.37／予測以内に収まった日 58%</div>
           </div>
-          <div class="focus-foot">検証（232日）: 窓 r=+0.64 ✅ 連動を確認 ／ 寄り後（〜引け） r=+0.10 ✗ 連動なし</div>
+          <div class="focus-note muted">・25日線乖離 -18.2%・月足 陰線2本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）</div><div class="focus-note muted">・3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る</div>
+          <div class="focus-foot">検証（232日）: 窓 r=+0.64 ✅ 連動を確認 ／ 寄り後（〜引け） r=+0.10 △ 弱い連動</div>
         </div>
         
         <div class="focus-card">
@@ -392,8 +411,8 @@ section > h2.section-title {
           
           <div class="focus-us">米関連株の平均 -5.89%（Arm・NVIDIA・ナスダック100）</div>
           <div class="focus-chips"><span class="focus-chip">ARM <span style="color: var(--short);">-10.0%</span></span><span class="focus-chip">NVDA <span style="color: var(--short);">-4.2%</span></span><span class="focus-chip">QQQ <span style="color: var(--short);">-3.5%</span></span></div>
-          <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.71）</div>
-          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.09）。寄り値で飛びつかない</div>
+          <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.72）</div>
+          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.08）。寄り値で飛びつかない</div>
           
           
           <div class="focus-range">
@@ -403,11 +422,12 @@ section > h2.section-title {
             <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約2割</div>
             <div class="focus-range-sub">利確の目安（損切りの3倍）：+15,000円（150円幅）。9時台の目安の約10割</div>
             <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約15,245円</b>（荒れた日は約20,814円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約10,942円（100株）以上動いたら、9時台は約19,275円まで広がりやすい</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約15,243円</b>（荒れた日は約20,794円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約10,942円（100株）以上動いたら、9時台は約19,282円まで広がりやすい</div>
             <div class="focus-range-sub">次の決算：11/10</div>
             <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.24／予測以内に収まった日 56%</div>
           </div>
-          <div class="focus-foot">検証（232日）: 窓 r=+0.71 ✅ 連動を確認 ／ 寄り後（〜引け） r=-0.09 ✗ 連動なし</div>
+          <div class="focus-note muted">・25日線乖離 -16.7%・月足 陰線1本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）</div><div class="focus-note muted">・3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る</div>
+          <div class="focus-foot">検証（232日）: 窓 r=+0.72 ✅ 連動を確認 ／ 寄り後（〜引け） r=-0.08 ✗ 連動なし</div>
         </div>
         
         <div class="focus-card">
@@ -419,21 +439,22 @@ section > h2.section-title {
           <div class="focus-us">米関連株の平均 -5.31%（半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品））</div>
           <div class="focus-chips"><span class="focus-chip">SOXX <span style="color: var(--short);">-8.2%</span></span><span class="focus-chip">QQQ <span style="color: var(--short);">-3.5%</span></span><span class="focus-chip">NVDA <span style="color: var(--short);">-4.2%</span></span></div>
           <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは安く始まりやすい（窓の連動：検証済み r=+0.62）</div>
-          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.12）。寄り値で飛びつかない</div>
+          <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.11）。寄り値で飛びつかない</div>
           
           
           <div class="focus-range">
             <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
             <div class="focus-range-main">約343円<span class="lot">100株で約34,299円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約447円まで（100株で約44,707円）</div>
+            <div class="focus-range-sub">荒れた日（5日に1日）は約451円まで（100株で約45,077円）</div>
             <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約1割</div>
             <div class="focus-range-sub">利確の目安（損切りの3倍）：+15,000円（150円幅）。9時台の目安の約7割</div>
             <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約21,663円</b>（荒れた日は約27,521円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約15,434円（100株）以上動いたら、9時台は約27,188円まで広がりやすい</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約21,663円</b>（荒れた日は約27,521円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約15,434円（100株）以上動いたら、9時台は約27,197円まで広がりやすい</div>
             <div class="focus-range-sub">次の決算：02/02</div>
-            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.65／予測以内に収まった日 60%</div>
+            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.64／予測以内に収まった日 59%</div>
           </div>
-          <div class="focus-foot">検証（232日）: 窓 r=+0.62 ✅ 連動を確認 ／ 寄り後（〜引け） r=-0.12 ✗ 連動なし</div>
+          <div class="focus-note muted">・25日線乖離 -14.3%・月足 陰線1本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）</div><div class="focus-note muted">・3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る</div>
+          <div class="focus-foot">検証（232日）: 窓 r=+0.62 ✅ 連動を確認 ／ 寄り後（〜引け） r=-0.11 ✗ 連動なし</div>
         </div>
         
       </div>
@@ -538,7 +559,7 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▲ <b>通信（配当ディフェンシブ）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.25">✓ 検証済</span>
+          ▲ <b>通信（配当ディフェンシブ）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.26">✓ 検証済</span>
         </div>
         <div class="sector-avg dir-bullish">
           +3.67%
@@ -580,7 +601,7 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▼ <b>SaaS・ソフトウェア</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.52">✓ 検証済</span>
+          ▼ <b>SaaS・ソフトウェア</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.53">✓ 検証済</span>
         </div>
         <div class="sector-avg dir-bearish">
           -1.50%
@@ -601,7 +622,7 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▲ <b>生活防衛（配当王）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.28">✓ 検証済</span>
+          ▲ <b>生活防衛（配当王）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.29">✓ 検証済</span>
         </div>
         <div class="sector-avg dir-bullish">
           +1.14%
@@ -664,7 +685,7 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▼ <b>電線（CAT連動系）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.25">✓ 検証済</span>
+          ▼ <b>電線（CAT連動系）</b> <span class="vbadge vbadge-confirmed" title="実測r=+0.30">✓ 検証済</span>
         </div>
         <div class="sector-avg dir-bearish">
           -0.73%
@@ -691,7 +712,7 @@ section > h2.section-title {
     <div class="sector-card">
       <div class="sector-header">
         <div class="sector-title">
-          ▲ <b>海運・物流</b> <span class="vbadge vbadge-contradicted" title="実測r=-0.18">✗ 連動低</span>
+          ▲ <b>海運・物流</b> <span class="vbadge vbadge-contradicted" title="実測r=-0.15">✗ 連動低</span>
         </div>
         <div class="sector-avg dir-bullish">
           +1.32%
