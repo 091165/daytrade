@@ -1,16 +1,5 @@
 [
   {
-    "date": "2026-08-12",
-    "verdict": "hands_off",
-    "verdict_label": "初心者手出し無用",
-    "confidence": "low",
-    "futures_diff": 199.78125,
-    "nasdaq_pct": -0.6010595844469724,
-    "dow_pct": -0.3411311932658756,
-    "sox_pct": 0.8722073215682524,
-    "warnings": []
-  },
-  {
     "date": "2026-08-13",
     "verdict": "buy_bias",
     "verdict_label": "買いポジ主体",
@@ -695,6 +684,20 @@
     "warnings": [
       "🆕 月初営業日 = 月間トレンド形成に注目",
       "📊 決算シーズン"
+    ]
+  },
+  {
+    "date": "2026-11-03",
+    "verdict": "sell_bias",
+    "verdict_label": "売りポジ主体",
+    "confidence": "high",
+    "futures_diff": -300.109375,
+    "nasdaq_pct": -1.0718116080905782,
+    "dow_pct": 0.41273054150925415,
+    "sox_pct": -3.372415142127727,
+    "warnings": [
+      "📊 決算シーズン",
+      "📉 指数が -2σ〜-3σ（ナスダック -2.0σ・SOX -2.1σ）"
     ]
   }
 ]
