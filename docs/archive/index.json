@@ -521,9 +521,9 @@
   },
   {
     "date": "2026-11-04",
-    "verdict": "hands_off",
-    "verdict_label": "初心者手出し無用",
-    "confidence": "low",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "high",
     "reconstructed": false,
     "generated_after_open": false
   }
