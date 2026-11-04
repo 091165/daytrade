@@ -623,7 +623,7 @@ MIN_STOP_YEN = 3000     # マイルールの損切り「-3,000〜-5,000円」の
 
 
 def rule_fit_rows(screen: dict | None, morning: dict | None) -> list[dict]:
-    """売買代金上位の銘柄を、100株・損切り-5,000円・利確は損切りの3倍・10時前 のルールに当てはめる"""
+    """売買代金上位の銘柄を、100株・損切り-5,000円・利確は損切りの1.5倍・10時前 のルールに当てはめる"""
     from trade_plan import bracket
     ratios = [v["ratio"] for v in ((morning or {}).get("per_code") or {}).values() if v.get("ratio")]
     ratio = sum(ratios) / len(ratios) if ratios else 0.62
@@ -675,11 +675,11 @@ def render_level_section(levels: dict | None, screen: dict | None, morning: dict
   <section class="section-box">
     <h2 class="section-title">{title}</h2>
     <div class="explainer" style="margin-top: 0;">
-      <h3>100株・損切り-5,000円まで・利確は損切りの3倍・10時前 に合う銘柄（売買代金上位）</h3>
+      <h3>100株・損切り-5,000円まで・利確は損切りの1.5倍・10時前 に合う銘柄（売買代金上位）</h3>
       <table class="results"><thead><tr><th>銘柄</th><th class="num">株価</th><th class="num">9時台の目安</th>
         <th class="num">損切り / 利確（100株）</th><th class="num">売買代金</th><th></th></tr></thead><tbody>{rows}</tbody></table>
       <div class="muted tiny">◎ 損切りが -3,000〜-5,000円に収まり、利確が9時台に届く ／ △ 値動きが大きく、-5,000円の損切りでは振り回されやすい ／ × 値動きが小さく、100株では取れる額が小さい。
-      損切りは9時台の目安の1/3（上限50円）、利確はその3倍。承認・試用銘柄を決め直すときの参考（毎朝の画面には承認・試用銘柄だけ出す）。</div>
+      損切りは9時台の目安の1/3（上限50円）、利確はその1.5倍。承認・試用銘柄を決め直すときの参考（毎朝の画面には承認・試用銘柄だけ出す）。</div>
       {lv}
     </div>
   </section>
@@ -705,6 +705,43 @@ def render_us_range_section(r: dict | None) -> str:
     <div class="period-note">{r["period"]}・決算明けの日は除く。値幅（高値−安値）が目安（直近{r["window"]}日平均）の何倍だったか。列は前日の米関連株の平均の動きの大きさ</div>
     <table class="results"><thead><tr><th></th>{heads}</tr></thead><tbody>{rows}</tbody></table>
     <div class="explainer"><ul><li>✅ の区分（1%未満の日より広く、補正後 q&lt;0.05）だけ、毎朝の値幅・作戦の幅にその倍率を掛ける。</li></ul></div>
+  </section>
+"""
+
+
+def render_intraday_section(r: dict | None) -> str:
+    """9時台の動き方：寄りからの上下・利確の幅・順張り/逆張り・VIX"""
+    p = (r or {}).get("pooled") or {}
+    if not p:
+        return ""
+    e = p.get("excursion") or {}
+    ks = "".join(f'<tr><td>{x["k"]:.1f}倍</td><td class="num">{x["win"] * 100:.0f}%</td><td class="num">{x["decided"] * 100:.0f}%</td>'
+                 f'<td class="num">{x["mean_r"]:+.3f}R</td></tr>' for x in p["trades"]["by_k"])
+    def qm(x, k):
+        q = x.get(k)
+        return f'<div class="muted tiny">q={q:.2f}{" ✅" if q is not None and q < 0.05 else ""}</div>' if q is not None else ""
+    sz = "".join(f'<tr><td>{x["size"]}（{x["n"]}日）</td><td class="num">{(x["follow_r"] or 0):+.2f}R・勝ち{(x["follow_win"] or 0) * 100:.0f}%{qm(x, "q_follow")}</td>'
+                 f'<td class="num">{(x["fade_r"] or 0):+.2f}R・勝ち{(x["fade_win"] or 0) * 100:.0f}%{qm(x, "q_fade")}</td></tr>' for x in p["trades"]["by_size"])
+    vx = "".join(f'<tr><td>{x["group"]}（{x["n"]}日）</td><td class="num">{(x["mean"] or 0):.2f}倍</td><td class="num">{(x["calm_mean"] or 0):.2f}倍{qm(x, "q_vix")}</td></tr>'
+                 for x in p["vix"])
+    per = "".join(f'<tr><td>{c["name"]}</td><td class="num">{(c["excursion"] or {}).get("up_med", 0):.2f} / {(c["excursion"] or {}).get("up_p80", 0):.2f}</td>'
+                  f'<td class="num">{(c["excursion"] or {}).get("down_med", 0):.2f} / {(c["excursion"] or {}).get("down_p80", 0):.2f}</td></tr>'
+                  for c in (r.get("per_code") or {}).values())
+    return f"""
+  <section class="section-box">
+    <h2 class="section-title">⏱️ 9時台の動き方（寄りからの上下・利確の幅・順張り／逆張り・VIX）</h2>
+    <div class="period-note">{r["source"]}。R＝損切り幅を1とした損益（損切り＝9時台の目安の1/3、9:10に入る、同じ5分足で両方に届いたら損切り扱い）</div>
+    <div class="explainer" style="margin-top: 0;">
+      <h3>寄りから10:00までに動いた幅（1日の目安Dの何倍か・中央値 / 80%点）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">上</th><th class="num">下</th></tr></thead><tbody>
+        <tr><td>全体（{e.get("n", 0)}日）</td><td class="num">{e.get("up_med", 0):.2f} / {e.get("up_p80", 0):.2f}</td><td class="num">{e.get("down_med", 0):.2f} / {e.get("down_p80", 0):.2f}</td></tr>{per}</tbody></table>
+      <h3>利確の幅（損切りの何倍）</h3>
+      <table class="results"><thead><tr><th>利確</th><th class="num">勝ち</th><th class="num">10:00までに決着</th><th class="num">平均</th></tr></thead><tbody>{ks}</tbody></table>
+      <h3>最初の10分の値幅の大きさ別：9:10 に順張り／逆張り（利確1.5倍）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">順張り</th><th class="num">逆張り</th></tr></thead><tbody>{sz}</tbody></table>
+      <h3>前日のVIXと、翌日の値幅（目安の何倍か）</h3>
+      <table class="results"><thead><tr><th></th><th class="num">その日</th><th class="num">落ち着いた日</th></tr></thead><tbody>{vx}</tbody></table>
+    </div>
   </section>
 """
 
@@ -791,6 +828,7 @@ def render_report(
     idea_result: dict | None = None,
     level_result: dict | None = None,
     us_range_result: dict | None = None,
+    intraday_result: dict | None = None,
 ) -> None:
     """結果をHTMLとJSONで出力"""
     now = datetime.now(JST).strftime("%Y-%m-%d %H:%M JST")
@@ -910,6 +948,7 @@ def render_report(
     idea_section = render_idea_section(idea_result)
     level_section = render_level_section(level_result, screen_result, morning_result)
     us_range_section = render_us_range_section(us_range_result)
+    intraday_section = render_intraday_section(intraday_result)
     screen_section = render_screen_section(screen_result)
 
     # ===== HTML全体 =====
@@ -1091,6 +1130,7 @@ def render_report(
   {fib_section}
   {level_section}
   {us_range_section}
+  {intraday_section}
   {idea_section}
 
   {scan_section}
@@ -1192,6 +1232,7 @@ def render_report(
         "ideas": idea_result,
         "levels": level_result,
         "us_range": us_range_result,
+        "intraday": intraday_result,
     }
     output_json.write_text(
         json.dumps(json_data, ensure_ascii=False, indent=2),
@@ -1290,6 +1331,15 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         print(f"⚠️ US range study failed: {e}")
 
     print()
+    print("🔍 Running intraday study (9時台の動き方)")
+    intraday_result = None
+    try:
+        from intraday_study import run_intraday_study
+        intraday_result = run_intraday_study()
+    except Exception as e:
+        print(f"⚠️ Intraday study failed: {e}")
+
+    print()
     print("🔍 Running level study (上値・下値の目安)")
     level_result = None
     try:
@@ -1334,6 +1384,7 @@ def run_backtest_and_report(period: str = "6mo", direction_period: str = "1y") -
         idea_result=idea_result,
         level_result=level_result,
         us_range_result=us_range_result,
+        intraday_result=intraday_result,
     )
 
 

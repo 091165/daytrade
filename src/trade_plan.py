@@ -2,7 +2,8 @@
 取引前に決める「今日の作戦」：100株での損切り・利確の幅と、上値・下値の目安（レジサポ）（純粋関数）
 
 損切り・利確:
-  9時台の値幅の目安（1日の目安 × 銘柄ごとの比）を3つに分けた幅を損切り、その3倍を利確にする。
+  9時台の値幅の目安（1日の目安 × 銘柄ごとの比）を3つに分けた幅を損切り、その1.5倍を利確にする
+  （trading_rules.REWARD_RISK_RATIO。3倍は10時までに届かない日が4割あったため）。
   損切りはルールの上限（-5,000円 = 100株で50円）を超えない。上限に当たる銘柄は
   「9時台の値幅に比べて損切りが近い（振り回されやすい）」と出す。
   決算明けは値幅が何倍にもなるので、その日は見送り候補にする。
@@ -27,7 +28,7 @@ MAX_LEVELS = 3              # 上下それぞれ近い順にいくつ出すか
 
 
 def bracket(morning_width: float | None, earnings_today: bool = False, earnings_ratio: float | None = None,
-            shares: int = SHARES, max_stop_yen: int = PER_TRADE_STOP_MAX_YEN, ratio: int = REWARD_RISK_RATIO) -> dict | None:
+            shares: int = SHARES, max_stop_yen: int = PER_TRADE_STOP_MAX_YEN, ratio: float = REWARD_RISK_RATIO) -> dict | None:
     """9時台の目安（1株あたりの円幅）から、損切り・利確の幅（円）を出す"""
     if not morning_width or morning_width <= 0:
         return None
@@ -36,7 +37,7 @@ def bracket(morning_width: float | None, earnings_today: bool = False, earnings_
     raw = width / STOP_PARTS
     stop = min(raw, max_stop)
     stop = max(1.0, math.floor(stop))
-    target = stop * ratio
+    target = round(stop * ratio)
     out = {
         "stop_width": stop, "target_width": target,
         "stop_yen": stop * shares, "target_yen": target * shares,

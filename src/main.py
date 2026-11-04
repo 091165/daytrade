@@ -22,6 +22,7 @@ from market_direction import build_market_direction, build_market_direction_v2
 from card_notes import build_card_notes
 from trade_plan import build_trade_plan
 from us_range_study import today_multiplier
+from intraday_study import vix_signal
 from stock_page import write_stock_pages
 from sector_mapping import build_all_sector_signals, get_all_us_tickers
 from warnings_module import check_index_deviation_warning, get_all_warnings, us_was_closed
@@ -354,9 +355,19 @@ def main() -> int:
     # 今日の作戦（100株の損切り・利確の幅）と上値・下値の目安
     level_val = _load_level_validation(output_dir)
     us_range_val = _load_report_key(output_dir, "us_range")
+    intraday_val = _load_report_key(output_dir, "intraday")
+    vix_note = vix_signal(intraday_val, market["us_markets"].get("vix_change_pct"))
+    vix_mult = (vix_note or {}).get("multiplier")
+    if vix_note and vix_note.get("warning"):
+        from warnings_module import TradingWarning
+        warnings_dict.append(TradingWarning(**vix_note["warning"]).as_dict())
     for f in focus_signals_dict:
+        ex = ((intraday_val.get("per_code") or {}).get(f["code"]) or {}).get("excursion") \
+            or (intraday_val.get("pooled") or {}).get("excursion")
+        f["excursion"] = {**ex, "source": intraday_val.get("source", "")} if ex else None
+        f["first10_guide"] = (intraday_val.get("pooled") or {}).get("trades")
         f["us_range"] = today_multiplier(us_range_val, f["code"], f.get("us_avg_change_pct"))
-        mult = (f["us_range"] or {}).get("multiplier")
+        mult = max((f["us_range"] or {}).get("multiplier") or 0, vix_mult or 0) or None
         f["plan"] = build_trade_plan(records_to_ohlc(focus_ohlc_full.get(f["code"])), f["range"],
                                      f["range"].get("morning"), level_val, mult)
 

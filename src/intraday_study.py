@@ -142,12 +142,13 @@ def summarize_trades(t: pd.DataFrame) -> dict:
     """利確の倍率ごとの成績（順張り・逆張りを合わせた全体）と、最初の10分の大きさ別の 順張り vs 逆張り（利確1.5倍）"""
     if t.empty:
         return {"by_k": [], "by_size": [], "n_days": 0}
-    out = {"n_days": int(t["date"].nunique()), "by_k": [], "by_size": []}
+    out = {"n_days": int(t["date"].nunique()), "by_k": [], "by_size": [], "cuts": None}
     for k, g in t.groupby("k"):
         out["by_k"].append({"k": float(k), "n": int(len(g)), "win": float(g["win"].mean()),
                             "decided": float(g["decided"].mean()), "mean_r": float(g["r"].mean())})
     base = t[t["k"] == 1.5].copy()
     cuts = base.drop_duplicates("date")["first_range"].quantile([1 / 3, 2 / 3]).values
+    out["cuts"] = [float(cuts[0]), float(cuts[1])]     # 最初の10分の値幅（1日の目安 D に対する倍率）の 1/3・2/3 点
     base["size"] = np.where(base["first_range"] <= cuts[0], "小さい", np.where(base["first_range"] >= cuts[1], "大きい", "ふつう"))
     for size in ("小さい", "ふつう", "大きい"):
         g = base[base["size"] == size]
@@ -202,6 +203,25 @@ def summarize_vix(rows: pd.DataFrame) -> list[dict]:
         out.append({"group": lab, "n": int(len(x)), "mean": float(x.mean()) if len(x) else None,
                     "calm_mean": float(calm.mean()) if len(calm) else None, "p": _p_diff(x, calm)})
     return out
+
+
+def vix_signal(validation: dict | None, vix_change_pct: float | None) -> dict | None:
+    """毎朝用：前日の VIX が +10% 以上上がっていて、検証で値幅が広がっていたら、その倍率と警告"""
+    if vix_change_pct is None or vix_change_pct < 10:
+        return None
+    g = next((x for x in ((validation or {}).get("pooled") or {}).get("vix", []) if x["group"].startswith("VIXが前日比+10%")), None)
+    if not g or g.get("mean") is None:
+        return {"multiplier": None, "warning": {
+            "type": "vix_jump", "severity": "medium", "label": f"😨 VIXが前日比 {vix_change_pct:+.0f}%",
+            "message": "米国株の恐怖指数が大きく上がった翌日。値幅が広がりやすいとされる。",
+            "action": "損切りの幅を守る。株数は増やさない。", "evidence": "未検証"}}
+    ok = (g.get("q_vix") or 1) < Q_TH and g["mean"] > (g.get("calm_mean") or 0)
+    ev = f"検証（{g['n']}日）：翌日の値幅は目安の {g['mean']:.2f}倍（落ち着いた日は {g['calm_mean']:.2f}倍）"
+    return {"multiplier": g["mean"] if ok else None, "warning": {
+        "type": "vix_jump", "severity": "medium" if ok else "low", "label": f"😨 VIXが前日比 {vix_change_pct:+.0f}%",
+        "message": ("米国株の恐怖指数が大きく上がった翌日。値幅がふだんより広がりやすい。作戦の幅も広げてある。" if ok
+                    else "米国株の恐怖指数が大きく上がった翌日。ただし過去の検証では値幅の差ははっきりしない。"),
+        "action": "損切りの幅を守る。株数は増やさない。", "evidence": ev}}
 
 
 def run_intraday_study() -> dict:

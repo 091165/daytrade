@@ -205,6 +205,7 @@ def fetch_all_market_data(us_sector_tickers: list[str] | None = None) -> dict:
     dow_change = fetch_change_pct(TICKER_DOW)
     sox_change = fetch_change_pct(TICKER_SOX)
     sp500_change = _safe_change_pct(TICKER_SP500)
+    vix_change = _safe_change_pct("^VIX")
     nikkei_change = fetch_change_pct(TICKER_NIKKEI_SPOT)
 
     # 為替・コモディティ
@@ -241,6 +242,7 @@ def fetch_all_market_data(us_sector_tickers: list[str] | None = None) -> dict:
             "dow_change_pct": dow_change,
             "sox_change_pct": sox_change,
             "sp500_change_pct": sp500_change,
+            "vix_change_pct": vix_change,
         },
         "index_deviation": fetch_index_deviation(),
         "fx_commodities": {
