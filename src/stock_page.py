@@ -497,7 +497,7 @@ def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warn
     plan = f.get("plan") or {}
     b = plan.get("bracket") or {}
     verdict = direction.get("verdict")
-    side_hint = {"buy_bias": "buy", "sell_bias": "sell"}.get(verdict, "both")
+    side_hint = "both"   # 向きは 9:10 に決めるので、買い・売りの両方の形を出す
     d = f["direction"]
     dir_txt = {"bullish": "▲ 買い寄り", "bearish": "▼ 売り寄り"}.get(d, "― 方向感なし")
     trial = '<span class="focus-trial">試用</span>' if f.get("trial") else ""
@@ -506,8 +506,7 @@ def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warn
         big = (f'<div class="big"><span class="stop">損切り -{b["stop_yen"]:,.0f}円</span>（{b["stop_width"]:.0f}円幅）　'
                f'<span class="take">利確 +{b["target_yen"]:,.0f}円</span>（{b["target_width"]:.0f}円幅）</div>'
                + "".join(f'<div class="note">⚠️ {escape(n)}</div>' for n in b["notes"]))
-    side_txt = {"buy": "今日の方針は買い。買いで入るときの図", "sell": "今日の方針は売り。売りで入るときの図"}.get(
-        side_hint, "今日は方向なしの日。入るなら両方の形")
+    side_txt = "向きは 9:10 に決める（下の「9:10 の確認」）。買い・売りの両方の形"
     chips = "".join(_focus_chip(t, v) for t, v in f.get("us_changes", {}).items()) or '<span class="focus-chip">データなし</span>'
     notes = "".join(f'<div class="note {n.get("level", "")}">・{escape(n["text"])}</div>' for n in f.get("notes") or [])
     rules = ""
