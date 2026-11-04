@@ -2,7 +2,7 @@
   "date": "2026-11-05",
   "reconstructed": false,
   "market": {
-    "timestamp": "2026-11-05T06:53:58.057677+09:00",
+    "timestamp": "2026-11-05T08:38:19.691130+09:00",
     "nikkei": {
       "prev_close": 63081.859375,
       "change_pct": -0.32904035410351584,
@@ -10,7 +10,7 @@
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 63185.0
+      "price": 63140.0
     },
     "etf_1570": {
       "prev_close": 61030.0
@@ -40,12 +40,12 @@
       }
     },
     "fx_commodities": {
-      "usdjpy_price": 158.41400146484375,
-      "usdjpy_change_pct": 0.31599797354691095,
-      "gold_price": 4069.89990234375,
-      "gold_change_pct": 3.286468460294434,
-      "oil_price": 88.3499984741211,
-      "oil_change_pct": -8.054946569622734
+      "usdjpy_price": 158.3979949951172,
+      "usdjpy_change_pct": 0.3058618430925142,
+      "gold_price": 4072.89990234375,
+      "gold_change_pct": 3.362602864780029,
+      "oil_price": 88.19999694824219,
+      "oil_change_pct": -8.211051816366044
     },
     "us_sector_changes": {
       "ADBE": 0.9506769902060119,
@@ -105,24 +105,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 158.41400146484375,
-        "change_pct": 0.31599797354691095,
+        "current": 158.3979949951172,
+        "change_pct": 0.3058618430925142,
         "direction": "up",
         "interpretation": "円安傾向 → 輸出株にやや追い風"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4069.89990234375,
-        "change_pct": 3.286468460294434,
+        "current": 4072.89990234375,
+        "change_pct": 3.362602864780029,
         "direction": "up",
         "interpretation": "ゴールド上昇 → インフレ懸念 or リスクオフ。住友金属鉱山等の金鉱株に追い風"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 88.3499984741211,
-        "change_pct": -8.054946569622734,
+        "current": 88.19999694824219,
+        "change_pct": -8.211051816366044,
         "direction": "down",
         "interpretation": "原油急落 → リスクオン転換の可能性、エネルギー株は逆風"
       }
@@ -151,11 +151,11 @@
       }
     ],
     "us_consensus_direction": "bullish",
-    "futures_diff": 103.140625,
+    "futures_diff": 58.140625,
     "futures_aligned": false,
     "reasons": [
       "米指数が揃って上げ（ナスダック, ダウ）",
-      "先物の方向性が不明確（現対+103円）",
+      "先物の方向性が不明確（現対+58円）",
       "→ 米日非連動のため、方向性読みづらく様子見"
     ]
   },
@@ -166,7 +166,7 @@
     "agreement_count": 4,
     "agreement_direction": "bullish",
     "sp500_change_pct": 1.5814699659663978,
-    "usdjpy_change_pct": 0.31599797354691095,
+    "usdjpy_change_pct": 0.3058618430925142,
     "evidence": "検証（2022-12-06〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）"
   },
   "kiriban": {
@@ -182,13 +182,13 @@
       }
     },
     "sayatori_signal": {
-      "futures_price": 63185.0,
+      "futures_price": 63140.0,
       "spot_price": 63081.859375,
-      "diff": 103.140625,
-      "abs_diff": 103.140625,
+      "diff": 58.140625,
+      "abs_diff": 58.140625,
       "direction": "neutral",
       "threshold": 1000,
-      "rationale": "現対+103円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+      "rationale": "現対+58円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
       "current_price": 63081.859375,
@@ -390,7 +390,7 @@
       "verdict": "hands_off",
       "verdict_label": "初心者手出し無用",
       "confidence": "low",
-      "futures_diff": 103.140625,
+      "futures_diff": 58.140625,
       "nasdaq_pct": 1.4366378919806522,
       "dow_pct": 3.030511261635005,
       "sox_pct": -3.1295619177120537,
