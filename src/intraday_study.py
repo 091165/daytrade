@@ -215,7 +215,8 @@ def vix_signal(validation: dict | None, vix_change_pct: float | None) -> dict | 
             "type": "vix_jump", "severity": "medium", "label": f"😨 VIXが前日比 {vix_change_pct:+.0f}%",
             "message": "米国株の恐怖指数が大きく上がった翌日。値幅が広がりやすいとされる。",
             "action": "損切りの幅を守る。株数は増やさない。", "evidence": "未検証"}}
-    ok = (g.get("q_vix") or 1) < Q_TH and g["mean"] > (g.get("calm_mean") or 0)
+    q = g.get("q_vix")
+    ok = q is not None and q < Q_TH and g["mean"] > (g.get("calm_mean") or 0)
     ev = f"検証（{g['n']}日）：翌日の値幅は目安の {g['mean']:.2f}倍（落ち着いた日は {g['calm_mean']:.2f}倍）"
     return {"multiplier": g["mean"] if ok else None, "warning": {
         "type": "vix_jump", "severity": "medium" if ok else "low", "label": f"😨 VIXが前日比 {vix_change_pct:+.0f}%",

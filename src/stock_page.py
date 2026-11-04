@@ -162,8 +162,8 @@ def first10_text(guide: dict | None, D: float) -> str:
         x = rows.get(size)
         if not x or x.get("follow_r") is None:
             continue
-        sig_f = (x.get("q_follow") or 1) < 0.05
-        sig_r = (x.get("q_fade") or 1) < 0.05
+        sig_f = x.get("q_follow") is not None and x["q_follow"] < 0.05
+        sig_r = x.get("q_fade") is not None and x["q_fade"] < 0.05
         if sig_f and x["follow_r"] > 0:
             what = f"その向きに<b>順張り</b>が良かった（{x['follow_r']:+.2f}R・勝ち{x['follow_win'] * 100:.0f}%）"
         elif sig_r and x["fade_r"] > 0:

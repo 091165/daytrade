@@ -87,7 +87,17 @@ def test_vix_rows_alignment():
     print("✅ test_vix_rows_alignment")
 
 
+def test_vix_signal_q_zero_counts_as_significant():
+    from intraday_study import vix_signal
+    v = {"pooled": {"vix": [{"group": "VIXが前日比+10%以上", "n": 958, "mean": 1.12, "calm_mean": 1.04, "q_vix": 0.0}]}}
+    assert vix_signal(v, 15)["multiplier"] == 1.12
+    assert vix_signal(v, 5) is None
+    assert vix_signal(None, 15)["warning"]["evidence"] == "未検証"
+    print("✅ test_vix_signal_q_zero_counts_as_significant")
+
+
 if __name__ == "__main__":
+    test_vix_signal_q_zero_counts_as_significant()
     test_simulate_order_and_timeout()
     test_day_frames_excursion_first10()
     test_follow_edge_detected()
