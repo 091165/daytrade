@@ -209,16 +209,16 @@ table.lv .num { text-align: right; }
 <div class="container" style="max-width: 760px;">
   <header>
     <h1>フジクラ <span class="focus-code">5803</span></h1>
-    <div class="header-right"><a class="back" href="../index.html">← 今日の判定に戻る</a><div class="timestamp">2026-11-04 16:00 JST</div></div>
+    <div class="header-right"><a class="back" href="../index.html">← 今日の判定に戻る</a><div class="timestamp">2026-11-04 16:03 JST</div></div>
   </header>
 
   <div class="box">
     <h2>🎯 今日の作戦（100株・入る前に決める）</h2>
-    <div class="note">今日の方針：<b>初心者手出し無用</b>　この銘柄の寄り前予測：<span class="dir bullish">▲ 買い寄り</span></div>
+    <div class="note">今日の方針：<b>買いポジ主体</b>　この銘柄の寄り前予測：<span class="dir bullish">▲ 買い寄り</span></div>
     
     <div class="big"><span class="stop">損切り -3,800円</span>（38円幅）　<span class="take">利確 +5,700円</span>（57円幅）</div>
-    <div class="note muted">今日は方向なしの日。入るなら両方の形。入った値段（寄り値など）を0として見る。</div>
-    <svg viewBox="0 0 360 214" class="chart ruler" role="img" aria-label="損切り・利確の物差し"><text x="16" y="22" class="t-label">買いで入ったとき</text><line x1="147.2" x2="16.0" y1="52" y2="52" class="r-stop"/><line x1="147.2" x2="344.0" y1="52" y2="52" class="r-take"/><circle cx="147.2" cy="52" r="6" class="r-entry"/><text x="147.2" y="40" class="t-entry" text-anchor="middle">▼入った値段</text><text x="16.0" y="76" class="r-stop-t" text-anchor="start">損切り -38円</text><text x="344.0" y="76" class="r-take-t" text-anchor="end">利確 +57円</text><text x="16" y="100" class="t-label">売りで入ったとき</text><line x1="212.8" x2="344.0" y1="130" y2="130" class="r-stop"/><line x1="212.8" x2="16.0" y1="130" y2="130" class="r-take"/><circle cx="212.8" cy="130" r="6" class="r-entry"/><text x="212.8" y="118" class="t-entry" text-anchor="middle">▼入った値段</text><text x="344.0" y="154" class="r-stop-t" text-anchor="end">損切り +38円</text><text x="16.0" y="154" class="r-take-t" text-anchor="start">利確 -57円</text><rect x="16" y="174" width="328.0" height="12" class="band"/><text x="16" y="204" class="t-muted">黄色＝9時台にふつう動く幅 約116円（同じ縮尺）</text></svg>
+    <div class="note muted">今日の方針は買い。買いで入るときの図。入った値段（寄り値など）を0として見る。</div>
+    <svg viewBox="0 0 360 136" class="chart ruler" role="img" aria-label="損切り・利確の物差し"><text x="16" y="22" class="t-label">買いで入ったとき</text><line x1="147.2" x2="16.0" y1="52" y2="52" class="r-stop"/><line x1="147.2" x2="344.0" y1="52" y2="52" class="r-take"/><circle cx="147.2" cy="52" r="6" class="r-entry"/><text x="147.2" y="40" class="t-entry" text-anchor="middle">▼入った値段</text><text x="16.0" y="76" class="r-stop-t" text-anchor="start">損切り -38円</text><text x="344.0" y="76" class="r-take-t" text-anchor="end">利確 +57円</text><rect x="16" y="96" width="328.0" height="12" class="band"/><text x="16" y="126" class="t-muted">黄色＝9時台にふつう動く幅 約115円（同じ縮尺）</text></svg>
   </div>
 
   <div class="box" id="openbox">
@@ -227,12 +227,12 @@ table.lv .num { text-align: right; }
       <label>始値（寄り値）<input id="op-price" type="number" inputmode="decimal" step="1" placeholder="寄ったら入力"></label>
     </div>
     <div id="op-out" class="muted note">始値を入れると、ここに図が出ます。</div>
-    <div class="note muted">まだ検証の結果がないので、9時台の目安の半分（ふつう）と、荒れた日の目安から出した仮の値。上と下はそれぞれ別に数えている（両方に動く日もある）。</div>
-    
+    <div class="note muted">寄りから10:00までに動いた幅（60日分・売買代金上位20銘柄・5分足60日（VIX は日足2年））の中央値と80%点を、1日の目安 約191円に掛けたもの。上と下はそれぞれ別に数えている（両方に動く日もある）。</div>
+    <div class="note"><b>9:10 の確認</b><ul style="margin: 4px 0; padding-left: 18px;"><li>最初の10分（9:00〜9:10）の値幅が約39円より小さい日：9:10 にその向きに<b>順張り</b>が良かった（+0.15R・勝ち52%）</li><li>最初の10分（9:00〜9:10）の値幅が約58円より大きい日：9:10 に順張り -0.05R・逆張り +0.07R で、はっきりした差はない</li></ul></div>
   </div>
 <script>
 (function () {
-  var C = {"code": "5803", "D": 191.09, "ex": {"up_med": 0.31, "up_p80": 0.55, "down_med": 0.31, "down_p80": 0.55, "n": 0}, "levels": [{"price": 3976.0, "kind": "前日高値"}, {"price": 4000.0, "kind": "キリ（大）"}, {"price": 3832.0, "kind": "前日安値・5日安値"}, {"price": 3800.0, "kind": "キリ"}, {"price": 3775.0, "kind": "20日安値"}], "pc": 3900.0};
+  var C = {"code": "5803", "D": 191.09, "ex": {"up_med": 0.30340612297672953, "up_p80": 0.5772603277681264, "down_med": 0.24580417719950254, "down_p80": 0.541356034397852, "n": 60}, "levels": [{"price": 3976.0, "kind": "前日高値"}, {"price": 4000.0, "kind": "キリ（大）"}, {"price": 3832.0, "kind": "前日安値・5日安値"}, {"price": 3800.0, "kind": "キリ"}, {"price": 3775.0, "kind": "20日安値"}], "pc": 3900.0};
   var $ = function (id) { return document.getElementById(id); };
   function today() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
   var KEY = "daytrade-open-" + today() + "-" + C.code;
@@ -389,11 +389,11 @@ table.lv .num { text-align: right; }
 
   <div class="box">
     <h2>📈 上値・下値の目安（直近10日の日足）</h2>
-    <svg viewBox="0 0 430 400" class="chart" role="img" aria-label="日足と上値・下値の目安"><clipPath id="plot"><rect x="0" y="18" width="270" height="362"/></clipPath><line x1="6" x2="270" y1="380.0" y2="380.0" class="grid"/><line x1="6" x2="270" y1="289.5" y2="289.5" class="grid"/><line x1="6" x2="270" y1="199.0" y2="199.0" class="grid"/><line x1="6" x2="270" y1="108.5" y2="108.5" class="grid"/><line x1="6" x2="270" y1="18.0" y2="18.0" class="grid"/><g clip-path="url(#plot)"><line x1="17.5" x2="17.5" y1="-58.0" y2="94.0" class="c-down-w"/><rect x="10.6" y="-58.0" width="13.8" height="120.0" class="c-down"/><line x1="40.5" x2="40.5" y1="-92.6" y2="-0.2" class="c-down-w"/><rect x="33.6" y="-62.4" width="13.8" height="27.0" class="c-down"/><line x1="63.5" x2="63.5" y1="-44.8" y2="142.4" class="c-down-w"/><rect x="56.6" y="-8.4" width="13.8" height="142.0" class="c-down"/><line x1="86.5" x2="86.5" y1="147.5" y2="324.1" class="c-up-w"/><rect x="79.6" y="159.4" width="13.8" height="106.2" class="c-up"/><line x1="109.5" x2="109.5" y1="111.6" y2="206.5" class="c-up-w"/><rect x="102.6" y="196.5" width="13.8" height="6.9" class="c-up"/><line x1="132.5" x2="132.5" y1="44.4" y2="156.9" class="c-down-w"/><rect x="125.6" y="72.0" width="13.8" height="52.8" class="c-down"/><line x1="155.5" x2="155.5" y1="45.7" y2="162.5" class="c-down-w"/><rect x="148.6" y="57.0" width="13.8" height="55.9" class="c-down"/><line x1="178.5" x2="178.5" y1="18.0" y2="161.3" class="c-down-w"/><rect x="171.6" y="35.0" width="13.8" height="25.1" class="c-down"/><line x1="201.5" x2="201.5" y1="152.5" y2="266.9" class="c-down-w"/><rect x="194.6" y="176.4" width="13.8" height="57.8" class="c-down"/><line x1="224.5" x2="224.5" y1="197.7" y2="288.2" class="c-down-w"/><rect x="217.6" y="244.9" width="13.8" height="1.0" class="c-down"/></g><text x="6" y="396" class="t-muted">10/20</text><text x="236" y="396" class="t-muted" text-anchor="end">11/02</text><rect x="242" y="209.0" width="28" height="73.0" class="band"/><text x="256.0" y="12" class="t-muted" text-anchor="middle">今日</text><line x1="6" x2="270" y1="245.5" y2="245.5" class="pc"/><line x1="6" x2="270" y1="182.7" y2="182.7" class="lv-up"/><text x="276" y="186.7" class="lv-up-t">4,000 キリ（大）</text><line x1="6" x2="270" y1="197.7" y2="197.7" class="lv-up"/><text x="276" y="201.7" class="lv-up-t">3,976 前日高値</text><line x1="6" x2="270" y1="288.2" y2="288.2" class="lv-down"/><text x="276" y="292.2" class="lv-down-t">3,832 前日安値・5日安値</text><line x1="6" x2="270" y1="308.3" y2="308.3" class="lv-down"/><text x="276" y="312.3" class="lv-down-t">3,800 キリ</text><line x1="6" x2="270" y1="324.1" y2="324.1" class="lv-down"/><text x="276" y="328.1" class="lv-down-t">3,775 20日安値</text><text x="276" y="249.5" class="pc-t">3,900 前日終値</text></svg>
+    <svg viewBox="0 0 430 400" class="chart" role="img" aria-label="日足と上値・下値の目安"><clipPath id="plot"><rect x="0" y="18" width="270" height="362"/></clipPath><line x1="6" x2="270" y1="380.0" y2="380.0" class="grid"/><line x1="6" x2="270" y1="289.5" y2="289.5" class="grid"/><line x1="6" x2="270" y1="199.0" y2="199.0" class="grid"/><line x1="6" x2="270" y1="108.5" y2="108.5" class="grid"/><line x1="6" x2="270" y1="18.0" y2="18.0" class="grid"/><g clip-path="url(#plot)"><line x1="17.5" x2="17.5" y1="-58.0" y2="94.0" class="c-down-w"/><rect x="10.6" y="-58.0" width="13.8" height="120.0" class="c-down"/><line x1="40.5" x2="40.5" y1="-92.6" y2="-0.2" class="c-down-w"/><rect x="33.6" y="-62.4" width="13.8" height="27.0" class="c-down"/><line x1="63.5" x2="63.5" y1="-44.8" y2="142.4" class="c-down-w"/><rect x="56.6" y="-8.4" width="13.8" height="142.0" class="c-down"/><line x1="86.5" x2="86.5" y1="147.5" y2="324.1" class="c-up-w"/><rect x="79.6" y="159.4" width="13.8" height="106.2" class="c-up"/><line x1="109.5" x2="109.5" y1="111.6" y2="206.5" class="c-up-w"/><rect x="102.6" y="196.5" width="13.8" height="6.9" class="c-up"/><line x1="132.5" x2="132.5" y1="44.4" y2="156.9" class="c-down-w"/><rect x="125.6" y="72.0" width="13.8" height="52.8" class="c-down"/><line x1="155.5" x2="155.5" y1="45.7" y2="162.5" class="c-down-w"/><rect x="148.6" y="57.0" width="13.8" height="55.9" class="c-down"/><line x1="178.5" x2="178.5" y1="18.0" y2="161.3" class="c-down-w"/><rect x="171.6" y="35.0" width="13.8" height="25.1" class="c-down"/><line x1="201.5" x2="201.5" y1="152.5" y2="266.9" class="c-down-w"/><rect x="194.6" y="176.4" width="13.8" height="57.8" class="c-down"/><line x1="224.5" x2="224.5" y1="197.7" y2="288.2" class="c-down-w"/><rect x="217.6" y="244.9" width="13.8" height="1.0" class="c-down"/></g><text x="6" y="396" class="t-muted">10/20</text><text x="236" y="396" class="t-muted" text-anchor="end">11/02</text><rect x="242" y="209.5" width="28" height="72.0" class="band"/><text x="256.0" y="12" class="t-muted" text-anchor="middle">今日</text><line x1="6" x2="270" y1="245.5" y2="245.5" class="pc"/><line x1="6" x2="270" y1="182.7" y2="182.7" class="lv-up"/><text x="276" y="186.7" class="lv-up-t">4,000 キリ（大）</text><line x1="6" x2="270" y1="197.7" y2="197.7" class="lv-up"/><text x="276" y="201.7" class="lv-up-t">3,976 前日高値</text><line x1="6" x2="270" y1="288.2" y2="288.2" class="lv-down"/><text x="276" y="292.2" class="lv-down-t">3,832 前日安値・5日安値</text><line x1="6" x2="270" y1="308.3" y2="308.3" class="lv-down"/><text x="276" y="312.3" class="lv-down-t">3,800 キリ</text><line x1="6" x2="270" y1="324.1" y2="324.1" class="lv-down"/><text x="276" y="328.1" class="lv-down-t">3,775 20日安値</text><text x="276" y="249.5" class="pc-t">3,900 前日終値</text></svg>
     <div class="note muted">黄色の帯＝今日の9時台にふつう動く幅を、前日終値の上下に置いたもの。赤い点線＝上値の目安、緑の点線＝下値の目安。</div>
     <table class="lv"><thead><tr><th></th><th>水準</th><th class="num">値段</th><th class="num">終値から</th><th class="num">100株で</th></tr></thead>
       <tbody><tr><td class="lv-up-t">上値</td><td>前日高値</td><td class="num">3,976円</td><td class="num">+76円</td><td class="num">+7,600円</td></tr><tr><td class="lv-up-t">上値</td><td>キリ（大）</td><td class="num">4,000円</td><td class="num">+100円</td><td class="num">+10,000円</td></tr><tr><td class="lv-down-t">下値</td><td>前日安値・5日安値</td><td class="num">3,832円</td><td class="num">-68円</td><td class="num">-6,800円</td></tr><tr><td class="lv-down-t">下値</td><td>キリ</td><td class="num">3,800円</td><td class="num">-100円</td><td class="num">-10,000円</td></tr><tr><td class="lv-down-t">下値</td><td>20日安値</td><td class="num">3,775円</td><td class="num">-125円</td><td class="num">-12,500円</td></tr></tbody></table>
-    <div class="note muted">検証（売買代金上位20銘柄・5分足60日・9時台）：抜けやすい水準 5日高値（止まったのは 32%）。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う</div>
+    <div class="note muted">検証（売買代金上位20銘柄・5分足60日・9時台）：どの水準も止まりやすさは差なし。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う</div>
   </div>
 
   <div class="box">
@@ -402,14 +402,14 @@ table.lv .num { text-align: right; }
           <div class="focus-range">
             <div class="focus-range-title">今日の値幅の目安（高値−安値・直近10日平均）</div>
             <div class="focus-range-main">約191円<span class="lot">100株で約19,109円</span></div>
-            <div class="focus-range-sub">荒れた日（5日に1日）は約234円まで（100株で約23,390円）</div>
+            <div class="focus-range-sub">荒れた日（5日に1日）は約235円まで（100株で約23,465円）</div>
             <div class="focus-range-sub">損切り-5,000円（50円幅）は値幅の約3割</div>
             <div class="focus-range-sub normal">最近の値幅は普段どおり</div>
-            <div class="focus-range-sub"><b>9時台の目安：100株で約11,615円</b>（荒れた日は約14,557円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約8,599円（100株）以上動いたら、9時台は約15,153円まで広がりやすい</div>
+            <div class="focus-range-sub"><b>9時台の目安：100株で約11,450円</b>（荒れた日は約14,557円）</div><div class="focus-range-sub">9:10の確認：最初の10分で約8,599円（100株）以上動いたら、9時台は約15,189円まで広がりやすい</div>
             <div class="focus-range-sub">次の決算：11/10</div>
-            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.37／予測以内に収まった日 58%</div>
+            <div class="focus-foot">検証（232日）: 直近10日の平均で翌日の値幅を予測 r=+0.36／予測以内に収まった日 58%</div>
           </div>
-    <div class="note muted">米関連株の前日の動き：2〜3%（値幅の目安はそのまま）</div><div class="note muted">検証（1195日）：米関連株が2〜3%動いた翌日の値幅は目安の 1.01倍（224回）・1%未満の日は 1.00倍</div>
+    <div class="note muted">米関連株の前日の動き：2〜3%（値幅の目安はそのまま）</div><div class="note muted">検証（1195日）：米関連株が2〜3%動いた翌日の値幅は目安の 1.02倍（225回）・1%未満の日は 1.00倍</div>
   </div>
 
   <div class="box">
@@ -418,7 +418,7 @@ table.lv .num { text-align: right; }
     <div class="focus-chips"><span class="focus-chip">GLW <span style="color: var(--long);">+2.4%</span></span><span class="focus-chip">COHR <span style="color: var(--long);">+3.8%</span></span><span class="focus-chip">LITE <span style="color: var(--short);">-0.6%</span></span><span class="focus-chip">VRT <span style="color: var(--long);">+5.2%</span></span></div>
     <div class="note"><b>寄り（窓）</b>　寄りは高く始まりやすい（窓の連動：検証済み r=+0.64）</div>
     <div class="note"><b>寄り後（〜引け）</b>　寄り後の方向は読めない（r=+0.10）。寄り値で飛びつかない</div>
-    <div class="note muted">検証（232日）: 窓 r=+0.64 ✅ 連動を確認 ／ 寄り後（〜引け） r=+0.10 △ 弱い連動</div>
+    <div class="note muted">検証（232日）: 窓 r=+0.64 ✅ 連動を確認 ／ 寄り後（〜引け） r=+0.10 ✗ 連動なし</div>
   </div>
 
   <div class="box">
@@ -443,7 +443,7 @@ table.lv .num { text-align: right; }
 
   <div class="box">
     <h2>📌 今日のマイルール</h2>
-    <ul style="margin: 0; padding-left: 20px; font-size: 13px;"><li>フジクラ(5803)・SBG(9984) だけ。1回取れたら終える</li><li>09:05〜09:15 は方向が定まりにくいので様子見</li><li>判定の確度が低い日。迷ったら見送り</li><li>10:00前に「取引終了」を宣言する</li><li>1日 -10,000円 でその日は終了</li><li>株数は100株まで（200株以上は使わない）</li><li>2回続けて損切りしたら、その日は終了</li><li>触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない</li><li>試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り</li><li>注文画面で「日計り」になっているか毎回確認する</li></ul>
+    <ul style="margin: 0; padding-left: 20px; font-size: 13px;"><li>売りは入れない（1銘柄だけ逆を張らない）</li><li>下げている銘柄を拾わない（ナンピン禁止）</li><li>逆行したら即損切り（-3,000〜5,000円）。粘らない</li><li>10:00前に「取引終了」を宣言する</li><li>1日 -10,000円 でその日は終了</li><li>株数は100株まで（200株以上は使わない）</li><li>2回続けて損切りしたら、その日は終了</li><li>触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない</li><li>試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り</li><li>注文画面で「日計り」になっているか毎回確認する</li></ul>
   </div>
 </div>
 </body>
