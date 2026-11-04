@@ -274,24 +274,24 @@ section > h2.section-title {
   <header>
     <h1>📊 Daytrade Signal Board</h1>
     <div class="header-right">
-      <div class="timestamp">Updated: 2026-11-04 08:18 JST</div>
+      <div class="timestamp">Updated: 2026-11-04 16:00 JST</div>
       <a href="./backtest_report.html" class="report-link">🧪 バックテスト検証レポート →</a>
       <a href="../daytrade-journal/review.html" class="report-link">✅ ルール遵守の振り返り →</a>
     </div>
   </header>
 
-  
+  <section><div class="late-notice">⚠️ この判定は寄り付き後（16:00）に作られました。先物の値に当日の値動きが含まれるため、検証済みの寄り前の判定とは条件が異なります。参考程度に。</div></section>
 
   
     <section>
-      <div class="rules-banner tone-danger">
+      <div class="rules-banner tone-caution">
         <div class="rules-kicker">今日のマイルール</div>
-        <div class="rules-headline">📈 トレンド日（上）：全部「買い」で統一する</div>
-        <div class="rules-subline">方向がはっきり出る日は値動きが荒い。過去の記録では、予想が当たった日ほど逆張り・塩持ちで大きく負けている。</div>
+        <div class="rules-headline">⏸️ 方向なしの日：承認銘柄だけ、小さく</div>
+        <div class="rules-subline">指数の方向が読めない日。やるなら最小単位で、取れたらすぐ終える。</div>
         <div class="rules-cols">
           <div class="rules-col day">
             <h3>今日のタイプのルール</h3>
-            <ul><li>売りは入れない（1銘柄だけ逆を張らない）</li><li>下げている銘柄を拾わない（ナンピン禁止）</li><li>逆行したら即損切り（-3,000〜5,000円）。粘らない</li></ul>
+            <ul><li>フジクラ(5803)・SBG(9984) だけ。1回取れたら終える</li><li>09:05〜09:15 は方向が定まりにくいので様子見</li><li>判定の確度が低い日。迷ったら見送り</li></ul>
           </div>
           <div class="rules-col">
             <h3>毎日のルール</h3>
@@ -324,11 +324,11 @@ section > h2.section-title {
         本日の日経デイトレ方針
       </h2>
       
-    <div style="background: rgba(16, 185, 129, 0.15); color: var(--long); padding: 16px 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 12px;">
-      <div style="font-size: 32px;">📈</div>
+    <div style="background: rgba(107, 114, 128, 0.15); color: var(--neutral); padding: 16px 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 12px;">
+      <div style="font-size: 32px;">⏸️</div>
       <div>
-        <div style="font-size: 24px; font-weight: 700;">買いポジ主体</div>
-        <div style="font-size: 12px; opacity: 0.8; margin-top: 2px;">確度:高</div>
+        <div style="font-size: 24px; font-weight: 700;">初心者手出し無用</div>
+        <div style="font-size: 12px; opacity: 0.8; margin-top: 2px;">確度:低</div>
       </div>
     </div>
     
@@ -357,17 +357,17 @@ section > h2.section-title {
         </div>
         <div class="direction-meta-item">
           <div class="direction-meta-label">日経先物 現対</div>
-          <div class="futures-value" style="color: var(--long);">+248円</div>
+          <div class="futures-value" style="color: var(--muted);">+196円</div>
           <div class="sub" style="font-size: 12px;">
-            先物: ¥63,330 / 現物終値: ¥63,082
+            先物: ¥62,385 / 現物終値: ¥62,189
           </div>
         </div>
       </div>
 
       <div class="reasons-list">
-        <ul><li>米指数が揃って上げ（ナスダック, SOX）</li><li>日経先物が米に追随（現対+248円）</li><li>→ 米日連動の上昇相場として買い目線</li></ul>
+        <ul><li>米指数が揃って上げ（ナスダック, SOX）</li><li>先物の方向性が不明確（現対+196円）</li><li>→ 米日非連動のため、方向性読みづらく様子見</li></ul>
       </div>
-      <div class="v2-ref">参考（判定には使わない）：S&amp;P500 +0.36%・ドル円 +0.66%（円安）・6材料中 5つが上向き<div class="v2-ev">検証（2022-12-05〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）</div></div>
+      <div class="v2-ref">参考（判定には使わない）：S&amp;P500 +0.36%・ドル円 +0.15%（小動き）・6材料中 3つが上向き<div class="v2-ev">検証（2022-12-05〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）</div></div>
 
       <div class="time-nodes-note">
         💡 <b>時間節目</b>: 9:40・10:00（前場トレ転）／12:30（後場寄り）／14:00・14:30（後場トレ転）
@@ -392,7 +392,7 @@ section > h2.section-title {
           <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは高く始まりやすい（窓の連動：検証済み r=+0.64）</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=+0.10）。寄り値で飛びつかない</div>
           
-          <div class="focus-plan"><span class="stop">損切り -3,800円</span>　<span class="take">利確 +11,400円</span><span class="muted">（38円幅 / 114円幅・9時台の目安 約116円）</span></div><div class="focus-range-sub">いちばん近い目安：上 3,976（前日高値） ／ 下 3,832（前日安値・5日安値）</div><div class="focus-range-sub">次の決算：11/10</div>
+          <div class="focus-plan"><span class="stop">損切り -3,800円</span>　<span class="take">利確 +5,700円</span><span class="muted">（38円幅 / 57円幅・9時台の目安 約116円）</span></div><div class="focus-range-sub">いちばん近い目安：上 3,976（前日高値） ／ 下 3,832（前日安値・5日安値）</div><div class="focus-range-sub">次の決算：11/10</div>
           <a class="focus-more" href="stock/5803.html">📈 図と作戦を見る（フジクラのページ）→</a>
         </div>
         
@@ -407,7 +407,7 @@ section > h2.section-title {
           <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは高く始まりやすい（窓の連動：検証済み r=+0.72）</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.08）。寄り値で飛びつかない</div>
           
-          <div class="focus-plan"><span class="stop">損切り -4,800円</span>　<span class="take">利確 +14,400円</span><span class="muted">（48円幅 / 144円幅・9時台の目安 約147円）</span></div><div class="focus-range-sub">いちばん近い目安：上 4,473（前日高値） ／ 下 4,400（キリ）</div><div class="focus-range-sub">次の決算：11/10</div>
+          <div class="focus-plan"><span class="stop">損切り -4,800円</span>　<span class="take">利確 +7,200円</span><span class="muted">（48円幅 / 72円幅・9時台の目安 約147円）</span></div><div class="focus-range-sub">いちばん近い目安：上 4,473（前日高値） ／ 下 4,400（キリ）</div><div class="focus-range-sub">次の決算：11/10</div>
           <a class="focus-more" href="stock/9984.html">📈 図と作戦を見る（ソフトバンクGのページ）→</a>
         </div>
         
@@ -422,7 +422,7 @@ section > h2.section-title {
           <div class="focus-line"><span class="lbl">寄り（窓）</span>寄りは高く始まりやすい（窓の連動：検証済み r=+0.62）</div>
           <div class="focus-line"><span class="lbl">寄り後（〜引け）</span>寄り後の方向は読めない（r=-0.11）。寄り値で飛びつかない</div>
           
-          <div class="focus-plan"><span class="stop">損切り -5,000円</span>　<span class="take">利確 +15,000円</span><span class="muted">（50円幅 / 150円幅・9時台の目安 約219円）</span></div><div class="focus-range-sub high">⚠️ 9時台の値幅に比べて損切り（上限 -5,000円）が近い。普段の上下で引っかかりやすい</div><div class="focus-range-sub">いちばん近い目安：上 6,400（キリ） ／ 下 6,188（前日安値）</div><div class="focus-range-sub">次の決算：02/02</div>
+          <div class="focus-plan"><span class="stop">損切り -5,000円</span>　<span class="take">利確 +7,500円</span><span class="muted">（50円幅 / 75円幅・9時台の目安 約219円）</span></div><div class="focus-range-sub high">⚠️ 9時台の値幅に比べて損切り（上限 -5,000円）が近い。普段の上下で引っかかりやすい</div><div class="focus-range-sub">いちばん近い目安：上 6,400（キリ） ／ 下 6,188（前日安値）</div><div class="focus-range-sub">次の決算：02/02</div>
           <a class="focus-more" href="stock/6981.html">📈 図と作戦を見る（村田製作所のページ）→</a>
         </div>
         
@@ -441,10 +441,10 @@ section > h2.section-title {
             <span class="fx-symbol">USD/JPY</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">158.72</span>
-            <span class="fx-change" style="color: var(--long);">▲ +0.66%</span>
+            <span class="fx-price">158.15</span>
+            <span class="fx-change" style="color: var(--muted);">━ +0.15%</span>
           </div>
-          <div class="fx-interpretation">円安傾向 → 輸出株にやや追い風</div>
+          <div class="fx-interpretation">変動なし</div>
         </div>
         
         <div class="fx-item">
@@ -453,10 +453,10 @@ section > h2.section-title {
             <span class="fx-symbol">XAU/USD</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$3,940.7</span>
-            <span class="fx-change" style="color: var(--short);">▼ -0.73%</span>
+            <span class="fx-price">$4,030.3</span>
+            <span class="fx-change" style="color: var(--long);">▲ +2.28%</span>
           </div>
-          <div class="fx-interpretation">ゴールド小幅下落</div>
+          <div class="fx-interpretation">ゴールド上昇 → インフレ懸念 or リスクオフ。住友金属鉱山等の金鉱株に追い風</div>
         </div>
         
         <div class="fx-item">
@@ -465,10 +465,10 @@ section > h2.section-title {
             <span class="fx-symbol">CL</span>
           </div>
           <div class="fx-price-row">
-            <span class="fx-price">$96.71</span>
-            <span class="fx-change" style="color: var(--muted);">━ +0.26%</span>
+            <span class="fx-price">$96.42</span>
+            <span class="fx-change" style="color: var(--long);">▲ +0.33%</span>
           </div>
-          <div class="fx-interpretation">変動なし</div>
+          <div class="fx-interpretation">原油小幅上昇</div>
         </div>
         
       </div>
@@ -477,6 +477,40 @@ section > h2.section-title {
     
 
   
+    <section>
+      <h2 class="section-title">💡 個別銘柄の方向感（指数手出し無用日）</h2>
+      <div class="picks-grid">
+        
+        <div class="pick-card pick-bullish">
+          <div class="pick-header">
+            <div class="pick-title">
+              ▲ <b>ストレージ半導体</b>
+            </div>
+            <span class="pick-badge pick-badge-bullish">買い候補</span>
+          </div>
+          <ul class="pick-stocks"></ul>
+          <div class="pick-rationale">米サンディスク等ストレージが平均+3.17%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは買い目線で考えやすい。</div>
+        </div>
+        
+        <div class="pick-card pick-bullish">
+          <div class="pick-header">
+            <div class="pick-title">
+              ▲ <b>半導体</b>
+            </div>
+            <span class="pick-badge pick-badge-bullish">買い候補</span>
+          </div>
+          <ul class="pick-stocks"></ul>
+          <div class="pick-rationale">米SOX指数（半導体）が平均+2.27%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは買い目線で考えやすい。</div>
+        </div>
+        
+      </div>
+      <div class="picks-disclaimer">
+        ⚠️ これは推奨ではなく、過去の連動データに基づく <b>該当銘柄の参考表示</b> です。
+        個別銘柄の決算・材料・需給は別途確認してください。指数全体は方向感がない日のため、
+        ポジションサイズは控えめにし、損切りラインを明確に。
+      </div>
+    </section>
+    
 
   
     <section>
@@ -730,12 +764,12 @@ section > h2.section-title {
         <tbody>
         <tr>
           <td>11/4(水)</td>
-          <td><span class="hist-badge hist-buy">📈 買いポジ主体</span></td>
-          <td class="num"><span style="color: var(--muted);">高</span></td>
+          <td><span class="hist-badge hist-handsoff">⏸️ 初心者手出し無用</span></td>
+          <td class="num"><span style="color: var(--muted);">低</span></td>
           <td class="num">+0.83%</td>
           <td class="num">-0.38%</td>
           <td class="num">+2.63%</td>
-          <td class="num">+248</td>
+          <td class="num">+196</td>
         </tr>
         
         <tr>
