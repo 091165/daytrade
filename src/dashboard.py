@@ -14,6 +14,8 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
+from trading_rules import REWARD_RISK_RATIO
+
 
 
 def format_jpy(n: float) -> str:
@@ -258,7 +260,7 @@ def render_plan_block(plan: dict | None) -> str:
         head = (f'<div class="focus-range-main plan">損切り -{b["stop_yen"]:,.0f}円（{b["stop_width"]:.0f}円幅）'
                 f'<span class="lot">利確 +{b["target_yen"]:,.0f}円（{b["target_width"]:.0f}円幅）</span></div>')
         head += "".join(f'<div class="focus-range-sub {cls}">{n}</div>' for n in b["notes"])
-        head += (f'<div class="focus-range-sub">9時台の目安 約{b["morning_width"]:.0f}円 を3つに分けた幅を損切り、その3倍を利確'
+        head += (f'<div class="focus-range-sub">9時台の目安 約{b["morning_width"]:.0f}円 を3つに分けた幅を損切り、その{REWARD_RISK_RATIO:g}倍を利確'
                  f'（損切りの上限は -5,000円）</div>')
     lv = plan.get("levels") or {}
     up = " ／ ".join(_level_txt(x) for x in lv.get("up", [])) or "目安の範囲に水準なし"

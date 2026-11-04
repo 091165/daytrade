@@ -10,6 +10,7 @@
 
 from __future__ import annotations
 
+import json
 from html import escape
 from pathlib import Path
 
@@ -145,6 +146,118 @@ def ruler_svg(plan: dict | None, side_hint: str) -> str:
     rows.append(f'<text x="{L}" y="{yy + 26}" class="t-muted">黄色＝9時台にふつう動く幅 約{w:.0f}円（同じ縮尺）</text>')
     h = yy + 36
     return f'<svg viewBox="0 0 {Wd} {h}" class="chart ruler" role="img" aria-label="損切り・利確の物差し">' + "".join(rows) + "</svg>"
+
+
+DEFAULT_EXCURSION = {"up_med": 0.31, "up_p80": 0.55, "down_med": 0.31, "down_p80": 0.55, "n": 0}
+
+
+def first10_text(guide: dict | None, D: float) -> str:
+    """最初の10分の値幅の大きさで、9:10 に順張り／逆張りのどちらが良かったか（週次の検証）"""
+    if not guide or not guide.get("cuts") or not guide.get("by_size"):
+        return ""
+    small_y, big_y = guide["cuts"][0] * D, guide["cuts"][1] * D
+    rows = {x["size"]: x for x in guide["by_size"]}
+    parts = []
+    for size, cond in (("小さい", f"約{small_y:.0f}円より小さい"), ("大きい", f"約{big_y:.0f}円より大きい")):
+        x = rows.get(size)
+        if not x or x.get("follow_r") is None:
+            continue
+        sig_f = x.get("q_follow") is not None and x["q_follow"] < 0.05
+        sig_r = x.get("q_fade") is not None and x["q_fade"] < 0.05
+        if sig_f and x["follow_r"] > 0:
+            what = f"その向きに<b>順張り</b>が良かった（{x['follow_r']:+.2f}R・勝ち{x['follow_win'] * 100:.0f}%）"
+        elif sig_r and x["fade_r"] > 0:
+            what = f"逆向きに<b>逆張り</b>が良かった（{x['fade_r']:+.2f}R・勝ち{x['fade_win'] * 100:.0f}%）"
+        elif sig_r and x["fade_r"] < 0:
+            what = f"<b>逆張りは負けやすい</b>（{x['fade_r']:+.2f}R）。入るなら順張り（{x['follow_r']:+.2f}R・はっきりした差ではない）"
+        else:
+            what = f"順張り {x['follow_r']:+.2f}R・逆張り {x['fade_r']:+.2f}R で、はっきりした差はない"
+        parts.append(f"<li>最初の10分（9:00〜9:10）の値幅が{cond}日：9:10 に{what}</li>")
+    return ('<div class="note"><b>9:10 の確認</b><ul style="margin: 4px 0; padding-left: 18px;">' + "".join(parts) +
+            "</ul></div>") if parts else ""
+
+
+def render_open_box(f: dict) -> str:
+    """始値を入れると、寄りから10:00までに上下どこまで動きやすいかを図で出す（図は端末側で描く）"""
+    rng = f.get("range") or {}
+    plan = f.get("plan") or {}
+    D = rng.get("pred_yen")
+    if not rng.get("available") or not D:
+        return ""
+    ex = f.get("excursion") or {}
+    src = ex.get("source") or ""
+    ex = {k: ex.get(k) for k in ("up_med", "up_p80", "down_med", "down_p80", "n")} if ex.get("up_med") else dict(DEFAULT_EXCURSION)
+    lv = plan.get("levels") or {}
+    levels = [{"price": x["price"], "kind": x["kind"]} for x in lv.get("up", []) + lv.get("down", [])]
+    cfg = json.dumps({"code": f["code"], "D": round(float(D), 2), "ex": ex, "levels": levels,
+                      "pc": plan.get("prev_close")}, ensure_ascii=False)
+    note = (f"寄りから10:00までに動いた幅（{ex['n']}日分・{escape(src)}）の中央値と80%点を、1日の目安 約{D:.0f}円に掛けたもの"
+            if ex.get("n") else "まだ検証の結果がないので、9時台の目安の半分（ふつう）と、荒れた日の目安から出した仮の値")
+    return f"""
+  <div class="box" id="openbox">
+    <h2>🔔 寄りの値段から見た上下の目安（10:00まで）</h2>
+    <div class="live-row">
+      <label>始値（寄り値）<input id="op-price" type="number" inputmode="decimal" step="1" placeholder="寄ったら入力"></label>
+    </div>
+    <div id="op-out" class="muted note">始値を入れると、ここに図が出ます。</div>
+    <div class="note muted">{note}。上と下はそれぞれ別に数えている（両方に動く日もある）。</div>
+    {first10_text(f.get("first10_guide"), float(D))}
+  </div>
+<script>
+(function () {{
+  var C = {cfg};
+  var $ = function (id) {{ return document.getElementById(id); }};
+  function today() {{ var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }}
+  var KEY = "daytrade-open-" + today() + "-" + C.code;
+  function fmt(n) {{ return Math.round(n).toLocaleString(); }}
+  function draw() {{
+    var o = parseFloat($("op-price").value);
+    try {{ localStorage.setItem(KEY, $("op-price").value); }} catch (e) {{}}
+    if (!isFinite(o) || o <= 0) {{ $("op-out").innerHTML = "始値を入れると、ここに図が出ます。"; return; }}
+    var D = C.D, ex = C.ex;
+    var marks = [
+      {{ p: o + ex.up_p80 * D, t: "荒れた日の上", c: "ex2" }},
+      {{ p: o + ex.up_med * D, t: "ふつうの上", c: "ex1" }},
+      {{ p: o - ex.down_med * D, t: "ふつうの下", c: "ex1" }},
+      {{ p: o - ex.down_p80 * D, t: "荒れた日の下", c: "ex2" }}
+    ];
+    var span = Math.max(ex.up_p80, ex.down_p80) * D * 1.35;
+    var lo = o - span, hi = o + span;
+    var lv = C.levels.filter(function (x) {{ return x.price > lo && x.price < hi; }});
+    if (C.pc && C.pc > lo && C.pc < hi) lv.push({{ price: C.pc, kind: "前日終値", pc: true }});
+    var W = 360, H = 330, T = 14, B = H - 14, X0 = 8, X1 = 150, LX = 158;
+    function y(p) {{ return T + (hi - p) / (hi - lo) * (B - T); }}
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart opfig">';
+    s += '<rect x="' + X0 + '" y="' + y(marks[0].p) + '" width="' + (X1 - X0) + '" height="' + (y(marks[3].p) - y(marks[0].p)) + '" class="band2"/>';
+    s += '<rect x="' + X0 + '" y="' + y(marks[1].p) + '" width="' + (X1 - X0) + '" height="' + (y(marks[2].p) - y(marks[1].p)) + '" class="band"/>';
+    var labels = [];
+    lv.forEach(function (x) {{
+      var cls = x.pc ? "pc" : (x.price > o ? "lv-up" : "lv-down");
+      s += '<line x1="' + X0 + '" x2="' + X1 + '" y1="' + y(x.price) + '" y2="' + y(x.price) + '" class="' + cls + '"/>';
+      labels.push({{ y: y(x.price), t: fmt(x.price) + " " + x.kind + "（" + (x.price - o >= 0 ? "+" : "") + fmt(x.price - o) + "）", c: cls + "-t" }});
+    }});
+    marks.forEach(function (m) {{
+      labels.push({{ y: y(m.p), t: fmt(m.p) + " " + m.t + "（" + (m.p - o >= 0 ? "+" : "") + fmt(m.p - o) + "）", c: m.c + "-t" }});
+    }});
+    s += '<line x1="' + X0 + '" x2="' + X1 + '" y1="' + y(o) + '" y2="' + y(o) + '" class="open"/>';
+    labels.push({{ y: y(o), t: fmt(o) + " 始値", c: "open-t" }});
+    labels.sort(function (a, b) {{ return a.y - b.y; }});
+    for (var i = 1; i < labels.length; i++) if (labels[i].y - labels[i - 1].y < 15) labels[i].y = labels[i - 1].y + 15;
+    labels.forEach(function (l) {{ s += '<text x="' + LX + '" y="' + (l.y + 4) + '" class="' + l.c + '">' + l.t + '</text>'; }});
+    s += "</svg>";
+    var up = ex.up_med * D, dn = ex.down_med * D;
+    $("op-out").innerHTML = '<div class="op-sum"><span class="up">ふつう ' + fmt(o + up) + '円（+' + fmt(up) + '）まで上</span>　<span class="down">' + fmt(o - dn) + '円（-' + fmt(dn) + '）まで下</span></div>' + s;
+    var e = $("lv-entry");
+    if (e && !e.dataset.touched) {{ e.value = Math.round(o); e.dispatchEvent(new Event("input")); }}
+  }}
+  try {{ var kept = localStorage.getItem(KEY); if (kept) $("op-price").value = kept; }} catch (e) {{}}
+  $("op-price").addEventListener("input", draw);
+  var e = $("lv-entry");
+  if (e) e.addEventListener("keydown", function () {{ e.dataset.touched = "1"; }});
+  draw();
+}})();
+</script>
+"""
 
 
 def render_live_box(f: dict, side_hint: str) -> str:
@@ -313,6 +426,12 @@ table.lv .num { text-align: right; }
 .lv-up-t { color: #f87171; } .lv-down-t { color: #34d399; }
 .muted { color: var(--muted); }
 .live { border-color: var(--accent); }
+.opfig .band2 { fill: rgba(251, 191, 36, 0.08); stroke: rgba(251, 191, 36, 0.35); stroke-dasharray: 3 3; }
+.opfig .open { stroke: var(--accent); stroke-width: 2.5; }
+.opfig .open-t { fill: var(--accent); font-weight: 700; }
+.opfig .ex1-t { fill: #fbbf24; } .opfig .ex2-t { fill: #a3863a; }
+.op-sum { font-size: 15px; font-weight: 700; margin: 6px 0; }
+.op-sum .up { color: var(--long); } .op-sum .down { color: var(--short); }
 .live.over { border-color: var(--short); background: rgba(239, 68, 68, 0.08); }
 .live-status { font-size: 14px; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); margin-bottom: 10px; }
 .live-status.over { background: rgba(239, 68, 68, 0.2); color: #fecaca; font-size: 15px; }
@@ -340,6 +459,12 @@ table.lv .num { text-align: right; }
 .note { font-size: 13px; margin-top: 6px; }
 .note.muted { color: var(--muted); }
 .live { border-color: var(--accent); }
+.opfig .band2 { fill: rgba(251, 191, 36, 0.08); stroke: rgba(251, 191, 36, 0.35); stroke-dasharray: 3 3; }
+.opfig .open { stroke: var(--accent); stroke-width: 2.5; }
+.opfig .open-t { fill: var(--accent); font-weight: 700; }
+.opfig .ex1-t { fill: #fbbf24; } .opfig .ex2-t { fill: #a3863a; }
+.op-sum { font-size: 15px; font-weight: 700; margin: 6px 0; }
+.op-sum .up { color: var(--long); } .op-sum .down { color: var(--short); }
 .live.over { border-color: var(--short); background: rgba(239, 68, 68, 0.08); }
 .live-status { font-size: 14px; padding: 8px 10px; border-radius: 8px; background: var(--panel-2); margin-bottom: 10px; }
 .live-status.over { background: rgba(239, 68, 68, 0.2); color: #fecaca; font-size: 15px; }
@@ -423,6 +548,7 @@ def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warn
     <div class="note muted">{side_txt}。入った値段（寄り値など）を0として見る。</div>
     {ruler_svg(plan, side_hint)}
   </div>
+{render_open_box(f)}
 {render_live_box(f, side_hint)}
 
   <div class="box">
