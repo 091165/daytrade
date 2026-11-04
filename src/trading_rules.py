@@ -42,10 +42,13 @@ MAX_CONSECUTIVE_LOSSES = 2
 # 10:00 までに決着した割合は 90%・79%・70%・58% で、3倍は逆張りで底・天井を拾わないと届きにくいので 1.5倍にした
 REWARD_RISK_RATIO = 1.5
 END_TIME = "10:00"
-CHOP_WINDOW = "09:05〜09:15"
+CHOP_WINDOW = "09:05〜09:15"   # 2026/11/4 まで「方向なしの日」に使っていた様子見の時間（今は DECIDE_AT に統一）
+DECIDE_AT = "09:10"           # 方向を決める時刻。これより前は入らない（最初の10分を見る）
 
 # 全日共通のルール（どの判定の日でも表示）
 ALWAYS_RULES: tuple[str, ...] = (
+    f"{DECIDE_AT}までは入らない。最初の10分の値幅が小さい日は、その向きに順張り（銘柄ページの「9:10 の確認」）",
+    "寄りから大きく動いた銘柄を、逆向きに拾わない（落ちるナイフを掴まない）",
     f"{END_TIME}前に「取引終了」を宣言する",
     f"1日 -{DAILY_LOSS_LIMIT_YEN:,}円 でその日は終了",
     f"株数は{MAX_QTY}株まで（200株以上は使わない）",
@@ -77,18 +80,20 @@ class TradingRulesBanner:
 def build_checks(day_type: DayType) -> dict:
     """ルールのうち、約定記録から機械的に判定できるものを数値で返す。
 
-    該当しないルールは None。株数の上限と連敗で終了は毎日のルール。
+    該当しないルールは None。2026/11/5 から、方向は寄り前の判定ではなく 9:10 に決める（direction は使わない）。
+    銘柄ごとの「最初の10分が小さい」の境目と「大きく動いた」の幅は、毎朝の作戦から main で first10 に入れる。
     """
-    trend = day_type in ("trend_up", "trend_down")
     return {
         "approved_codes": list(APPROVED_CODES),
         "daily_loss_limit_yen": DAILY_LOSS_LIMIT_YEN,
         "end_time": END_TIME,
         "require_day_trade": True,  # 期限が「日計り」であること
-        "direction": {"trend_up": "buy", "trend_down": "sell"}.get(day_type),
-        "per_trade_stop_yen": PER_TRADE_STOP_MAX_YEN if trend else None,
+        "direction": None,
+        "decide_at": DECIDE_AT,
+        "first10": {},
+        "per_trade_stop_yen": PER_TRADE_STOP_MAX_YEN,
         "max_qty": MAX_QTY,
-        "wait_window": None if trend else CHOP_WINDOW.split("〜"),
+        "wait_window": None,
         "max_consecutive_losses": MAX_CONSECUTIVE_LOSSES,
         "trial": {
             "codes": list(TRIAL_CODES),
@@ -109,32 +114,31 @@ def build_trading_rules(verdict: str, confidence: str = "medium") -> TradingRule
         confidence: "high" / "medium" / "low"
     """
     trend_subline = (
-        "方向がはっきり出る日は値動きが荒い。"
-        "過去の記録では、予想が当たった日ほど逆張り・塩持ちで大きく負けている。"
+        "寄り前の判定は日経平均には少し効くが、承認・試用銘柄の寄り後の向きはほぼ五分（検証）。"
+        f"向きは {DECIDE_AT} に、最初の10分を見て決める。"
     )
+    stop_rule = f"逆行したら即損切り（-{PER_TRADE_STOP_YEN}円）。粘らない"
 
     if verdict == "buy_bias":
         banner = TradingRulesBanner(
             day_type="trend_up",
-            tone="danger",
-            headline="📈 トレンド日（上）：全部「買い」で統一する",
+            tone="caution",
+            headline="📈 米国株は上げ（寄り前の判定・参考）。向きは 9:10 に決める",
             subline=trend_subline,
             day_rules=[
-                "売りは入れない（1銘柄だけ逆を張らない）",
-                "下げている銘柄を拾わない（ナンピン禁止）",
-                f"逆行したら即損切り（-{PER_TRADE_STOP_YEN}円）。粘らない",
+                "上げやすい地合いでも、寄りから下げている銘柄を買いで拾わない",
+                stop_rule,
             ],
         )
     elif verdict == "sell_bias":
         banner = TradingRulesBanner(
             day_type="trend_down",
-            tone="danger",
-            headline="📉 トレンド日（下）：全部「売り」で統一する",
+            tone="caution",
+            headline="📉 米国株は下げ（寄り前の判定・参考）。向きは 9:10 に決める",
             subline=trend_subline,
             day_rules=[
-                "買いは入れない（1銘柄だけ逆を張らない）",
-                "落ちている銘柄を拾わない（落ちるナイフを掴まない）",
-                f"逆行したら即損切り（-{PER_TRADE_STOP_YEN}円）。粘らない",
+                "下げやすい地合いでも、寄りから上げている銘柄を売りで向かわない",
+                stop_rule,
             ],
         )
     else:
@@ -145,7 +149,7 @@ def build_trading_rules(verdict: str, confidence: str = "medium") -> TradingRule
             subline="指数の方向が読めない日。やるなら最小単位で、取れたらすぐ終える。",
             day_rules=[
                 f"{'・'.join(APPROVED_STOCKS)} だけ。1回取れたら終える",
-                f"{CHOP_WINDOW} は方向が定まりにくいので様子見",
+                stop_rule,
             ],
         )
 

@@ -68,7 +68,7 @@ def test_conflict_with_market_flagged():
     # 指数は買い主体なのに、SBGの関連株が下げ → 見送り候補
     sig = build_focus_signal(SBG, {"ARM": -3.0, "NVDA": -2.0, "QQQ": -1.0}, "buy_bias")
     assert sig.conflict_with_market is True
-    assert "見送る" in sig.conflict_text
+    assert "9:10" in sig.conflict_text
     # 同じ向きなら警告なし
     sig2 = build_focus_signal(SBG, {"ARM": -3.0, "NVDA": -2.0, "QQQ": -1.0}, "sell_bias")
     assert sig2.conflict_with_market is False

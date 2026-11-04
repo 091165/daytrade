@@ -15,9 +15,8 @@ from trading_rules import build_trading_rules, ALWAYS_RULES
 def test_buy_bias_is_trend_up_danger():
     b = build_trading_rules("buy_bias", "high")
     assert b.day_type == "trend_up"
-    assert b.tone == "danger"
-    assert "買い" in b.headline
-    assert any("売りは入れない" in r for r in b.day_rules)
+    assert b.tone == "caution" and "9:10" in b.headline
+    assert any("買いで拾わない" in r for r in b.day_rules)
     assert any("即損切り" in r for r in b.day_rules)
     print("✅ test_buy_bias_is_trend_up_danger")
 
@@ -25,9 +24,8 @@ def test_buy_bias_is_trend_up_danger():
 def test_sell_bias_is_trend_down_danger():
     b = build_trading_rules("sell_bias", "high")
     assert b.day_type == "trend_down"
-    assert b.tone == "danger"
-    assert "売り" in b.headline
-    assert any("買いは入れない" in r for r in b.day_rules)
+    assert "9:10" in b.headline
+    assert any("売りで向かわない" in r for r in b.day_rules)
     print("✅ test_sell_bias_is_trend_down_danger")
 
 
@@ -35,7 +33,7 @@ def test_hands_off_is_caution_and_small():
     b = build_trading_rules("hands_off", "medium")
     assert b.day_type == "no_trend"
     assert b.tone == "caution"
-    assert any("様子見" in r for r in b.day_rules)
+    assert any("1回取れたら終える" in r for r in b.day_rules)
     print("✅ test_hands_off_is_caution_and_small")
 
 
@@ -72,16 +70,16 @@ def test_unknown_verdict_falls_back_to_no_trend():
 
 def test_checks_match_day_type():
     up = build_trading_rules("buy_bias", "high").checks
-    assert up["direction"] == "buy"
+    assert up["direction"] is None and up["decide_at"] == "09:10"   # 方向は 9:10 に決める（2026/11/5〜）
     assert up["approved_codes"] == ["5803", "9984"]
     assert up["per_trade_stop_yen"] == 5000
     assert up["wait_window"] is None
     assert up["max_qty"] == 100 and up["max_consecutive_losses"] == 2   # 毎日のルール
-    assert build_trading_rules("sell_bias", "high").checks["direction"] == "sell"
+    assert build_trading_rules("sell_bias", "high").checks["direction"] is None
     flat = build_trading_rules("hands_off", "low").checks
     assert flat["direction"] is None
     assert flat["max_qty"] == 100
-    assert flat["wait_window"] == ["09:05", "09:15"]
+    assert flat["wait_window"] is None and flat["per_trade_stop_yen"] == 5000
     assert flat["max_consecutive_losses"] == 2
     assert flat["daily_loss_limit_yen"] == 10000 and flat["end_time"] == "10:00"
     for c in (up, flat):
@@ -92,6 +90,8 @@ def test_checks_match_day_type():
     assert any("試用" in r and "村田(6981)" in r for r in ALWAYS_RULES)
     assert any("100株まで" in r for r in ALWAYS_RULES)
     assert any("2回続けて損切り" in r for r in ALWAYS_RULES)
+    assert any("9:10までは入らない" in r for r in ALWAYS_RULES)
+    assert any("逆向きに拾わない" in r for r in ALWAYS_RULES)
     print("✅ test_checks_match_day_type")
 
 

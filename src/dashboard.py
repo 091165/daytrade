@@ -342,7 +342,7 @@ def render_focus_section(focus_signals: list[dict] | None) -> str:
             chips = '<span class="focus-chip">データなし</span>'
         is_conflict = bool(f.get("conflict_with_market"))
         conflict = f'<div class="focus-conflict">⚠️ {f["conflict_text"]}</div>' if is_conflict else ""
-        card_class = "focus-card conflict" if is_conflict else "focus-card"
+        card_class = "focus-card"
         trial_badge = '<span class="focus-trial">試用</span>' if f.get("trial") else ""
         trial_note = f'<div class="focus-trial-note">🧪 {f["note"]}</div>' if f.get("trial") else ""
         cards += f"""

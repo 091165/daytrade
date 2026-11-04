@@ -85,7 +85,7 @@ def test_backfill_fills_missing_days_only():
         filled = _load(d / "2026-10-27.json")
         assert filled["reconstructed"] is True
         assert filled["trading_rules"]["day_type"] == "trend_down"
-        assert filled["trading_rules"]["checks"]["direction"] == "sell"
+        assert filled["trading_rules"]["day_type"] == "trend_down"   # 判定ラベルから今のルールで組み立て直す
         assert filled["warnings"] == [{"label": "⚠️ x"}]
         assert _load(d / "2026-10-28.json")["direction"]["verdict"] == "buy_bias"  # 既存は上書きしない
         assert backfill_from_history(d, history) == 0

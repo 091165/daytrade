@@ -366,6 +366,15 @@ def main() -> int:
             or (intraday_val.get("pooled") or {}).get("excursion")
         f["excursion"] = {**ex, "source": intraday_val.get("source", "")} if ex else None
         f["first10_guide"] = (intraday_val.get("pooled") or {}).get("trades")
+        # 振り返りページで「9:10 の確認」「逆向きに拾わない」を判定するための、銘柄ごとの境目（円）
+        D = (f.get("range") or {}).get("pred_yen")
+        cuts = (f["first10_guide"] or {}).get("cuts")
+        if D:
+            knife_k = max(ex.get("up_med", 0), ex.get("down_med", 0)) if ex else 0.31
+            trading_rules.checks["first10"][f["code"]] = {
+                "small": round((cuts[0] if cuts else 0.2) * D, 1),
+                "knife": round(knife_k * D, 1),
+            }
         f["us_range"] = today_multiplier(us_range_val, f["code"], f.get("us_avg_change_pct"))
         mult = max((f["us_range"] or {}).get("multiplier") or 0, vix_mult or 0) or None
         f["plan"] = build_trade_plan(records_to_ohlc(focus_ohlc_full.get(f["code"])), f["range"],

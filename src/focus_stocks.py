@@ -174,7 +174,7 @@ def build_focus_signal(
         or (market_verdict == "sell_bias" and direction == "bullish")
     )
     conflict_text = (
-        "指数の判定と逆向き。今日はこの銘柄を見送る候補（1銘柄だけ逆を張らない）"
+        "指数の判定と逆向き（参考。向きは 9:10 に、この銘柄の最初の10分を見て決める）"
         if conflict else ""
     )
 
