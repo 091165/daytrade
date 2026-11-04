@@ -246,6 +246,8 @@ def render_card_summary(f: dict) -> str:
         u = f'上 {up["price"]:,.0f}（{up["kind"]}）' if up else ""
         d = f'下 {down["price"]:,.0f}（{down["kind"]}）' if down else ""
         out += f'<div class="focus-range-sub">いちばん近い目安：{" ／ ".join(x for x in (u, d) if x)}</div>'
+    # 節目を少し割ったところの反発候補（L6-3。週次の検証で有意なときだけ notes に入る）
+    out += "".join(f'<div class="focus-range-sub">📉 {n["text"]}</div>' for n in f.get("notes") or [] if n.get("kind") == "dip")
     if mo.get("next_earnings") and not mo.get("earnings_today"):
         out += f'<div class="focus-range-sub">次の決算：{mo["next_earnings"][5:].replace("-", "/")}</div>'
     return out

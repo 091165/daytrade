@@ -966,12 +966,19 @@ def render_screen_section(screen: dict | None) -> str:
         size = (f'{r["range_pct"]:.1f}%<div class="muted tiny">100株で約{r["range_yen"]:,.0f}円</div>'
                 if r.get("range_pct") and r.get("range_yen") else "—")
         tv = f'{r["turnover_oku"]:,.0f}億' if r.get("turnover_oku") else "—"
+        hd = r.get("high_days") or {}
+        hi = ("📈 更新中" if r.get("at_high") else "—")
+        if hd.get("high"):
+            pc = lambda b: "—" if b.get("up_rate") is None else f'{b["up_rate"] * 100:.0f}%'
+            hi += (f'<div class="muted tiny">更新中の日 上げ {pc(hd["high"])}（{hd["high"]["n"]}日）'
+                   f'／ほか {pc(hd["other"])}</div>')
         rows += f"""
           <tr>
             <td><b>{r["name"]}</b><div class="muted tiny">{r["code"]}</div></td>
             <td class="num">{rng}</td>
             <td class="num">{size}</td>
             <td class="num tiny">{tv}</td>
+            <td class="tiny">{hi}</td>
             {cell(pr.get("us"))}{cell(pr.get("gap"))}{cell(pr.get("prev"))}
           </tr>"""
     n_rel = sum(1 for r in screen["results"] for p in r.get("predictors", {}).values() if p.get("reliable"))
@@ -982,7 +989,7 @@ def render_screen_section(screen: dict | None) -> str:
     <table class="results">
       <thead>
         <tr>
-          <th>銘柄</th><th class="num">値幅予測<br>r</th><th class="num">1日の値幅<br>（直近60日）</th><th class="num">売買代金<br>（20日平均）</th>
+          <th>銘柄</th><th class="num">値幅予測<br>r</th><th class="num">1日の値幅<br>（直近60日）</th><th class="num">売買代金<br>（20日平均）</th><th>52週高値</th>
           <th>寄り後 ←<br>{labels.get("us", "us")}</th><th>寄り後 ←<br>{labels.get("gap", "gap")}</th><th>寄り後 ←<br>{labels.get("prev", "prev")}</th>
         </tr>
       </thead>
@@ -994,6 +1001,7 @@ def render_screen_section(screen: dict | None) -> str:
         <li><b>値幅予測 r</b>: 直近10日の平均値幅で翌日の値幅を予測したときの相関。大きいほど「今日の値幅の目安」が当たる。</li>
         <li><b>寄り後 ← ◯◯</b>: 寄り付き時点でわかる手がかりで、寄り→引けの方向を当てられるか。後半の期間での相関 r と、前半の向きで寄りに入り引けで出た場合の当たり率・100株あたりの平均損益（手数料なし）。</li>
         <li><b>窓</b>の r がマイナスなら窓埋め（窓と逆に動く）、プラスなら窓の方向に続く。<b>前日の寄り後</b>も同じ。</li>
+        <li><b>52週高値</b>: 直近5日のうちに52週高値を更新していれば「更新中」（記事では、テーマ・需給で最高値を更新中の銘柄は買いが入りやすい）。下の数字は、2年の中で更新中だった日とそうでない日に、寄り→引けで上げた割合。</li>
         <li>毎朝のダッシュボードには出さない。承認・試用に加える前に、本人の取引成績と合わせて判断する。</li>
       </ul>
     </div>

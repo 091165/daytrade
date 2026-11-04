@@ -79,7 +79,23 @@ def test_range_and_size_fields():
     print("✅ test_range_and_size_fields")
 
 
+def test_high_clue():
+    d = _ohlc(7)
+    r = screen_stock(d, {})
+    assert "at_high" in r and r["high_days"] and r["high_days"]["high"]["n"] + r["high_days"]["other"]["n"] == len(d) - 250
+    # 最後の5日で上に抜けると「更新中」
+    up = d.copy()
+    top = float(up["High"].max())
+    for k, i in enumerate(range(len(up) - 3, len(up))):
+        up.iloc[i, :4] = top * (1.05 + 0.01 * k)
+    assert screen_stock(up, {})["at_high"] == "52週高値更新中"
+    # 短いデータでは出さない
+    assert screen_stock(_ohlc(8, n=200), {})["high_days"] is None
+    print("✅ test_high_clue")
+
+
 if __name__ == "__main__":
+    test_high_clue()
     test_daily_moves_columns()
     test_detects_gap_fade_and_ignores_noise()
     test_us_predictor_chosen_in_first_half_only()

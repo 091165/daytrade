@@ -126,7 +126,18 @@ def test_approach_episodes_and_study():
     print("✅ test_approach_episodes_and_study")
 
 
+def test_dip_note_on_top_card():
+    from dashboard import render_card_summary
+    f = {"notes": [{"text": "急落時の反発候補：節目 4,000円 と その少し下（3,980円前後）", "kind": "dip"},
+                   {"text": "ほかの注意", "kind": None}]}
+    h = render_card_summary(f)
+    assert "📉 急落時の反発候補" in h and "ほかの注意" not in h
+    assert "反発候補" not in render_card_summary({"notes": []})
+    print("✅ test_dip_note_on_top_card")
+
+
 if __name__ == "__main__":
+    test_dip_note_on_top_card()
     test_big_number_note()
     test_approach_episodes_and_study()
     test_touch_count_and_approach()

@@ -12,6 +12,10 @@
   - gap:  その日の窓（前日終値 → 寄り）。窓埋め（逆）か、窓の方向に続く（順）か
   - prev: 前日の寄り後の動き。続く（順）か、戻す（逆）か
 
+候補探しの手がかり（過去ログ7 L7-2。向きの当てはめはしない）:
+  - at_high:   いま52週高値を更新中か（直近5日。stock_trend.at_high）
+  - high_days: 52週高値を更新中だった日と、そうでない日の、寄り後に上げた割合（focus_backtest.high_day_study）
+
 過剰な当てはめを避ける検証:
   期間を前半・後半に分け、前半で「どの手がかりを、どちら向きに使うか」を決め、
   後半だけで当たったかを測る（前半で選んだ米国株は後半では選び直さない）。
@@ -96,7 +100,14 @@ def screen_stock(ohlc: pd.DataFrame, us_returns: dict[str, pd.Series]) -> dict:
     range_pct = float(rng.tail(60).mean()) if len(rng) else None
     range_val = validate_range_prediction(ohlc, RANGE_WINDOW)
 
+    from focus_backtest import high_day_study
+    from stock_trend import at_high
+    o = ohlc.dropna(subset=["High", "Close"])
+    hd = high_day_study(o) if len(o) > 260 else None
     out = {"n": n, "price": price, "turnover_oku": turnover,
+           "at_high": at_high(o["Close"], o["High"]),
+           "high_days": ({"high": hd["high"], "other": hd["other"], "p_rate": hd.get("p_rate")}
+                         if hd and (hd["high"]["n"] or hd["other"]["n"]) else None),
            "range_pct": range_pct,
            "range_yen": range_pct / 100 * price * 100 if range_pct and price else None,
            "range_r": range_val.get("r"), "range_within": range_val.get("within_rate"),
