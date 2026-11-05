@@ -1,6 +1,6 @@
 {
   "market": {
-    "timestamp": "2026-11-06T06:59:37.506155+09:00",
+    "timestamp": "2026-11-06T08:37:12.295226+09:00",
     "nikkei": {
       "prev_close": 62188.62890625,
       "change_pct": -1.4159862718060579,
@@ -8,7 +8,7 @@
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 57325.0
+      "price": 57160.0
     },
     "etf_1570": {
       "prev_close": 58960.0
@@ -38,12 +38,12 @@
       }
     },
     "fx_commodities": {
-      "usdjpy_price": 157.6699981689453,
-      "usdjpy_change_pct": -0.49851599703584215,
-      "gold_price": 4098.39990234375,
-      "gold_change_pct": 0.6236165564387441,
-      "oil_price": 91.01000213623047,
-      "oil_change_pct": 3.2796179069122022
+      "usdjpy_price": 157.447998046875,
+      "usdjpy_change_pct": -0.6442876092492722,
+      "gold_price": 4097.10009765625,
+      "gold_change_pct": 0.5917038462128543,
+      "oil_price": 91.38999938964844,
+      "oil_change_pct": 3.7108449173229863
     },
     "us_sector_changes": {
       "ADBE": -0.820988941246481,
@@ -2033,24 +2033,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 157.6699981689453,
-        "change_pct": -0.49851599703584215,
+        "current": 157.447998046875,
+        "change_pct": -0.6442876092492722,
         "direction": "down",
         "interpretation": "円高傾向 → 輸出株にやや逆風"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4098.39990234375,
-        "change_pct": 0.6236165564387441,
+        "current": 4097.10009765625,
+        "change_pct": 0.5917038462128543,
         "direction": "up",
         "interpretation": "ゴールド小幅上昇"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 91.01000213623047,
-        "change_pct": 3.2796179069122022,
+        "current": 91.38999938964844,
+        "change_pct": 3.7108449173229863,
         "direction": "up",
         "interpretation": "原油急騰 → リスクオフ懸念。エネルギー株（INPEX・ENEOS等）に追い風、他はリスクオフ警戒"
       }
@@ -2079,11 +2079,11 @@
       }
     ],
     "us_consensus_direction": "bearish",
-    "futures_diff": -4863.62890625,
+    "futures_diff": -5028.62890625,
     "futures_aligned": true,
     "reasons": [
       "米指数が揃って下げ（ナスダック, ダウ, SOX）",
-      "日経先物が米に追随（現対-4864円）",
+      "日経先物が米に追随（現対-5029円）",
       "→ 米日連動の下落相場として売り目線"
     ]
   },
@@ -2094,7 +2094,7 @@
     "agreement_count": 6,
     "agreement_direction": "bearish",
     "sp500_change_pct": -4.35565981430297,
-    "usdjpy_change_pct": -0.49851599703584215,
+    "usdjpy_change_pct": -0.6442876092492722,
     "evidence": "検証（2022-12-06〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）"
   },
   "kiriban": {
@@ -2110,13 +2110,13 @@
       }
     },
     "sayatori_signal": {
-      "futures_price": 57325.0,
+      "futures_price": 57160.0,
       "spot_price": 62188.62890625,
-      "diff": -4863.62890625,
-      "abs_diff": 4863.62890625,
+      "diff": -5028.62890625,
+      "abs_diff": 5028.62890625,
       "direction": "long",
       "threshold": 1000,
-      "rationale": "現対-4,864円。先物が現物より4,864円安い。鞘が閉じる方向（先物買い）を朝一で狙う。"
+      "rationale": "現対-5,029円。先物が現物より5,029円安い。鞘が閉じる方向（先物買い）を朝一で狙う。"
     },
     "round_number_levels": {
       "current_price": 62188.62890625,
@@ -2318,7 +2318,7 @@
       "verdict": "sell_bias",
       "verdict_label": "売りポジ主体",
       "confidence": "high",
-      "futures_diff": -4863.62890625,
+      "futures_diff": -5028.62890625,
       "nasdaq_pct": -5.5233274896064,
       "dow_pct": -3.4355242892923132,
       "sox_pct": -12.246134082630522,

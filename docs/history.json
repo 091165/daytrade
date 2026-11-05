@@ -696,7 +696,7 @@
     "verdict": "sell_bias",
     "verdict_label": "売りポジ主体",
     "confidence": "high",
-    "futures_diff": -4863.62890625,
+    "futures_diff": -5028.62890625,
     "nasdaq_pct": -5.5233274896064,
     "dow_pct": -3.4355242892923132,
     "sox_pct": -12.246134082630522,
