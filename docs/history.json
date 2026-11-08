@@ -701,7 +701,7 @@
     "verdict": "buy_bias",
     "verdict_label": "買いポジ主体",
     "confidence": "high",
-    "futures_diff": 830.23046875,
+    "futures_diff": 1000.23046875,
     "nasdaq_pct": 1.0875167077935455,
     "dow_pct": -0.46062507055586455,
     "sox_pct": 4.207129912011043,
