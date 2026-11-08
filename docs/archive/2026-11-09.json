@@ -2,7 +2,7 @@
   "date": "2026-11-09",
   "reconstructed": false,
   "market": {
-    "timestamp": "2026-11-09T06:40:31.344786+09:00",
+    "timestamp": "2026-11-09T07:00:08.544644+09:00",
     "nikkei": {
       "prev_close": 57434.76953125,
       "change_pct": -5.964725374397018,
@@ -40,8 +40,8 @@
       }
     },
     "fx_commodities": {
-      "usdjpy_price": 158.27999877929688,
-      "usdjpy_change_pct": 0.4965127653743018,
+      "usdjpy_price": 158.3350067138672,
+      "usdjpy_change_pct": 0.5314388813799642,
       "gold_price": 4074.89990234375,
       "gold_change_pct": -0.9383760217880122,
       "oil_price": 90.83000183105469,
@@ -113,8 +113,8 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 158.27999877929688,
-        "change_pct": 0.4965127653743018,
+        "current": 158.3350067138672,
+        "change_pct": 0.5314388813799642,
         "direction": "up",
         "interpretation": "円安傾向 → 輸出株にやや追い風"
       },
@@ -174,7 +174,7 @@
     "agreement_count": 5,
     "agreement_direction": "bullish",
     "sp500_change_pct": 0.3145326640212831,
-    "usdjpy_change_pct": 0.4965127653743018,
+    "usdjpy_change_pct": 0.5314388813799642,
     "evidence": "検証（2022-12-07〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）"
   },
   "kiriban": {
