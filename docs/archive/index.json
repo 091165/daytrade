@@ -542,5 +542,13 @@
     "confidence": "high",
     "reconstructed": false,
     "generated_after_open": false
+  },
+  {
+    "date": "2026-11-09",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "high",
+    "reconstructed": false,
+    "generated_after_open": false
   }
 ]
