@@ -4,7 +4,7 @@
 上段：日ごとの値動き（終値ベース）を横に並べる。各日の高値・安値と時刻、最初の10分（9:00〜9:09）の
       高値・安値（点線）。日付の下に「寄り→10:30 の騰落」「窓」「9:10 以降に最初の10分の値幅を
       上抜け・下抜けしたか（時刻）」を出す。
-下段：日ごとの値動きを縦に並べる（下ほど遅い時刻・右ほど高い）。高値▲・安値▼の時刻と、
+下段（--detail のときだけ）：日ごとの値動きを縦に並べる（下ほど遅い時刻・右ほど高い）。高値▲・安値▼の時刻と、
       極値から終値で1%戻すまでの時間（10:30 までに戻さなければ「未」）。
 
 データ: Yahoo のチャートAPI（1分足は直近30日分まで）。--from-minutes で data/minutes/ の保存分を使う。
@@ -105,7 +105,7 @@ def _gap_minutes(a: time, b: time) -> int:
     return _minute(b) - _minute(a)
 
 
-def draw(code: str, name: str, days: dict, summaries: dict, out: Path, interval: str) -> Path:
+def draw(code: str, name: str, days: dict, summaries: dict, out: Path, interval: str, detail: bool = False) -> Path:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -120,8 +120,12 @@ def draw(code: str, name: str, days: dict, summaries: dict, out: Path, interval:
     dates = sorted(days)
     n = len(dates)
     W = SLOTS + 1
-    fig, (ax, bx) = plt.subplots(2, 1, figsize=(max(14, n * 1.0 + 4), 17),
-                                 gridspec_kw={"height_ratios": [1.05, 1]})
+    if detail:
+        fig, (ax, bx) = plt.subplots(2, 1, figsize=(max(14, n * 1.0 + 4), 17),
+                                     gridspec_kw={"height_ratios": [1.05, 1]})
+    else:
+        fig, ax = plt.subplots(1, 1, figsize=(max(14, n * 1.0 + 4), 9))
+        bx = None
     ups = sum(1 for d in dates if summaries[d]["change_pct"] > 0)
     downs = sum(1 for d in dates if summaries[d]["change_pct"] < 0)
     fig.suptitle(
@@ -179,8 +183,8 @@ def draw(code: str, name: str, days: dict, summaries: dict, out: Path, interval:
     ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:,.0f}"))
     ax.grid(axis="y", color="#bbb", lw=0.5)
 
-    # ---------- 下段 ----------
-    for i, d in enumerate(dates):
+    # ---------- 下段（--detail のときだけ） ----------
+    for i, d in enumerate(dates if bx is not None else []):
         b, s = days[d], summaries[d]
         bx.axvspan(i, i + 1, color="#fde4e4" if s["change_pct"] >= 0 else "#e4ecfb", lw=0)
         bx.axvline(i, color="white", lw=2)
@@ -213,27 +217,28 @@ def draw(code: str, name: str, days: dict, summaries: dict, out: Path, interval:
             bx.text(X(float(seg["Close"].iloc[-1])), y1 + 1.2, f"{_hm(t1)} (+{_gap_minutes(t0, t1)}分)",
                     color="#333", fontsize=7, ha="center", va="top")
 
-    bx.axhline(_minute(DECIDE), color="#999", lw=0.8, ls="--")
-    for m in (30, 60):
-        bx.axhline(m, color="#bbb", lw=0.6, ls=":")
-    bx.set_xlim(0, n)
-    bx.set_ylim(SLOTS + 1, -3)
-    bx.set_yticks([0, 10, 30, 60, 89])
-    bx.set_yticklabels(["9:00", "9:10", "9:30", "10:00", "10:29"])
-    bx.set_xticks([i + 0.5 for i in range(n)])
-    bx.set_xticklabels([f"{d:%m/%d}" for d in dates], fontsize=8.5)
-    bx.set_ylabel("時刻")
+    if bx is not None:
+        bx.axhline(_minute(DECIDE), color="#999", lw=0.8, ls="--")
+        for m in (30, 60):
+            bx.axhline(m, color="#bbb", lw=0.6, ls=":")
+        bx.set_xlim(0, n)
+        bx.set_ylim(SLOTS + 1, -3)
+        bx.set_yticks([0, 10, 30, 60, 89])
+        bx.set_yticklabels(["9:00", "9:10", "9:30", "10:00", "10:29"])
+        bx.set_xticks([i + 0.5 for i in range(n)])
+        bx.set_xticklabels([f"{d:%m/%d}" for d in dates], fontsize=8.5)
+        bx.set_ylabel("時刻")
 
     note = (
-        "上段：赤/緑の破線＝その日の高値/安値（時刻）　点線＝最初の10分（9:00〜9:09）の高値/安値　縦の破線＝9:10　"
+        ("上段：" if detail else "") + "赤/緑の破線＝その日の高値/安値（時刻）　点線＝最初の10分（9:00〜9:09）の高値/安値　縦の破線＝9:10　"
         "背景の赤/青＝寄り→10:30 で上げ/下げ\n"
         "日付の下：寄り→10:30 の騰落／窓（前日終値→寄り）／9:10以降に最初の10分の値幅を上抜け・下抜け・両抜けした最初の時刻、内側＝抜けず\n"
-        f"下段：縦＝時刻（下ほど遅い）・横＝その日の安値〜高値で正規化　▲高値 ▼安値　太線＝極値から終値で{REVERT_PCT:.0f}%戻すまで、"
-        "○＝戻した足（かっこ内＝極値からの分数）　未＝10:30までに戻さず　灰色の横棒＝最初の10分の値幅\n"
-        f"出典: Yahoo {interval}足（寄りの 9:00 台の足が欠ける日がある）　作成 {datetime.now(JST):%Y-%m-%d %H:%M}"
+        + (f"下段：縦＝時刻（下ほど遅い）・横＝その日の安値〜高値で正規化　▲高値 ▼安値　太線＝極値から終値で{REVERT_PCT:.0f}%戻すまで、"
+           "○＝戻した足（かっこ内＝極値からの分数）　未＝10:30までに戻さず　灰色の横棒＝最初の10分の値幅\n" if detail else "")
+        + f"出典: Yahoo {interval}足（寄りの 9:00 台の足が欠ける日がある）　作成 {datetime.now(JST):%Y-%m-%d %H:%M}"
     )
     fig.text(0.01, 0.005, note, fontsize=8.5, color="#444", va="bottom")
-    fig.tight_layout(rect=(0, 0.06, 1, 0.98))
+    fig.tight_layout(rect=(0, 0.06 if detail else 0.07, 1, 0.97))
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=110)
     plt.close(fig)
@@ -268,6 +273,7 @@ def main(argv=None) -> int:
     ap.add_argument("code", nargs="?", default="5803")
     ap.add_argument("--days", type=int, default=20)
     ap.add_argument("--interval", default="1m", choices=["1m", "2m", "5m"])
+    ap.add_argument("--detail", action="store_true", help="下段（時刻×値幅の図）も描く")
     ap.add_argument("--from-minutes", action="store_true", help="data/minutes/ の保存分を使う（ネットに出ない）")
     a = ap.parse_args(argv)
 
@@ -299,7 +305,7 @@ def main(argv=None) -> int:
         print("❌ 分足が取れなかった")
         return 1
     summaries = {d: summarize_day(days[d], pcs.get(d)) for d in keep}
-    out = draw(a.code, name, days, summaries, OUT_DIR / f"{a.code}_morning.png", interval)
+    out = draw(a.code, name, days, summaries, OUT_DIR / f"{a.code}_morning.png", interval, a.detail)
     print(f"✅ {out}（{len(keep)}日: {keep[0]}〜{keep[-1]}）")
     return 0
 
