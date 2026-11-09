@@ -492,6 +492,21 @@ table.lv .num { text-align: right; }
 """
 
 
+def render_morning_chart_box(code: str) -> str:
+    """寄り〜10:30 の1分足チャート（morning_chart.py が docs/charts/ に描いた PNG）。画像がなければ枠ごと隠す。"""
+    src = f"../charts/{code}_morning.png"
+    return (
+        '\n  <div class="box">\n'
+        '    <h2>🕘 寄り〜10:30 の動き（直近20営業日・1分足）</h2>\n'
+        f'    <div style="overflow-x: auto;"><a href="{src}"><img src="{src}" alt="寄り〜10:30 の1分足チャート" loading="lazy"'
+        ' style="min-width: 900px; width: 100%; height: auto; display: block;"'
+        """ onerror="this.closest('.box').style.display='none'"></a></div>\n"""
+        '    <div class="note muted">日付の下＝寄り→10:30 の騰落／窓／9:10以降に最初の10分（9:00〜9:09、点線）の値幅を抜けた時刻。'
+        '平日の引け後に描き直す。横にスクロール・タップで拡大。</div>\n'
+        '  </div>'
+    )
+
+
 def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warnings: list[dict],
                       trading_rules: dict | None, generated_at: str) -> str:
     plan = f.get("plan") or {}
@@ -549,6 +564,7 @@ def render_stock_page(f: dict, records: list[dict] | None, direction: dict, warn
   </div>
 {render_open_box(f)}
 {render_live_box(f, side_hint)}
+{render_morning_chart_box(f["code"])}
 
   <div class="box">
     <h2>📈 上値・下値の目安（直近{CHART_DAYS}日の日足）</h2>

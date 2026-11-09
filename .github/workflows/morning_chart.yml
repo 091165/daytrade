@@ -9,7 +9,7 @@ on:
       codes:
         description: "銘柄コード（空白区切り）"
         required: false
-        default: "5803"
+        default: "5803 9984 6981"
       days:
         description: "営業日数（1分足は直近30日分まで）"
         required: false
@@ -40,7 +40,7 @@ jobs:
 
       - name: Draw charts
         run: |
-          for c in ${{ github.event.inputs.codes || '5803' }}; do
+          for c in ${{ github.event.inputs.codes || '5803 9984 6981' }}; do
             python src/morning_chart.py "$c" --days "${{ github.event.inputs.days || '20' }}"
           done
 
