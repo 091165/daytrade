@@ -2,7 +2,7 @@
   "date": "2026-11-10",
   "reconstructed": false,
   "market": {
-    "timestamp": "2026-11-10T07:02:49.104809+09:00",
+    "timestamp": "2026-11-10T07:14:02.215875+09:00",
     "nikkei": {
       "prev_close": 57434.76953125,
       "change_pct": -5.964725374397018,
@@ -10,7 +10,7 @@
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 61010.0
+      "price": 61005.0
     },
     "etf_1570": {
       "prev_close": 54180.0
@@ -40,12 +40,12 @@
       }
     },
     "fx_commodities": {
-      "usdjpy_price": 157.86599731445312,
-      "usdjpy_change_pct": 0.23365135636854717,
-      "gold_price": 4150.5,
-      "gold_change_pct": 1.85526269277847,
-      "oil_price": 86.37000274658203,
-      "oil_change_pct": -4.910270829640995
+      "usdjpy_price": 157.84100341796875,
+      "usdjpy_change_pct": 0.21778201433879651,
+      "gold_price": 4149.5,
+      "gold_change_pct": 1.8307222126693778,
+      "oil_price": 86.37999725341797,
+      "oil_change_pct": -4.899267299271671
     },
     "us_sector_changes": {
       "ADBE": -0.8274114928075504,
@@ -105,24 +105,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 157.86599731445312,
-        "change_pct": 0.23365135636854717,
+        "current": 157.84100341796875,
+        "change_pct": 0.21778201433879651,
         "direction": "flat",
         "interpretation": "変動なし"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 4150.5,
-        "change_pct": 1.85526269277847,
+        "current": 4149.5,
+        "change_pct": 1.8307222126693778,
         "direction": "up",
         "interpretation": "ゴールド上昇 → インフレ懸念 or リスクオフ。住友金属鉱山等の金鉱株に追い風"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 86.37000274658203,
-        "change_pct": -4.910270829640995,
+        "current": 86.37999725341797,
+        "change_pct": -4.899267299271671,
         "direction": "down",
         "interpretation": "原油急落 → リスクオン転換の可能性、エネルギー株は逆風"
       }
@@ -151,11 +151,11 @@
       }
     ],
     "us_consensus_direction": "bullish",
-    "futures_diff": 3575.23046875,
+    "futures_diff": 3570.23046875,
     "futures_aligned": true,
     "reasons": [
       "米指数が揃って上げ（ナスダック, ダウ, SOX）",
-      "日経先物が米に追随（現対+3575円）",
+      "日経先物が米に追随（現対+3570円）",
       "→ 米日連動の上昇相場として買い目線"
     ]
   },
@@ -166,7 +166,7 @@
     "agreement_count": 5,
     "agreement_direction": "bullish",
     "sp500_change_pct": 2.3462568265193218,
-    "usdjpy_change_pct": 0.23365135636854717,
+    "usdjpy_change_pct": 0.21778201433879651,
     "evidence": "検証（2022-12-07〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）"
   },
   "kiriban": {
@@ -182,13 +182,13 @@
       }
     },
     "sayatori_signal": {
-      "futures_price": 61010.0,
+      "futures_price": 61005.0,
       "spot_price": 57434.76953125,
-      "diff": 3575.23046875,
-      "abs_diff": 3575.23046875,
+      "diff": 3570.23046875,
+      "abs_diff": 3570.23046875,
       "direction": "short",
       "threshold": 1000,
-      "rationale": "現対+3,575円。先物が現物より3,575円高い。鞘が閉じる方向（先物売り）を朝一で狙う。"
+      "rationale": "現対+3,570円。先物が現物より3,570円高い。鞘が閉じる方向（先物売り）を朝一で狙う。"
     },
     "round_number_levels": {
       "current_price": 57434.76953125,
@@ -390,7 +390,7 @@
       "verdict": "buy_bias",
       "verdict_label": "買いポジ主体",
       "confidence": "high",
-      "futures_diff": 3575.23046875,
+      "futures_diff": 3570.23046875,
       "nasdaq_pct": 2.7409463642584786,
       "dow_pct": 2.1526836434994534,
       "sox_pct": 6.854797446154248,
