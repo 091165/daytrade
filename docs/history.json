@@ -1,16 +1,5 @@
 [
   {
-    "date": "2026-08-19",
-    "verdict": "sell_bias",
-    "verdict_label": "売りポジ主体",
-    "confidence": "high",
-    "futures_diff": -3150.25,
-    "nasdaq_pct": -1.3330846929753393,
-    "dow_pct": -0.21770162499495926,
-    "sox_pct": -4.9800896075984475,
-    "warnings": []
-  },
-  {
     "date": "2026-08-20",
     "verdict": "hands_off",
     "verdict_label": "初心者手出し無用",
@@ -707,6 +696,19 @@
     "sox_pct": 4.207129912011043,
     "warnings": [
       "🇺🇸 雇用統計明け：S&P500 +0.31%",
+      "📊 決算シーズン"
+    ]
+  },
+  {
+    "date": "2026-11-10",
+    "verdict": "buy_bias",
+    "verdict_label": "買いポジ主体",
+    "confidence": "high",
+    "futures_diff": 3575.23046875,
+    "nasdaq_pct": 2.7409463642584786,
+    "dow_pct": 2.1526836434994534,
+    "sox_pct": 6.854797446154248,
+    "warnings": [
       "📊 決算シーズン"
     ]
   }
