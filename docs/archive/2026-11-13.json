@@ -1,0 +1,1357 @@
+{
+  "date": "2026-11-13",
+  "reconstructed": false,
+  "market": {
+    "timestamp": "2026-11-13T07:15:08.062828+09:00",
+    "nikkei": {
+      "prev_close": 61248.58984375,
+      "change_pct": 1.305023526824356,
+      "week_is_positive": false,
+      "month_is_positive": false
+    },
+    "nikkei_futures": {
+      "price": 61335.0
+    },
+    "etf_1570": {
+      "prev_close": 57880.0
+    },
+    "us_markets": {
+      "nasdaq_change_pct": -0.3930533200078634,
+      "dow_change_pct": -0.36085179958145197,
+      "sox_change_pct": -0.5436948453402368,
+      "sp500_change_pct": -0.3540968016256807,
+      "vix_change_pct": 6.918244755036551
+    },
+    "index_deviation": {
+      "ナスダック": {
+        "dev": -2.4414724177455605,
+        "z": -0.9044110041852199,
+        "date": "2026-11-12"
+      },
+      "SOX": {
+        "dev": -4.204996997320343,
+        "z": -0.7921693247657438,
+        "date": "2026-11-12"
+      },
+      "日経平均": {
+        "dev": -4.591727870494655,
+        "z": -1.3607364356327838,
+        "date": "2026-11-11"
+      }
+    },
+    "fx_commodities": {
+      "usdjpy_price": 159.83700561523438,
+      "usdjpy_change_pct": 0.713275429960758,
+      "gold_price": 3881.699951171875,
+      "gold_change_pct": -2.969630016951008,
+      "oil_price": 88.69999694824219,
+      "oil_change_pct": 2.5077986820271514
+    },
+    "us_sector_changes": {
+      "ADBE": 0.3956174909388155,
+      "AMAT": -3.5764844703541576,
+      "AMD": 5.860003969658378,
+      "ARM": -1.7604257574301285,
+      "BA": -1.713068837738152,
+      "CAT": 0.6100370729664295,
+      "CL": -0.10203925930724056,
+      "COHR": -1.0362000480582556,
+      "COP": 1.595819627522177,
+      "CRM": -0.20181973015158672,
+      "CVX": 1.439425797913474,
+      "DE": -1.8735123921440167,
+      "FDX": -1.0321473636815903,
+      "GLW": -0.7969442900289669,
+      "HON": -1.8406266265333593,
+      "INTU": -0.7208735451513015,
+      "KLAC": -2.3041994793190357,
+      "KO": -0.13323486094554138,
+      "LITE": -3.6123157165575015,
+      "LMT": -0.9769627172786066,
+      "LRCX": -0.8902857639666917,
+      "MCD": -0.4257579920409982,
+      "MSFT": 0.3588346669096465,
+      "NOC": -0.33215061290501335,
+      "NOW": -2.0435952028660886,
+      "NVDA": -4.340064163679481,
+      "ORCL": -0.9892539524517185,
+      "PG": 0.21470782744854588,
+      "QQQ": -0.32011674107383925,
+      "RTX": -1.4556077169798898,
+      "SNDK": -4.114799207140408,
+      "SOXX": -0.2638278117265691,
+      "STX": -1.1926260429365731,
+      "T": -0.35938869219891423,
+      "TMUS": -0.65636899324788,
+      "UPS": -1.840817919965787,
+      "VRT": 1.5156675057239832,
+      "VZ": -0.10729450364319604,
+      "WDC": -0.6702646324341699,
+      "XOM": 1.8415163708192184
+    }
+  },
+  "warnings": [
+    {
+      "type": "friday_closing",
+      "severity": "medium",
+      "label": "📅 金曜 × 週足陰線 = ショートカバー買い警戒",
+      "message": "今週の日経は陰線。金曜のショートカバーで後場上げの可能性。今朝の現対は小さい。",
+      "action": "安易な売りポジ持ち越しに注意。後場の買い戻しに巻き込まれる懸念。",
+      "evidence": "検証（時間外の動きが小さい日・76回）：寄り→引けで今の向きと逆に動いた日 57%・平均 +0.14%"
+    },
+    {
+      "type": "earnings_season",
+      "severity": "low",
+      "label": "📊 決算シーズン",
+      "message": "主要企業の決算が集中する時期。銘柄ごとの差が大きく、指数の予報どおりに動きにくい。",
+      "action": "各銘柄カードの「決算明け」「次の決算」を確認する。",
+      "evidence": ""
+    }
+  ],
+  "market_context": {
+    "items": [
+      {
+        "name": "ドル円",
+        "symbol": "USD/JPY",
+        "current": 159.83700561523438,
+        "change_pct": 0.713275429960758,
+        "direction": "up",
+        "interpretation": "円安傾向 → 輸出株にやや追い風"
+      },
+      {
+        "name": "ゴールド",
+        "symbol": "XAU/USD",
+        "current": 3881.699951171875,
+        "change_pct": -2.969630016951008,
+        "direction": "down",
+        "interpretation": "ゴールド下落 → リスクオン転換の可能性"
+      },
+      {
+        "name": "WTI原油",
+        "symbol": "CL",
+        "current": 88.69999694824219,
+        "change_pct": 2.5077986820271514,
+        "direction": "up",
+        "interpretation": "原油急騰 → リスクオフ懸念。エネルギー株（INPEX・ENEOS等）に追い風、他はリスクオフ警戒"
+      }
+    ],
+    "combined_note": null
+  },
+  "direction": {
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "us_indices": [
+      {
+        "name": "ナスダック",
+        "change_pct": -0.3930533200078634,
+        "direction": "bearish"
+      },
+      {
+        "name": "ダウ",
+        "change_pct": -0.36085179958145197,
+        "direction": "bearish"
+      },
+      {
+        "name": "SOX",
+        "change_pct": -0.5436948453402368,
+        "direction": "bearish"
+      }
+    ],
+    "us_consensus_direction": "bearish",
+    "futures_diff": 86.41015625,
+    "futures_aligned": false,
+    "reasons": [
+      "米指数が揃って下げ（ナスダック, ダウ, SOX）",
+      "先物の方向性が不明確（現対+86円）",
+      "→ 米日非連動のため、方向性読みづらく様子見"
+    ]
+  },
+  "direction_v2_reference": {
+    "verdict": "hands_off",
+    "us_direction": "bearish",
+    "usdjpy_direction": "bullish",
+    "agreement_count": 4,
+    "agreement_direction": "bearish",
+    "sp500_change_pct": -0.3540968016256807,
+    "usdjpy_change_pct": 0.713275429960758,
+    "evidence": "検証（2022-12-07〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）"
+  },
+  "kiriban": {
+    "kiriban_bands": {
+      "prev_close": 61248.58984375,
+      "bands": {
+        "-1500": 59748.58984375,
+        "-1000": 60248.58984375,
+        "-500": 60748.58984375,
+        "+500": 61748.58984375,
+        "+1000": 62248.58984375,
+        "+1500": 62748.58984375
+      }
+    },
+    "sayatori_signal": {
+      "futures_price": 61335.0,
+      "spot_price": 61248.58984375,
+      "diff": 86.41015625,
+      "abs_diff": 86.41015625,
+      "direction": "neutral",
+      "threshold": 1000,
+      "rationale": "現対+86円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+    },
+    "round_number_levels": {
+      "current_price": 61248.58984375,
+      "resistance": 62000.0,
+      "support": 61000.0,
+      "step": 1000
+    },
+    "high_volatility": false,
+    "kiriban_effective": false
+  },
+  "sectors": [
+    {
+      "sector_name": "ストレージ半導体",
+      "us_label": "サンディスク等ストレージ",
+      "us_avg_change_pct": -1.9925632941703837,
+      "direction": "bearish",
+      "signal_strength": "strong",
+      "jp_stocks": [
+        "キオクシア"
+      ],
+      "correlation_strength": "high",
+      "note": "キオクシアはサンディスクの動きに強く連動。半導体カルテットとは別扱いが鉄則",
+      "rationale": "米サンディスク等ストレージが平均-1.99%。キオクシア等は売り目線で想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.46408872797064415,
+      "validation_label": "✅ 強連動を確認"
+    },
+    {
+      "sector_name": "エネルギー（原油）",
+      "us_label": "エクソン・シェブロン等",
+      "us_avg_change_pct": 1.6255872654182897,
+      "direction": "bullish",
+      "signal_strength": "strong",
+      "jp_stocks": [
+        "INPEX",
+        "ENEOS",
+        "出光興産",
+        "コスモエネルギー"
+      ],
+      "correlation_strength": "high",
+      "note": "原油先物・XOM・CVXが上げればINPEX等は高確率で連動",
+      "rationale": "米エクソン・シェブロン等が平均+1.63%。INPEX・ENEOS・出光興産等は買い目線で想定。",
+      "validation_verdict": "weak",
+      "validation_pearson_r": 0.3937670701186434,
+      "validation_label": "△ 期待より弱い連動"
+    },
+    {
+      "sector_name": "海運・物流",
+      "us_label": "UPS・FedEx",
+      "us_avg_change_pct": -1.4364826418236887,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "日本郵船",
+        "商船三井",
+        "川崎汽船"
+      ],
+      "correlation_strength": "low",
+      "note": "連動は弱め。海運は日本独自の材料（海峡・BDI）の影響が大きい",
+      "rationale": "米UPS・FedExが平均-1.44%。日本郵船・商船三井・川崎汽船等はやや売り寄りで想定。",
+      "validation_verdict": "contradicted",
+      "validation_pearson_r": -0.14967467085495834,
+      "validation_label": "⚠️ 期待と逆方向の相関"
+    },
+    {
+      "sector_name": "軍需・防衛",
+      "us_label": "ロッキード・RTX等",
+      "us_avg_change_pct": -1.2636833022870042,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "三菱重工業",
+        "IHI",
+        "川崎重工業"
+      ],
+      "correlation_strength": "high",
+      "note": "地政学リスク連動。戦争懸念時の強い順張りセクター",
+      "rationale": "米ロッキード・RTX等が平均-1.26%。三菱重工業・IHI・川崎重工業等はやや売り寄りで想定。",
+      "validation_verdict": "weak",
+      "validation_pearson_r": 0.29868416720382013,
+      "validation_label": "△ 期待より弱い連動"
+    },
+    {
+      "sector_name": "半導体",
+      "us_label": "SOX指数（半導体）",
+      "us_avg_change_pct": -1.0502059815321974,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "東京エレクトロン",
+        "アドバンテスト",
+        "ディスコ",
+        "レーザーテック"
+      ],
+      "correlation_strength": "high",
+      "note": "SOX指数との連動が最も強いグループ（半導体カルテット）",
+      "rationale": "米SOX指数（半導体）が平均-1.05%。東京エレクトロン・アドバンテスト・ディスコ等はやや売り寄りで想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.4790197162315018,
+      "validation_label": "✅ 強連動を確認"
+    },
+    {
+      "sector_name": "建機",
+      "us_label": "キャタピラー・ディアー",
+      "us_avg_change_pct": -0.6317376595887936,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "コマツ",
+        "日立建機",
+        "クボタ"
+      ],
+      "correlation_strength": "high",
+      "note": "CAT・DEの動きから翌朝のコマツ方向が読みやすい",
+      "rationale": "米キャタピラー・ディアーが平均-0.63%。コマツ・日立建機・クボタ等はやや売り寄りで想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.41546253255808335,
+      "validation_label": "✅ 強連動を確認"
+    },
+    {
+      "sector_name": "電線（CAT連動系）",
+      "us_label": "キャタピラー・ディアー",
+      "us_avg_change_pct": -0.6317376595887936,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "フジクラ",
+        "住友電工",
+        "古河電工"
+      ],
+      "correlation_strength": "medium",
+      "note": "インフラ投資テーマでCAT・DEと一緒に動く傾向。PDFでは「電線3種」としてコマツとセットで語られる",
+      "rationale": "米キャタピラー・ディアーが平均-0.63%。フジクラ・住友電工・古河電工等はやや売り寄りで想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.33310107884865275,
+      "validation_label": "✅ 中程度の連動を確認"
+    },
+    {
+      "sector_name": "SaaS・ソフトウェア",
+      "us_label": "セールスフォース・MSFT等",
+      "us_avg_change_pct": -0.5335150454620389,
+      "direction": "bearish",
+      "signal_strength": "weak",
+      "jp_stocks": [
+        "富士通",
+        "NEC",
+        "NRI",
+        "オービック",
+        "マネーフォワード"
+      ],
+      "correlation_strength": "medium",
+      "note": "「アメリカ下げ戦犯・ソフトウェアSaaS系」として頻出。下げ時の連動が特に強い",
+      "rationale": "米セールスフォース・MSFT等が平均-0.53%。富士通・NEC・NRI等はやや売り寄りで想定。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.5367289804813117,
+      "validation_label": "✅ 中程度の連動を確認"
+    },
+    {
+      "sector_name": "通信（配当ディフェンシブ）",
+      "us_label": "ベライゾン・AT&T",
+      "us_avg_change_pct": -0.37435072969666344,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "KDDI",
+        "NTT",
+        "ソフトバンク"
+      ],
+      "correlation_strength": "medium",
+      "note": "ディフェンシブ資金フロー時に連動。日本特有の材料（粉飾等）には非連動",
+      "rationale": "米ベライゾン・AT&Tが平均-0.37%。方向感なし、様子見。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.26486688222631,
+      "validation_label": "✅ 中程度の連動を確認"
+    },
+    {
+      "sector_name": "生活防衛（配当王）",
+      "us_label": "コカコーラ・P&G等",
+      "us_avg_change_pct": -0.11158107121130856,
+      "direction": "neutral",
+      "signal_strength": "neutral",
+      "jp_stocks": [
+        "花王",
+        "味の素",
+        "明治HD",
+        "キッコーマン"
+      ],
+      "correlation_strength": "low",
+      "note": "連動は弱い。配当ディフェンシブ資金フロー時のみ同方向",
+      "rationale": "米コカコーラ・P&G等が平均-0.11%。方向感なし、様子見。",
+      "validation_verdict": "confirmed",
+      "validation_pearson_r": 0.3180137611774247,
+      "validation_label": "✅ 想定より強い連動"
+    }
+  ],
+  "recent_history": [
+    {
+      "date": "2026-11-13",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": 86.41015625,
+      "nasdaq_pct": -0.3930533200078634,
+      "dow_pct": -0.36085179958145197,
+      "sox_pct": -0.5436948453402368,
+      "warnings": [
+        "📅 金曜 × 週足陰線 = ショートカバー買い警戒",
+        "📊 決算シーズン"
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "verdict": "buy_bias",
+      "verdict_label": "買いポジ主体",
+      "confidence": "high",
+      "futures_diff": 1580.421875,
+      "nasdaq_pct": 1.5970733360735068,
+      "dow_pct": 0.487437182923145,
+      "sox_pct": 5.658757468288167,
+      "warnings": [
+        "📊 決算シーズン"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "verdict": "hands_off",
+      "verdict_label": "初心者手出し無用",
+      "confidence": "low",
+      "futures_diff": 1299.5,
+      "nasdaq_pct": -0.7415538042607306,
+      "dow_pct": -0.3013172901187744,
+      "sox_pct": -0.35479229458174055,
+      "warnings": [
+        "📊 決算シーズン"
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "verdict": "buy_bias",
+      "verdict_label": "買いポジ主体",
+      "confidence": "high",
+      "futures_diff": 3570.23046875,
+      "nasdaq_pct": 2.7409463642584786,
+      "dow_pct": 2.1526836434994534,
+      "sox_pct": 6.854797446154248,
+      "warnings": [
+        "📊 決算シーズン"
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "verdict": "buy_bias",
+      "verdict_label": "買いポジ主体",
+      "confidence": "high",
+      "futures_diff": 1000.23046875,
+      "nasdaq_pct": 1.0875167077935455,
+      "dow_pct": -0.46062507055586455,
+      "sox_pct": 4.207129912011043,
+      "warnings": [
+        "🇺🇸 雇用統計明け：S&P500 +0.31%",
+        "📊 決算シーズン"
+      ]
+    }
+  ],
+  "stock_picks": {
+    "available": true,
+    "reason": "1セクターで強い連動シグナル",
+    "picks": [
+      {
+        "sector_name": "ストレージ半導体",
+        "direction": "bearish",
+        "direction_label": "売り（空売り）候補",
+        "rationale": "米サンディスク等ストレージが平均-1.99%。バックテストで連動が確認されたセクター。指数全体は方向性不明でも、このセクターは売り目線で考えやすい。",
+        "stocks": [
+          "キオクシア"
+        ],
+        "tickers": []
+      }
+    ]
+  },
+  "trading_rules": {
+    "day_type": "no_trend",
+    "tone": "caution",
+    "headline": "⏸️ 方向なしの日：承認銘柄だけ、小さく",
+    "subline": "指数の方向が読めない日。やるなら最小単位で、取れたらすぐ終える。",
+    "day_rules": [
+      "フジクラ(5803)・SBG(9984) だけ。1回取れたら終える",
+      "逆行したら即損切り（-3,000〜5,000円）。粘らない",
+      "判定の確度が低い日。迷ったら見送り"
+    ],
+    "always_rules": [
+      "09:10までは入らない。最初の10分の値幅が小さい日は、その向きに順張り（銘柄ページの「9:10 の確認」）",
+      "寄りから大きく動いた銘柄を、逆向きに拾わない（落ちるナイフを掴まない）",
+      "10:00前に「取引終了」を宣言する",
+      "1日 -10,000円 でその日は終了",
+      "株数は100株まで（200株以上は使わない）",
+      "2回続けて損切りしたら、その日は終了",
+      "触るのは フジクラ(5803)・SBG(9984) だけ。太陽誘電(6976)・イビデン(4062)・アドバンテスト(6857) と承認外の銘柄は触らない",
+      "試用：村田(6981) は 100株だけ・10:00前だけ・-5,000円で即損切り",
+      "注文画面で「日計り」になっているか毎回確認する"
+    ],
+    "checks": {
+      "approved_codes": [
+        "5803",
+        "9984"
+      ],
+      "daily_loss_limit_yen": 10000,
+      "end_time": "10:00",
+      "require_day_trade": true,
+      "direction": null,
+      "decide_at": "09:10",
+      "first10": {
+        "5803": {
+          "small": 51.3,
+          "knife": 72.5
+        },
+        "9984": {
+          "small": 51.1,
+          "knife": 69.3
+        },
+        "6981": {
+          "small": 89.5,
+          "knife": 140.8
+        }
+      },
+      "per_trade_stop_yen": 5000,
+      "max_qty": 100,
+      "wait_window": null,
+      "max_consecutive_losses": 2,
+      "trial": {
+        "codes": [
+          "6981"
+        ],
+        "names": [
+          "村田"
+        ],
+        "since": "2026-10-29",
+        "max_qty": 100,
+        "stop_yen": 5000,
+        "review_after": 20
+      }
+    }
+  },
+  "generated_after_open": false,
+  "focus_stocks": [
+    {
+      "code": "5803",
+      "name": "フジクラ",
+      "us_label": "光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ）",
+      "us_avg_change_pct": -0.9824481372301852,
+      "us_changes": {
+        "GLW": -0.7969442900289669,
+        "COHR": -1.0362000480582556,
+        "LITE": -3.6123157165575015,
+        "VRT": 1.5156675057239832
+      },
+      "direction": "neutral",
+      "strength": "neutral",
+      "gap_text": "米関連株は小動き。寄りの方向感なし",
+      "intraday_text": "寄り後も手がかりなし",
+      "conflict_with_market": false,
+      "conflict_text": "",
+      "validation": {
+        "code": "5803",
+        "name": "フジクラ",
+        "us_label": "光ファイバー・AIデータセンター（コーニング・コヒレント・ルメンタム・バーティブ）",
+        "us_tickers_used": [
+          "COHR",
+          "GLW",
+          "LITE",
+          "VRT"
+        ],
+        "n": 231,
+        "gap_r": 0.663830586047321,
+        "gap_p": 1.0116777058573127e-30,
+        "intraday_r": 0.06261599438186413,
+        "intraday_p": 0.3434104700177494,
+        "gap_link": "confirmed",
+        "intraday_link": "none",
+        "us_up": {
+          "n": 105,
+          "mean_gap": 2.2530423358254876,
+          "mean_intraday": 0.22294522314815868,
+          "gap_hit": 0.780952380952381,
+          "intraday_hit": 0.49523809523809526
+        },
+        "us_down": {
+          "n": 77,
+          "mean_gap": -2.6878365227875185,
+          "mean_intraday": -0.46737221807362883,
+          "gap_hit": 0.8311688311688312,
+          "intraday_hit": 0.5584415584415584
+        },
+        "per_proxy": {
+          "GLW": {
+            "gap_r": 0.6693534938864221,
+            "intraday_r": 0.11882544848196654,
+            "n": 231
+          },
+          "COHR": {
+            "gap_r": 0.5991773334636857,
+            "intraday_r": 0.028278482276412224,
+            "n": 231
+          },
+          "LITE": {
+            "gap_r": 0.5575693910480668,
+            "intraday_r": 0.06386816549431483,
+            "n": 231
+          },
+          "VRT": {
+            "gap_r": 0.5306834306422636,
+            "intraday_r": 0.010079884984406637,
+            "n": 231
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "✗ 連動なし"
+      },
+      "note": "AIデータセンター向け光ファイバー需要で動く。建機株（CAT等）より光通信・DC関連が近い",
+      "trial": false,
+      "range": {
+        "available": true,
+        "as_of": "2026-11-12",
+        "last_close": 3002.0,
+        "window": 10,
+        "pred_pct": 8.354851117551672,
+        "pred_yen": 250.81263054890118,
+        "lot_yen": 25081.263054890118,
+        "shares": 100,
+        "rough_yen": 310.592056770522,
+        "level": "high",
+        "level_text": "最近の値幅はいつもより大きい（普段の1.8倍）",
+        "stop_yen": 5000,
+        "stop_width": 50.0,
+        "stop_frac": 0.19935200189310823,
+        "validation": {
+          "window": 10,
+          "n": 232,
+          "r": 0.3538360182865651,
+          "p": 3.013642476393676e-08,
+          "within_rate": 0.5818965517241379,
+          "median_ratio": 0.9311624064922919,
+          "rough_ratio": 1.2383429657860294
+        },
+        "morning": {
+          "available": true,
+          "n": 59,
+          "morning_yen": 148.15811348657593,
+          "morning_lot_yen": 14815.811348657593,
+          "rough_lot_yen": 19267.87374777574,
+          "first5_lot_yen": 11286.568374700553,
+          "first5_morning_lot_yen": 19935.853850241405,
+          "earnings_today": false,
+          "earnings_ratio": 2.616531106398478,
+          "earnings_n": 7,
+          "next_earnings": "2027-02-09"
+        }
+      },
+      "excursion": {
+        "n": 59,
+        "up_med": 0.28908037977025314,
+        "up_p80": 0.5787403504150669,
+        "down_med": 0.2490914127643197,
+        "down_p80": 0.5477063339769909,
+        "source": "売買代金上位20銘柄・5分足60日（VIX は日足2年）"
+      },
+      "first10_guide": {
+        "n_days": 60,
+        "by_k": [
+          {
+            "k": 1.0,
+            "n": 2312,
+            "win": 0.49567474048442905,
+            "decided": 0.903114186851211,
+            "mean_r": -0.004325259515570935
+          },
+          {
+            "k": 1.5,
+            "n": 2312,
+            "win": 0.4294982698961938,
+            "decided": 0.7928200692041523,
+            "mean_r": 0.00019154208699007216
+          },
+          {
+            "k": 2.0,
+            "n": 2312,
+            "win": 0.40527681660899656,
+            "decided": 0.7011245674740484,
+            "mean_r": 0.005465732695946033
+          },
+          {
+            "k": 3.0,
+            "n": 2312,
+            "win": 0.39186851211072665,
+            "decided": 0.5817474048442907,
+            "mean_r": -0.0005210429455099362
+          }
+        ],
+        "by_size": [
+          {
+            "size": "小さい",
+            "n": 278,
+            "follow_r": 0.1569712541788243,
+            "follow_win": 0.5251798561151079,
+            "fade_r": -0.14565437639912,
+            "fade_win": 0.3669064748201439,
+            "p_follow": 0.015202566976242497,
+            "p_fade": 0.018989343520831113,
+            "q_follow": 0.047473358802077786,
+            "q_fade": 0.047473358802077786
+          },
+          {
+            "size": "ふつう",
+            "n": 381,
+            "follow_r": 0.07042920220714927,
+            "follow_win": 0.45144356955380577,
+            "fade_r": -0.12254813475334184,
+            "fade_win": 0.3805774278215223,
+            "p_follow": 0.21566058632844495,
+            "p_fade": 0.024577956949231372,
+            "q_follow": 0.2695757329105562,
+            "q_fade": 0.049155913898462744
+          },
+          {
+            "size": "大きい",
+            "n": 497,
+            "follow_r": -0.04821967455929053,
+            "follow_win": 0.4104627766599598,
+            "fade_r": 0.08273489907128775,
+            "fade_win": 0.4507042253521127,
+            "p_follow": 0.3440613687380833,
+            "p_fade": 0.11424162946472974,
+            "q_follow": 0.3822904097089814,
+            "q_fade": 0.18434130089241413
+          }
+        ],
+        "cuts": [
+          0.20471968060721749,
+          0.30472624202862747
+        ]
+      },
+      "us_range": {
+        "bucket": "1%未満",
+        "multiplier": null,
+        "n": 369,
+        "evidence": "検証（1195日）：米関連株が1%未満動いた翌日の値幅は目安の 1.00倍（369回）・1%未満の日は 1.00倍",
+        "significant": false
+      },
+      "plan": {
+        "bracket": {
+          "stop_width": 49,
+          "target_width": 74,
+          "stop_yen": 4900,
+          "target_yen": 7400,
+          "morning_width": 148.15811348657593,
+          "capped": false,
+          "reachable": true,
+          "skip": false,
+          "notes": []
+        },
+        "levels": {
+          "up": [
+            {
+              "kind": "キリ",
+              "price": 3100.0,
+              "dist": 98.0,
+              "side": "up"
+            },
+            {
+              "kind": "前日高値",
+              "price": 3191.0,
+              "dist": 189.0,
+              "side": "up"
+            },
+            {
+              "kind": "キリ",
+              "price": 3200.0,
+              "dist": 198.0,
+              "side": "up"
+            }
+          ],
+          "down": [
+            {
+              "kind": "キリ（大）",
+              "price": 3000.0,
+              "dist": -2.0,
+              "side": "down"
+            },
+            {
+              "kind": "前日安値",
+              "price": 2961.0,
+              "dist": -41.0,
+              "side": "down"
+            },
+            {
+              "kind": "キリ",
+              "price": 2900.0,
+              "dist": -102.0,
+              "side": "down"
+            }
+          ]
+        },
+        "prev_close": 3002.0,
+        "level_evidence": "検証（売買代金上位20銘柄・5分足60日・9時台）：どの水準も止まりやすさは差なし。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う"
+      },
+      "notes": [
+        {
+          "text": "25日線乖離 -27.5%・月足 陰線2本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）",
+          "level": "muted"
+        },
+        {
+          "text": "今週の週足：陰線（記事では買い戻しに注意）。値幅の小さい週（記事では手仕舞いの力は弱め）（検証：金曜に今週と逆に動いた日 52%・391回／値幅の小さい週 63%・198回）",
+          "level": "info"
+        },
+        {
+          "text": "3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る",
+          "level": "muted"
+        }
+      ]
+    },
+    {
+      "code": "9984",
+      "name": "ソフトバンクG",
+      "us_label": "Arm・NVIDIA・ナスダック100",
+      "us_avg_change_pct": -2.1402022207278164,
+      "us_changes": {
+        "ARM": -1.7604257574301285,
+        "NVDA": -4.340064163679481,
+        "QQQ": -0.32011674107383925
+      },
+      "direction": "bearish",
+      "strength": "weak",
+      "gap_text": "寄りは安く始まりやすい（窓の連動：検証済み r=+0.74）",
+      "intraday_text": "寄り後の方向は読めない（r=-0.11）。寄り値で飛びつかない",
+      "conflict_with_market": false,
+      "conflict_text": "",
+      "validation": {
+        "code": "9984",
+        "name": "ソフトバンクG",
+        "us_label": "Arm・NVIDIA・ナスダック100",
+        "us_tickers_used": [
+          "ARM",
+          "NVDA",
+          "QQQ"
+        ],
+        "n": 231,
+        "gap_r": 0.7355292877423104,
+        "gap_p": 1.3506996525475695e-40,
+        "intraday_r": -0.1116699686986064,
+        "intraday_p": 0.09039272164054646,
+        "gap_link": "confirmed",
+        "intraday_link": "none",
+        "us_up": {
+          "n": 70,
+          "mean_gap": 3.399445779833655,
+          "mean_intraday": -0.30299891365732207,
+          "gap_hit": 0.9142857142857143,
+          "intraday_hit": 0.4142857142857143
+        },
+        "us_down": {
+          "n": 69,
+          "mean_gap": -3.492010624003731,
+          "mean_intraday": 0.07923966274467609,
+          "gap_hit": 0.8695652173913043,
+          "intraday_hit": 0.4492753623188406
+        },
+        "per_proxy": {
+          "ARM": {
+            "gap_r": 0.6853669596172491,
+            "intraday_r": -0.031049477689462375,
+            "n": 231
+          },
+          "NVDA": {
+            "gap_r": 0.5331371929201066,
+            "intraday_r": -0.2003438728894842,
+            "n": 231
+          },
+          "QQQ": {
+            "gap_r": 0.6405634822430221,
+            "intraday_r": -0.15629452197920762,
+            "n": 231
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "✗ 連動なし"
+      },
+      "note": "保有株Arm（約9割保有）とAI関連の値動きに敏感",
+      "trial": false,
+      "range": {
+        "available": true,
+        "as_of": "2026-11-12",
+        "last_close": 3738.0,
+        "window": 10,
+        "pred_pct": 6.674768703628305,
+        "pred_yen": 249.50285414162602,
+        "lot_yen": 24950.2854141626,
+        "shares": 100,
+        "rough_yen": 332.6454238017827,
+        "level": "high",
+        "level_text": "最近の値幅はいつもより大きい（普段の1.4倍）",
+        "stop_yen": 5000,
+        "stop_width": 50.0,
+        "stop_frac": 0.20039850915540372,
+        "validation": {
+          "window": 10,
+          "n": 232,
+          "r": 0.23642822632626406,
+          "p": 0.00027975071557809623,
+          "within_rate": 0.5560344827586207,
+          "median_ratio": 0.9150937937106444,
+          "rough_ratio": 1.3332329401448941
+        },
+        "morning": {
+          "available": true,
+          "n": 55,
+          "morning_yen": 153.11521864924893,
+          "morning_lot_yen": 15311.521864924893,
+          "rough_lot_yen": 20833.75362909288,
+          "first5_lot_yen": 11227.62843637317,
+          "first5_morning_lot_yen": 19831.74621030801,
+          "earnings_today": false,
+          "earnings_ratio": 1.5086762679327463,
+          "earnings_n": 7,
+          "next_earnings": "2027-02-11"
+        }
+      },
+      "excursion": {
+        "n": 55,
+        "up_med": 0.2324246599134321,
+        "up_p80": 0.624541146852485,
+        "down_med": 0.27772761059867657,
+        "down_p80": 0.5294275681511973,
+        "source": "売買代金上位20銘柄・5分足60日（VIX は日足2年）"
+      },
+      "first10_guide": {
+        "n_days": 60,
+        "by_k": [
+          {
+            "k": 1.0,
+            "n": 2312,
+            "win": 0.49567474048442905,
+            "decided": 0.903114186851211,
+            "mean_r": -0.004325259515570935
+          },
+          {
+            "k": 1.5,
+            "n": 2312,
+            "win": 0.4294982698961938,
+            "decided": 0.7928200692041523,
+            "mean_r": 0.00019154208699007216
+          },
+          {
+            "k": 2.0,
+            "n": 2312,
+            "win": 0.40527681660899656,
+            "decided": 0.7011245674740484,
+            "mean_r": 0.005465732695946033
+          },
+          {
+            "k": 3.0,
+            "n": 2312,
+            "win": 0.39186851211072665,
+            "decided": 0.5817474048442907,
+            "mean_r": -0.0005210429455099362
+          }
+        ],
+        "by_size": [
+          {
+            "size": "小さい",
+            "n": 278,
+            "follow_r": 0.1569712541788243,
+            "follow_win": 0.5251798561151079,
+            "fade_r": -0.14565437639912,
+            "fade_win": 0.3669064748201439,
+            "p_follow": 0.015202566976242497,
+            "p_fade": 0.018989343520831113,
+            "q_follow": 0.047473358802077786,
+            "q_fade": 0.047473358802077786
+          },
+          {
+            "size": "ふつう",
+            "n": 381,
+            "follow_r": 0.07042920220714927,
+            "follow_win": 0.45144356955380577,
+            "fade_r": -0.12254813475334184,
+            "fade_win": 0.3805774278215223,
+            "p_follow": 0.21566058632844495,
+            "p_fade": 0.024577956949231372,
+            "q_follow": 0.2695757329105562,
+            "q_fade": 0.049155913898462744
+          },
+          {
+            "size": "大きい",
+            "n": 497,
+            "follow_r": -0.04821967455929053,
+            "follow_win": 0.4104627766599598,
+            "fade_r": 0.08273489907128775,
+            "fade_win": 0.4507042253521127,
+            "p_follow": 0.3440613687380833,
+            "p_fade": 0.11424162946472974,
+            "q_follow": 0.3822904097089814,
+            "q_fade": 0.18434130089241413
+          }
+        ],
+        "cuts": [
+          0.20471968060721749,
+          0.30472624202862747
+        ]
+      },
+      "us_range": {
+        "bucket": "2〜3%",
+        "multiplier": null,
+        "n": 194,
+        "evidence": "検証（1192日）：米関連株が2〜3%動いた翌日の値幅は目安の 1.06倍（194回）・1%未満の日は 0.97倍",
+        "significant": false
+      },
+      "plan": {
+        "bracket": {
+          "stop_width": 50,
+          "target_width": 75,
+          "stop_yen": 5000,
+          "target_yen": 7500,
+          "morning_width": 153.11521864924893,
+          "capped": false,
+          "reachable": true,
+          "skip": false,
+          "notes": []
+        },
+        "levels": {
+          "up": [
+            {
+              "kind": "キリ",
+              "price": 3800.0,
+              "dist": 62.0,
+              "side": "up"
+            },
+            {
+              "kind": "キリ",
+              "price": 3900.0,
+              "dist": 162.0,
+              "side": "up"
+            }
+          ],
+          "down": [
+            {
+              "kind": "キリ",
+              "price": 3700.0,
+              "dist": -38.0,
+              "side": "down"
+            },
+            {
+              "kind": "前日安値",
+              "price": 3686.0,
+              "dist": -52.0,
+              "side": "down"
+            },
+            {
+              "kind": "キリ（大）",
+              "price": 3500.0,
+              "dist": -238.0,
+              "side": "down"
+            }
+          ]
+        },
+        "prev_close": 3738.0,
+        "level_evidence": "検証（売買代金上位20銘柄・5分足60日・9時台）：どの水準も止まりやすさは差なし。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う"
+      },
+      "notes": [
+        {
+          "text": "25日線乖離 -18.7%・月足 陰線1本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）",
+          "level": "muted"
+        },
+        {
+          "text": "今週の週足：陽線（記事では手仕舞い売りに注意）。値幅の小さい週（記事では手仕舞いの力は弱め）。日経と向きがバラバラ：見送り候補（検証：金曜に今週と逆に動いた日 52%・391回／値幅の小さい週 54%・211回）",
+          "level": "info"
+        },
+        {
+          "text": "3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る",
+          "level": "muted"
+        }
+      ]
+    },
+    {
+      "code": "6981",
+      "name": "村田製作所",
+      "us_label": "半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品）",
+      "us_avg_change_pct": -1.6413362388266297,
+      "us_changes": {
+        "SOXX": -0.2638278117265691,
+        "QQQ": -0.32011674107383925,
+        "NVDA": -4.340064163679481
+      },
+      "direction": "bearish",
+      "strength": "weak",
+      "gap_text": "寄りは安く始まりやすい（窓の連動：検証済み r=+0.64）",
+      "intraday_text": "寄り後の方向は読めない（r=-0.15）。寄り値で飛びつかない",
+      "conflict_with_market": false,
+      "conflict_text": "",
+      "validation": {
+        "code": "6981",
+        "name": "村田製作所",
+        "us_label": "半導体ETF・ナスダック100・NVIDIA（AIサーバー向け電子部品）",
+        "us_tickers_used": [
+          "NVDA",
+          "QQQ",
+          "SOXX"
+        ],
+        "n": 231,
+        "gap_r": 0.6395661694595626,
+        "gap_p": 5.701342761433338e-28,
+        "intraday_r": -0.149397111999775,
+        "intraday_p": 0.023141997254897878,
+        "gap_link": "confirmed",
+        "intraday_link": "none",
+        "us_up": {
+          "n": 78,
+          "mean_gap": 1.6893964373078931,
+          "mean_intraday": -0.23652763395547374,
+          "gap_hit": 0.7307692307692307,
+          "intraday_hit": 0.47435897435897434
+        },
+        "us_down": {
+          "n": 57,
+          "mean_gap": -3.133776544822166,
+          "mean_intraday": 0.6003486371658582,
+          "gap_hit": 0.8596491228070176,
+          "intraday_hit": 0.38596491228070173
+        },
+        "per_proxy": {
+          "SOXX": {
+            "gap_r": 0.6289623718371266,
+            "intraday_r": -0.09327571931957329,
+            "n": 231
+          },
+          "QQQ": {
+            "gap_r": 0.595569215859401,
+            "intraday_r": -0.1342092486941012,
+            "n": 231
+          },
+          "NVDA": {
+            "gap_r": 0.5112692439396799,
+            "intraday_r": -0.18991427706061373,
+            "n": 231
+          }
+        },
+        "gap_label": "✅ 連動を確認",
+        "intraday_label": "✗ 連動なし"
+      },
+      "note": "試用銘柄。100株だけ・10時前だけ・-5,000円で即損切り。値動きは承認銘柄の約2倍",
+      "trial": true,
+      "range": {
+        "available": true,
+        "as_of": "2026-11-12",
+        "last_close": 5224.0,
+        "window": 10,
+        "pred_pct": 8.371394992959372,
+        "pred_yen": 437.3216744321976,
+        "lot_yen": 43732.16744321976,
+        "shares": 100,
+        "rough_yen": 583.8972492897299,
+        "level": "high",
+        "level_text": "最近の値幅はいつもより大きい（普段の1.8倍）",
+        "stop_yen": 5000,
+        "stop_width": 50.0,
+        "stop_frac": 0.11433231628621693,
+        "validation": {
+          "window": 10,
+          "n": 232,
+          "r": 0.6333465622228379,
+          "p": 2.0400134752017545e-27,
+          "within_rate": 0.5905172413793104,
+          "median_ratio": 0.9536327725157007,
+          "rough_ratio": 1.3351664996889088
+        },
+        "morning": {
+          "available": true,
+          "n": 57,
+          "morning_yen": 279.02528671739634,
+          "morning_lot_yen": 27902.528671739634,
+          "rough_lot_yen": 35122.979431716,
+          "first5_lot_yen": 19679.475349448894,
+          "first5_morning_lot_yen": 34760.53406059753,
+          "earnings_today": false,
+          "earnings_ratio": 3.250946559477769,
+          "earnings_n": 8,
+          "next_earnings": "2027-02-02"
+        }
+      },
+      "excursion": {
+        "n": 57,
+        "up_med": 0.32205352848430235,
+        "up_p80": 0.5633975819406255,
+        "down_med": 0.3011462180855389,
+        "down_p80": 0.47877019542846894,
+        "source": "売買代金上位20銘柄・5分足60日（VIX は日足2年）"
+      },
+      "first10_guide": {
+        "n_days": 60,
+        "by_k": [
+          {
+            "k": 1.0,
+            "n": 2312,
+            "win": 0.49567474048442905,
+            "decided": 0.903114186851211,
+            "mean_r": -0.004325259515570935
+          },
+          {
+            "k": 1.5,
+            "n": 2312,
+            "win": 0.4294982698961938,
+            "decided": 0.7928200692041523,
+            "mean_r": 0.00019154208699007216
+          },
+          {
+            "k": 2.0,
+            "n": 2312,
+            "win": 0.40527681660899656,
+            "decided": 0.7011245674740484,
+            "mean_r": 0.005465732695946033
+          },
+          {
+            "k": 3.0,
+            "n": 2312,
+            "win": 0.39186851211072665,
+            "decided": 0.5817474048442907,
+            "mean_r": -0.0005210429455099362
+          }
+        ],
+        "by_size": [
+          {
+            "size": "小さい",
+            "n": 278,
+            "follow_r": 0.1569712541788243,
+            "follow_win": 0.5251798561151079,
+            "fade_r": -0.14565437639912,
+            "fade_win": 0.3669064748201439,
+            "p_follow": 0.015202566976242497,
+            "p_fade": 0.018989343520831113,
+            "q_follow": 0.047473358802077786,
+            "q_fade": 0.047473358802077786
+          },
+          {
+            "size": "ふつう",
+            "n": 381,
+            "follow_r": 0.07042920220714927,
+            "follow_win": 0.45144356955380577,
+            "fade_r": -0.12254813475334184,
+            "fade_win": 0.3805774278215223,
+            "p_follow": 0.21566058632844495,
+            "p_fade": 0.024577956949231372,
+            "q_follow": 0.2695757329105562,
+            "q_fade": 0.049155913898462744
+          },
+          {
+            "size": "大きい",
+            "n": 497,
+            "follow_r": -0.04821967455929053,
+            "follow_win": 0.4104627766599598,
+            "fade_r": 0.08273489907128775,
+            "fade_win": 0.4507042253521127,
+            "p_follow": 0.3440613687380833,
+            "p_fade": 0.11424162946472974,
+            "q_follow": 0.3822904097089814,
+            "q_fade": 0.18434130089241413
+          }
+        ],
+        "cuts": [
+          0.20471968060721749,
+          0.30472624202862747
+        ]
+      },
+      "us_range": {
+        "bucket": "1〜2%",
+        "multiplier": null,
+        "n": 334,
+        "evidence": "検証（1190日）：米関連株が1〜2%動いた翌日の値幅は目安の 1.01倍（334回）・1%未満の日は 1.00倍",
+        "significant": false
+      },
+      "plan": {
+        "bracket": {
+          "stop_width": 50,
+          "target_width": 75,
+          "stop_yen": 5000,
+          "target_yen": 7500,
+          "morning_width": 279.02528671739634,
+          "capped": true,
+          "reachable": true,
+          "skip": false,
+          "notes": [
+            "9時台の値幅に比べて損切り（上限 -5,000円）が近い。普段の上下で引っかかりやすい"
+          ]
+        },
+        "levels": {
+          "up": [
+            {
+              "kind": "キリ",
+              "price": 5300.0,
+              "dist": 76.0,
+              "side": "up"
+            },
+            {
+              "kind": "キリ",
+              "price": 5400.0,
+              "dist": 176.0,
+              "side": "up"
+            },
+            {
+              "kind": "前日高値・5日高値",
+              "price": 5557.0,
+              "dist": 333.0,
+              "side": "up"
+            }
+          ],
+          "down": [
+            {
+              "kind": "キリ",
+              "price": 5200.0,
+              "dist": -24.0,
+              "side": "down"
+            },
+            {
+              "kind": "前日安値",
+              "price": 5120.0,
+              "dist": -104.0,
+              "side": "down"
+            },
+            {
+              "kind": "キリ（大）",
+              "price": 5000.0,
+              "dist": -224.0,
+              "side": "down"
+            }
+          ]
+        },
+        "prev_close": 5224.0,
+        "level_evidence": "検証（売買代金上位20銘柄・5分足60日・9時台）：どの水準も止まりやすさは差なし。比較用のただの値段で止まった割合は 43%。止まる場所というより、損切り・利確の位置を決めるときの目安として使う"
+      },
+      "notes": [
+        {
+          "text": "25日線乖離 -19.5%・月足 陰線1本連続（検証：乖離・月足とその日の寄り後の向きは関係なし）",
+          "level": "muted"
+        },
+        {
+          "text": "今週の週足：陽線（記事では手仕舞い売りに注意）。値幅の小さい週（記事では手仕舞いの力は弱め）。日経と向きがバラバラ：見送り候補（検証：金曜に今週と逆に動いた日 50%・391回／値幅の小さい週 54%・206回）",
+          "level": "info"
+        },
+        {
+          "text": "SOX -0.5% と、金曜・月末の手仕舞いの向きが逆。記事では SOX の向きを優先（カレンダー要因より強い）。過去の検証でも金曜の反転はほぼ五分",
+          "level": "info"
+        },
+        {
+          "text": "3月決算（中間 9月）。権利付き最終日・権利落ち日は上の警告に出る",
+          "level": "muted"
+        }
+      ]
+    }
+  ]
+}

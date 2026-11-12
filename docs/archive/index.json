@@ -574,5 +574,13 @@
     "confidence": "high",
     "reconstructed": false,
     "generated_after_open": false
+  },
+  {
+    "date": "2026-11-13",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "reconstructed": false,
+    "generated_after_open": false
   }
 ]
