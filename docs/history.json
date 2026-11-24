@@ -1,16 +1,5 @@
 [
   {
-    "date": "2026-09-02",
-    "verdict": "hands_off",
-    "verdict_label": "初心者手出し無用",
-    "confidence": "low",
-    "futures_diff": -63.48828125,
-    "nasdaq_pct": -1.0280926471363694,
-    "dow_pct": -0.7878395280703998,
-    "sox_pct": -2.136423372007068,
-    "warnings": []
-  },
-  {
     "date": "2026-09-03",
     "verdict": "hands_off",
     "verdict_label": "初心者手出し無用",
@@ -714,6 +703,19 @@
     "sox_pct": -10.734182249194024,
     "warnings": [
       "📉 指数が理想乖離 -3σ（ナスダック -3.4σ）"
+    ]
+  },
+  {
+    "date": "2026-11-24",
+    "verdict": "hands_off",
+    "verdict_label": "初心者手出し無用",
+    "confidence": "low",
+    "futures_diff": 68.05078125,
+    "nasdaq_pct": 6.507417179449404,
+    "dow_pct": 3.0073952701814566,
+    "sox_pct": 14.026846152023676,
+    "warnings": [
+      "🏖️ 連休明け（3日休み）= 窓が大きくなりやすい"
     ]
   }
 ]
