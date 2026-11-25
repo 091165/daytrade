@@ -2,18 +2,18 @@
   "date": "2026-11-25",
   "reconstructed": false,
   "market": {
-    "timestamp": "2026-11-25T13:32:40.827664+09:00",
+    "timestamp": "2026-11-25T13:51:41.764583+09:00",
     "nikkei": {
-      "prev_close": 57187.0390625,
-      "change_pct": -2.4956396195969788,
+      "prev_close": 57036.94140625,
+      "change_pct": -2.741406212272346,
       "week_is_positive": false,
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 57190.0
+      "price": 57070.0
     },
     "etf_1570": {
-      "prev_close": 50880.0
+      "prev_close": 50580.0
     },
     "us_markets": {
       "nasdaq_change_pct": -1.4779239742967576,
@@ -34,18 +34,18 @@
         "date": "2026-11-24"
       },
       "日経平均": {
-        "dev": -6.3919767819041295,
-        "z": -1.6600217337931447,
+        "dev": -6.619109258781686,
+        "z": -1.7116322184071937,
         "date": "2026-11-25"
       }
     },
     "fx_commodities": {
-      "usdjpy_price": 159.28700256347656,
-      "usdjpy_change_pct": 0.17608989086648208,
-      "gold_price": 3555.699951171875,
-      "gold_change_pct": -2.620911259554104,
-      "oil_price": 80.75,
-      "oil_change_pct": 0.7234649423746076
+      "usdjpy_price": 159.34500122070312,
+      "usdjpy_change_pct": 0.21633626701331732,
+      "gold_price": 3543.89990234375,
+      "gold_change_pct": -2.9440763234670153,
+      "oil_price": 80.72000122070312,
+      "oil_change_pct": 0.6860459826864007
     },
     "us_sector_changes": {
       "ADBE": 3.616397114932046,
@@ -96,24 +96,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 159.28700256347656,
-        "change_pct": 0.17608989086648208,
+        "current": 159.34500122070312,
+        "change_pct": 0.21633626701331732,
         "direction": "flat",
         "interpretation": "変動なし"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 3555.699951171875,
-        "change_pct": -2.620911259554104,
+        "current": 3543.89990234375,
+        "change_pct": -2.9440763234670153,
         "direction": "down",
         "interpretation": "ゴールド下落 → リスクオン転換の可能性"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 80.75,
-        "change_pct": 0.7234649423746076,
+        "current": 80.72000122070312,
+        "change_pct": 0.6860459826864007,
         "direction": "up",
         "interpretation": "原油小幅上昇"
       }
@@ -142,11 +142,11 @@
       }
     ],
     "us_consensus_direction": "bearish",
-    "futures_diff": 2.9609375,
+    "futures_diff": 33.05859375,
     "futures_aligned": false,
     "reasons": [
       "米指数が揃って下げ（ナスダック, SOX）",
-      "先物の方向性が不明確（現対+3円）",
+      "先物の方向性が不明確（現対+33円）",
       "→ 米日非連動のため、方向性読みづらく様子見"
     ]
   },
@@ -157,32 +157,32 @@
     "agreement_count": 3,
     "agreement_direction": "bearish",
     "sp500_change_pct": -0.49853849660134175,
-    "usdjpy_change_pct": 0.17608989086648208,
+    "usdjpy_change_pct": 0.21633626701331732,
     "evidence": "検証（2022-12-14〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）"
   },
   "kiriban": {
     "kiriban_bands": {
-      "prev_close": 57187.0390625,
+      "prev_close": 57036.94140625,
       "bands": {
-        "-1500": 55687.0390625,
-        "-1000": 56187.0390625,
-        "-500": 56687.0390625,
-        "+500": 57687.0390625,
-        "+1000": 58187.0390625,
-        "+1500": 58687.0390625
+        "-1500": 55536.94140625,
+        "-1000": 56036.94140625,
+        "-500": 56536.94140625,
+        "+500": 57536.94140625,
+        "+1000": 58036.94140625,
+        "+1500": 58536.94140625
       }
     },
     "sayatori_signal": {
-      "futures_price": 57190.0,
-      "spot_price": 57187.0390625,
-      "diff": 2.9609375,
-      "abs_diff": 2.9609375,
+      "futures_price": 57070.0,
+      "spot_price": 57036.94140625,
+      "diff": 33.05859375,
+      "abs_diff": 33.05859375,
       "direction": "neutral",
       "threshold": 1000,
-      "rationale": "現対+3円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
+      "rationale": "現対+33円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
-      "current_price": 57187.0390625,
+      "current_price": 57036.94140625,
       "resistance": 58000.0,
       "support": 57000.0,
       "step": 1000
@@ -381,7 +381,7 @@
       "verdict": "hands_off",
       "verdict_label": "初心者手出し無用",
       "confidence": "low",
-      "futures_diff": 2.9609375,
+      "futures_diff": 33.05859375,
       "nasdaq_pct": -1.4779239742967576,
       "dow_pct": 0.8536908772321938,
       "sox_pct": -7.880109547987746,
