@@ -712,10 +712,10 @@
     "verdict": "hands_off",
     "verdict_label": "初心者手出し無用",
     "confidence": "low",
-    "futures_diff": 33.05859375,
-    "nasdaq_pct": -1.4779239742967576,
+    "futures_diff": 49.6484375,
+    "nasdaq_pct": -1.477907758766417,
     "dow_pct": 0.8536908772321938,
-    "sox_pct": -7.880109547987746,
+    "sox_pct": -7.880119733192448,
     "warnings": []
   }
 ]
