@@ -1,17 +1,17 @@
 {
   "market": {
-    "timestamp": "2026-11-26T12:44:42.277268+09:00",
+    "timestamp": "2026-11-26T13:05:36.170752+09:00",
     "nikkei": {
-      "prev_close": 57886.94921875,
-      "change_pct": 1.5353503517477662,
+      "prev_close": 57786.53125,
+      "change_pct": 1.3592143871435258,
       "week_is_positive": false,
       "month_is_positive": false
     },
     "nikkei_futures": {
-      "price": 57900.0
+      "price": 57800.0
     },
     "etf_1570": {
-      "prev_close": 52110.0
+      "prev_close": 51910.0
     },
     "us_markets": {
       "nasdaq_change_pct": -0.6224791327410162,
@@ -32,18 +32,18 @@
         "date": "2026-11-25"
       },
       "日経平均": {
-        "dev": -4.840243747942219,
-        "z": -1.2916365919675366,
+        "dev": -4.999046853514477,
+        "z": -1.3275248801663155,
         "date": "2026-11-26"
       }
     },
     "fx_commodities": {
-      "usdjpy_price": 159.18800354003906,
-      "usdjpy_change_pct": -0.04645795684248277,
-      "gold_price": 3604.39990234375,
-      "gold_change_pct": 1.1931834460602087,
-      "oil_price": 84.4000015258789,
-      "oil_change_pct": 2.8641052854546434
+      "usdjpy_price": 159.1580047607422,
+      "usdjpy_change_pct": -0.061528768579588444,
+      "gold_price": 3605.699951171875,
+      "gold_change_pct": 1.2296821929022927,
+      "oil_price": 84.33999633789062,
+      "oil_change_pct": 2.790972822619242
     },
     "us_sector_changes": {
       "ADBE": 0.3231644235102804,
@@ -716,7 +716,7 @@
           "open": 2066.0,
           "high": 2187.0,
           "low": 2014.5,
-          "close": 2123.5
+          "close": 2127.0
         }
       ],
       "9984": [
@@ -1348,7 +1348,7 @@
           "open": 2738.0,
           "high": 3029.0,
           "low": 2702.5,
-          "close": 3000.0
+          "close": 2947.0
         }
       ],
       "6981": [
@@ -1980,7 +1980,7 @@
           "open": 4718.0,
           "high": 5072.0,
           "low": 4718.0,
-          "close": 4922.0
+          "close": 4907.0
         }
       ]
     }
@@ -1991,24 +1991,24 @@
       {
         "name": "ドル円",
         "symbol": "USD/JPY",
-        "current": 159.18800354003906,
-        "change_pct": -0.04645795684248277,
+        "current": 159.1580047607422,
+        "change_pct": -0.061528768579588444,
         "direction": "flat",
         "interpretation": "変動なし"
       },
       {
         "name": "ゴールド",
         "symbol": "XAU/USD",
-        "current": 3604.39990234375,
-        "change_pct": 1.1931834460602087,
+        "current": 3605.699951171875,
+        "change_pct": 1.2296821929022927,
         "direction": "up",
         "interpretation": "ゴールド上昇 → インフレ懸念 or リスクオフ。住友金属鉱山等の金鉱株に追い風"
       },
       {
         "name": "WTI原油",
         "symbol": "CL",
-        "current": 84.4000015258789,
-        "change_pct": 2.8641052854546434,
+        "current": 84.33999633789062,
+        "change_pct": 2.790972822619242,
         "direction": "up",
         "interpretation": "原油急騰 → リスクオフ懸念。エネルギー株（INPEX・ENEOS等）に追い風、他はリスクオフ警戒"
       }
@@ -2037,7 +2037,7 @@
       }
     ],
     "us_consensus_direction": "bearish",
-    "futures_diff": 13.05078125,
+    "futures_diff": 13.46875,
     "futures_aligned": false,
     "reasons": [
       "米指数が揃って下げ（ナスダック, SOX）",
@@ -2052,32 +2052,32 @@
     "agreement_count": 2,
     "agreement_direction": "bearish",
     "sp500_change_pct": -0.2542678815435351,
-    "usdjpy_change_pct": -0.04645795684248277,
+    "usdjpy_change_pct": -0.061528768579588444,
     "evidence": "検証（2022-12-14〜）：今の判定 的中 59% ／ ドル円・S&P500 入り 56%（手出し無用が 72% に増える）"
   },
   "kiriban": {
     "kiriban_bands": {
-      "prev_close": 57886.94921875,
+      "prev_close": 57786.53125,
       "bands": {
-        "-1500": 56386.94921875,
-        "-1000": 56886.94921875,
-        "-500": 57386.94921875,
-        "+500": 58386.94921875,
-        "+1000": 58886.94921875,
-        "+1500": 59386.94921875
+        "-1500": 56286.53125,
+        "-1000": 56786.53125,
+        "-500": 57286.53125,
+        "+500": 58286.53125,
+        "+1000": 58786.53125,
+        "+1500": 59286.53125
       }
     },
     "sayatori_signal": {
-      "futures_price": 57900.0,
-      "spot_price": 57886.94921875,
-      "diff": 13.05078125,
-      "abs_diff": 13.05078125,
+      "futures_price": 57800.0,
+      "spot_price": 57786.53125,
+      "diff": 13.46875,
+      "abs_diff": 13.46875,
       "direction": "neutral",
       "threshold": 1000,
       "rationale": "現対+13円（しきい値±1,000円未満）。鞘取り不要。ハイボラ時のみ機能する戦略のため様子見。"
     },
     "round_number_levels": {
-      "current_price": 57886.94921875,
+      "current_price": 57786.53125,
       "resistance": 58000.0,
       "support": 57000.0,
       "step": 1000
@@ -2276,7 +2276,7 @@
       "verdict": "hands_off",
       "verdict_label": "初心者手出し無用",
       "confidence": "low",
-      "futures_diff": 13.05078125,
+      "futures_diff": 13.46875,
       "nasdaq_pct": -0.6224791327410162,
       "dow_pct": 0.32837719206106897,
       "sox_pct": -0.6525637737050616,
